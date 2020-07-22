@@ -3,8 +3,8 @@
 Heathen Engineering's Arkane Foundaiton is complete wrapper around Arkane Network's Web API. The tool simplifies integration with Arkane API exposing all features and funcitons to C# classes and includes Editor extensions to aid in design and deployment of Contracts and Tokens.
 
 ## Documentaiton
-* [Code Documentation](http://comingSoon)
-* [Developer Network](http://comingSoon)
+* [Code Documentation](https://heathen-engineering.github.io/Arkane-Documentation/annotated.html)
+* [Developer Network](https://heathen-engineering.mn.co/discovery)
 * [Discord Server](https://discord.gg/6X3xrRc)
 
 ## Installation
