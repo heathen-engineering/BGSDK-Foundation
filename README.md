@@ -1,4 +1,4 @@
-# Reorderable List
+# Arkane Foundation
 
 Heathen Engineering's Arkane Foundaiton is complete wrapper around Arkane Network's Web API. The tool simplifies integration with Arkane API exposing all features and funcitons to C# classes and includes Editor extensions to aid in design and deployment of Contracts and Tokens.
 
