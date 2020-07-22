@@ -1,0 +1,20 @@
+{
+    "name": "com.HeathenEngineering.ArkaneFoundation",
+    "author": "Heathen Engineering",
+    "displayName": "Arkane Foundation",
+    "version": "0.1",
+    "unity": "2018.4",
+    "keywords": [
+        "unity",
+        "editor",
+        "blockchain"
+    ],
+    "description": "Arkane Network web API integration and editor extensions.",
+    "samples": [
+        {
+            "displayName": "Examples",
+            "description": "(WIP) A set of examples highlighting various features of the package",
+            "path": "Samples~/Examples"
+        }
+    ]
+}
