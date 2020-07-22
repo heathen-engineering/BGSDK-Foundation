@@ -11,7 +11,6 @@ Heathen Engineering's Arkane Foundaiton is complete wrapper around Arkane Networ
 * Package Manager
 1) Open the package manager and click the '+' (plus) button located in the upper left of the window
 2) Select `Add package from git URL...` when prompted provide the following URL:
-
 `https://github.com/heathen-engineering/Arkane-Foundation.git`  
 
 * A version of the package will be made availabel via the [Unity Asset Store](http://comingSoon) at a later date.  
