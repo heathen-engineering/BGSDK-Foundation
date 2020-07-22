@@ -1,0 +1,145 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f74f99d19469d44bbd5317b7ad0f0d0, type: 3}
+  m_Name: Arkane Settings
+  m_EditorClassIdentifier: 
+  Authentication:
+    Staging: https://login-staging.arkane.network
+    Production: https://login.arkane.network
+  Business:
+    Staging: https://api-business-staging.arkane.network
+    Production: https://api-business.arkane.network
+  API:
+    Staging: https://api-staging.arkane.network
+    Production: https://api.arkane.network
+  UseStaging: 1
+  AppId:
+    id: 9e4fd311-649a-48db-b72e-fb209d4550b4
+    clientId: Heathen-app
+    clientSecret: b5e20e59-2257-4407-a851-c45ed5f89a5e
+    name: Heathen Test App
+    description: 
+    rootURL: 
+    imageUrl: https://via.placeholder.com/200/C8E2EB/ff5555.png?text=Heathen Test
+      App
+  AuthenticationMode:
+    ClientId: Heathen
+    GrantType: password
+  Contracts:
+  - {fileID: 114516516168147252}
+  - {fileID: 114933548032464500}
+  - {fileID: 114532544042022446}
+--- !u!114 &114257476623708458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
+  m_Name: 'Contract A : NFT Token 1 (backend)'
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8586080862673460552
+  contract: {fileID: 114516516168147252}
+  Data:
+    contractAddress: 0x4d6981513fd0de11927e6e74232a42a99ee36824
+    id: 4
+    confirmed: 1
+    name: NFT Token 1 (backend)
+    description: 
+    decimals: 0
+    isNonFungible: 0
+    properties: 
+    backgroundColor: '#c8e2eb'
+    url: 
+    imagePreview: 
+    imageThumbnail: 
+    image: 
+--- !u!114 &114516516168147252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6cbcdfaca89dd4e9d1c6e605cd139b, type: 3}
+  m_Name: Contract A
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8586080862687855142
+  Data:
+    id: 8
+    name: Contract A
+    description: 
+    confirmed: 1
+    address: 0x4d6981513fd0de11927e6e74232a42a99ee36824
+    symbol: 
+    url: 
+    imageUrl: 
+    type: 
+  Tokens:
+  - {fileID: 114257476623708458}
+--- !u!114 &114532544042022446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6cbcdfaca89dd4e9d1c6e605cd139b, type: 3}
+  m_Name: Contract C
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8586080862668850678
+  Data:
+    id: 10
+    name: Contract C
+    description: 
+    confirmed: 1
+    address: 0xea538e0328efbbaebafff5b194f5b7e0ece8196f
+    symbol: 
+    url: 
+    imageUrl: 
+    type: 
+  Tokens: []
+--- !u!114 &114933548032464500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6cbcdfaca89dd4e9d1c6e605cd139b, type: 3}
+  m_Name: Contract B
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8586080862673065750
+  Data:
+    id: 9
+    name: Contract B
+    description: 
+    confirmed: 1
+    address: 0xca7371045e539fe23c4244d2c7f320676df3b121
+    symbol: 
+    url: 
+    imageUrl: 
+    type: 
+  Tokens: []

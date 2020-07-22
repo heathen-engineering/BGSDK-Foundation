@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 2d9be6dbc6f2ca149add28ccd9ea0b8e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_PersistentViewDataDictionary: {instanceID: 0}
+  - ArkaneSkin: {fileID: 11400000, guid: 82b45fdf4d7add143b6e72a038955ca2, type: 2}
+  - ArkaneLogo: {fileID: 2800000, guid: ed788b0f39cbb9d4e809aecbf458d2d3, type: 3}
+  - ContractIcon: {fileID: 2800000, guid: 60943e0c401a6134ba2cd6ecc8eef16c, type: 3}
+  - CreateContractIcon: {fileID: 2800000, guid: da6f5893d360bb747bb4dd7332d7647c,
+      type: 3}
+  - RemoveContractIcon: {fileID: 2800000, guid: e0d72800a5f76f84f888e5fe05b96a23,
+      type: 3}
+  - TokenIcon: {fileID: 2800000, guid: ef6ffe7731b68e840ad006743435b7f4, type: 3}
+  - CreateTokenIcon: {fileID: 2800000, guid: 26eb6eb807623a04f887399adefb5558, type: 3}
+  - RemoveTokenIcon: {fileID: 2800000, guid: 4800756d9e81e1443a90841082d5e6f8, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

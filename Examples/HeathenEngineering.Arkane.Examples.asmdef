@@ -1,0 +1,18 @@
+{
+    "name": "HeathenEngineering.Arkane.Examples",
+    "references": [
+        "HeathenEngineering.Arkane.Foundation",
+        "HeathenEngineering.Arkane.Foundation.Editor"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [
+        "iOS",
+        "LinuxStandalone32"
+    ],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": []
+}
