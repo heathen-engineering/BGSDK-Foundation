@@ -595,262 +595,288 @@ namespace HeathenEngineering.Arkane.Editor
         private void DrawLoginArea()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox,GUILayout.Width(300), GUILayout.MinHeight(this.position.height - 45));
-            if (current == null)
-                current = new Identity();
-
-            //TODO: Remove this once we get the Unity ID integraiton
-            current.password = "Jodi@01092019";
-
-            EditorGUILayout.LabelField("Configuration", EditorStyles.whiteLargeLabel);
-            EditorGUILayout.Space();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.Space();
-            var r = EditorGUILayout.GetControlRect(false, GUILayout.Width(250), GUILayout.Height(250));
-            GUI.DrawTexture(r, ArkaneLogo, ScaleMode.ScaleToFit, true, 0);
-            EditorGUILayout.Space();
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.Space();
-
-            if (!useUnityId)
+            try
             {
-                #region Manual Auth
-                EditorGUILayout.LabelField("Username", EditorStyles.boldLabel);
-                var usernameValue = "";
-                if (PlayerPrefs.HasKey(username))
-                {
-                    usernameValue = PlayerPrefs.GetString(username);
-                }
-                usernameValue = EditorGUILayout.TextField(GUIContent.none, usernameValue);
-                current.username = usernameValue;
-                PlayerPrefs.SetString(username, usernameValue);
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("Password", EditorStyles.boldLabel);
-                current.password = EditorGUILayout.PasswordField(GUIContent.none, current.password);
-                EditorGUILayout.Space();
 
+                if (current == null)
+                    current = new Identity();
+
+                EditorGUILayout.LabelField("Configuration", EditorStyles.whiteLargeLabel);
+                EditorGUILayout.Space();
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.Space();
-                if (GUILayout.Button("Sign Up", GUILayout.Height(25)))
+                try
                 {
+                    EditorGUILayout.Space();
+                    var r = EditorGUILayout.GetControlRect(false, GUILayout.Width(250), GUILayout.Height(250));
+                    GUI.DrawTexture(r, ArkaneLogo, ScaleMode.ScaleToFit, true, 0);
+                    EditorGUILayout.Space();
                 }
-                EditorGUILayout.LabelField("", GUILayout.Width(25));
-                if (GUILayout.Button("Login", GUILayout.Height(25)))
-                {
-                    if (Settings.current == null)
-                    {
-                        Debug.LogError("You must provide a Arkane Settings object before you can authenticate!");
-                    }
-                    else
-                    {
-                        LogOn();
-                    }
-                }
-                EditorGUILayout.Space();
+                catch { }
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.Space();
-                #endregion
-            }
 
-            if (authenticated)
-            {
-                if (AppIds == null)
+                if (!useUnityId)
                 {
-                    AppIds = new List<AppId>();
-
-                    var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                    #region Manual Auth
+                    EditorGUILayout.LabelField("Username", EditorStyles.boldLabel);
+                    var usernameValue = "";
+                    if (PlayerPrefs.HasKey(username))
                     {
-                        if(!result.hasError)
-                        {
-                            AppIds.Clear();
-                            AppIds.AddRange(result.result);
+                        usernameValue = PlayerPrefs.GetString(username);
+                    }
+                    usernameValue = EditorGUILayout.TextField(GUIContent.none, usernameValue);
+                    current.username = usernameValue;
+                    PlayerPrefs.SetString(username, usernameValue);
+                    EditorGUILayout.Space();
+                    EditorGUILayout.LabelField("Password", EditorStyles.boldLabel);
+                    current.password = EditorGUILayout.PasswordField(GUIContent.none, current.password);
+                    EditorGUILayout.Space();
 
-                            foreach (var a in AppIds)
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.Space();
+                    if (GUILayout.Button("Sign Up", GUILayout.Height(25)))
+                    {
+                    }
+                    EditorGUILayout.LabelField("", GUILayout.Width(25));
+                    if (GUILayout.Button("Login", GUILayout.Height(25)))
+                    {
+                        if (Settings.current == null)
+                        {
+                            Debug.LogError("You must provide a Arkane Settings object before you can authenticate!");
+                        }
+                        else
+                        {
+                            LogOn();
+                        }
+                    }
+                    EditorGUILayout.Space();
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.Space();
+                    #endregion
+                }
+
+                if (authenticated)
+                {
+                    if (AppIds == null)
+                    {
+                        AppIds = new List<AppId>();
+
+                        var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                        {
+                            if (!result.hasError)
                             {
-                                if (string.IsNullOrEmpty(a.name))
+                                AppIds.Clear();
+                                AppIds.AddRange(result.result);
+
+                                foreach (var a in AppIds)
                                 {
-                                    a.name = "<< No Name >> client id: " + a.clientId;
+                                    if (string.IsNullOrEmpty(a.name))
+                                    {
+                                        a.name = "<< No Name >> client id: " + a.clientId;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                Debug.LogError(result.message);
+                            }
+                        });
+
+                        StartCoroutine(e);
+                    }
+
+                    //If we have authenticated with Unity ID
+                    if (Settings.current != null)
+                    {
+
+                        if (AppIds.Count > 0)
+                        {
+                            string[] options = new string[AppIds.Count + 2];
+                            options[0] = "<< Refresh List >>";
+                            options[1] = "<< Create New Application >>";
+                            for (int i = 0; i < AppIds.Count; i++)
+                            {
+                                options[2 + i] = AppIds[i].name;
+                            }
+
+                            appIdIndex = EditorGUILayout.Popup(appIdIndex, options);
+                            if (appIdIndex == 0)
+                            {
+                                appIdIndex = 2;
+                                var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                                {
+                                    if (!result.hasError)
+                                    {
+                                        AppIds.Clear();
+                                        AppIds.AddRange(result.result);
+
+                                        foreach (var a in AppIds)
+                                        {
+                                            if (string.IsNullOrEmpty(a.name))
+                                            {
+                                                a.name = "<< No Name >> client id: " + a.clientId;
+                                            }
+                                        }
+
+                                        Debug.Log("Returned " + AppIds.Count + " applications");
+                                    }
+                                    else
+                                    {
+                                        Debug.LogError(result.message + "\nHTTP Code: " + result.httpCode);
+                                    }
+                                });
+
+                                StartCoroutine(e);
+                            }
+                            else if (appIdIndex == 1)
+                            {
+                                appIdIndex = 2;
+                                if (Settings.current.UseStaging)
+                                    Help.BrowseURL("https://business-staging.arkane.network/applications");
+                                else
+                                    Help.BrowseURL("https://business.arkane.network/applications");
+                            }
+                            else
+                            {
+                                Settings.current.AppId = AppIds[appIdIndex - 2];
                             }
                         }
                         else
                         {
-                            Debug.LogError(result.message);
+                            //TODO: tell the user they have no app Ids so they need to refresh the list after they have made an applicaiton on Arkane Network
+                            string[] options = new string[] { "No Application Found", "<< Refresh List >>", "<< Create New Application >>" };
+
+                            appIdIndex = EditorGUILayout.Popup(appIdIndex, options);
+
+                            if (appIdIndex == 1)
+                            {
+                                appIdIndex = 0;
+                                var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                                {
+                                    if (!result.hasError)
+                                    {
+                                        AppIds.Clear();
+                                        AppIds.AddRange(result.result);
+
+                                        foreach (var a in AppIds)
+                                        {
+                                            if (string.IsNullOrEmpty(a.name))
+                                            {
+                                                a.name = "<< No Name >> client id: " + a.clientId;
+                                            }
+                                        }
+
+                                        Debug.Log("Returned " + AppIds.Count + " applications");
+                                    }
+                                    else
+                                    {
+                                        Debug.LogError(result.message + "\nHTTP Code: " + result.httpCode);
+                                    }
+                                });
+
+                                StartCoroutine(e);
+                            }
+                            else if (appIdIndex == 2)
+                            {
+                                appIdIndex = 0;
+                                if (Settings.current.UseStaging)
+                                    Help.BrowseURL("https://business-staging.arkane.network/applications");
+                                else
+                                    Help.BrowseURL("https://business.arkane.network/applications");
+                            }
                         }
-                    });
 
-                    StartCoroutine(e);
+                    }
                 }
-
-                //If we have authenticated with Unity ID
-                if (Settings.current != null)
+                else
                 {
-
-                    if (AppIds.Count > 0)
-                    {
-                        string[] options = new string[AppIds.Count + 2];
-                        options[0] = "<< Refresh List >>";
-                        options[1] = "<< Create New Application >>";
-                        for (int i = 0; i < AppIds.Count; i++)
-                        {
-                            options[2 + i] = AppIds[i].name;
-                        }
-
-                        appIdIndex = EditorGUILayout.Popup(appIdIndex, options);
-                        if (appIdIndex == 0)
-                        {
-                            appIdIndex = 2;
-                            var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
-                            {
-                                if (!result.hasError)
-                                {
-                                    AppIds.Clear();
-                                    AppIds.AddRange(result.result);
-                                    
-                                    foreach(var a in AppIds)
-                                    {
-                                        if(string.IsNullOrEmpty( a.name))
-                                        {
-                                            a.name = "<< No Name >> client id: " + a.clientId;
-                                        }
-                                    }
-
-                                    Debug.Log("Returned " + AppIds.Count + " applications");
-                                }
-                                else
-                                {
-                                    Debug.LogError(result.message + "\nHTTP Code: " + result.httpCode);
-                                }
-                            });
-
-                            StartCoroutine(e);
-                        }
-                        else if (appIdIndex == 1)
-                        {
-                            appIdIndex = 2;
-                            if (Settings.current.UseStaging)
-                                Help.BrowseURL("https://business-staging.arkane.network/applications");
-                            else
-                                Help.BrowseURL("https://business.arkane.network/applications");
-                        }
-                        else
-                        {
-                            Settings.current.AppId = AppIds[appIdIndex - 2];
-                        }
-                    }
-                    else
-                    {
-                        //TODO: tell the user they have no app Ids so they need to refresh the list after they have made an applicaiton on Arkane Network
-                        string[] options = new string[] { "No Application Found", "<< Refresh List >>", "<< Create New Application >>" };
-
-                        appIdIndex = EditorGUILayout.Popup(appIdIndex, options);
-
-                        if (appIdIndex == 1)
-                        {
-                            appIdIndex = 0;
-                            var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
-                            {
-                                if (!result.hasError)
-                                {
-                                    AppIds.Clear();
-                                    AppIds.AddRange(result.result);
-
-                                    foreach (var a in AppIds)
-                                    {
-                                        if (string.IsNullOrEmpty(a.name))
-                                        {
-                                            a.name = "<< No Name >> client id: " + a.clientId;
-                                        }
-                                    }
-
-                                    Debug.Log("Returned " + AppIds.Count + " applications");
-                                }
-                                else
-                                {
-                                    Debug.LogError(result.message + "\nHTTP Code: " + result.httpCode);
-                                }
-                            });
-
-                            StartCoroutine(e);
-                        }
-                        else if (appIdIndex == 2)
-                        {
-                            appIdIndex = 0;
-                            if (Settings.current.UseStaging)
-                                Help.BrowseURL("https://business-staging.arkane.network/applications");
-                            else
-                                Help.BrowseURL("https://business.arkane.network/applications");
-                        }
-                    }
-
+                    EditorGUILayout.LabelField("App ID", EditorStyles.boldLabel);
+                    Settings.current.AppId.id = EditorGUILayout.TextField(GUIContent.none, Settings.current.AppId.id);
                 }
-            }
-            else
-            {
-                EditorGUILayout.LabelField("App ID", EditorStyles.boldLabel);
-                Settings.current.AppId.id = EditorGUILayout.TextField(GUIContent.none, Settings.current.AppId.id);
-            }
 
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            if (GUILayout.Button("Dashboard", GUILayout.Height(25)))
-            {
-                tab = 1;
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+                if (GUILayout.Button("Dashboard", GUILayout.Height(25)))
+                {
+                    tab = 1;
+                }
+                if (GUILayout.Button("Asset Store", GUILayout.Height(25)))
+                {
+                }
+                if (GUILayout.Button("Portal", GUILayout.Height(25)))
+                {
+                }
+                if (GUILayout.Button("Marketplace", GUILayout.Height(25)))
+                {
+                }
+                if (GUILayout.Button("Learning", GUILayout.Height(25)))
+                {
+                }
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
             }
-            if (GUILayout.Button("Asset Store", GUILayout.Height(25)))
-            {
-            }
-            if (GUILayout.Button("Portal", GUILayout.Height(25)))
-            {
-            }
-            if (GUILayout.Button("Marketplace", GUILayout.Height(25)))
-            {
-            }
-            if (GUILayout.Button("Learning", GUILayout.Height(25)))
-            {
-            }
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
+            catch
+            { }
             EditorGUILayout.EndVertical();
             PlayerPrefs.Save();
         }
-        
+
         private void DrawNewsArea()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(position.width - 310), GUILayout.MinHeight(position.height - 45));
-            EditorGUILayout.LabelField("News", EditorStyles.whiteLargeLabel);
-            EditorGUILayout.Space();
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(GUIContent.none, GUILayout.Width(10));
-            EditorGUILayout.BeginVertical();
-            scrollPos_NewsArea = EditorGUILayout.BeginScrollView(scrollPos_NewsArea);
-            for (int i = 0; i < 50; i++)
+            try
             {
-                DrawNewsItem("Example Article 2020-Jan-01"
-                    , "This is an example of the first couple of lines being presented by the control. This can be shorter or longer as desired but would be keep to a resonable length and ended with a link or button to the source of the information."
-                    , "http://www.google.com");
+                EditorGUILayout.LabelField("News", EditorStyles.whiteLargeLabel);
+                EditorGUILayout.Space();
+                EditorGUILayout.BeginHorizontal();
+                try
+                {
+                    EditorGUILayout.LabelField(GUIContent.none, GUILayout.Width(10));
+                    EditorGUILayout.BeginVertical();
+                    try
+                    {
+                        scrollPos_NewsArea = EditorGUILayout.BeginScrollView(scrollPos_NewsArea);
+                        for (int i = 0; i < 50; i++)
+                        {
+                            DrawNewsItem("Example Article 2020-Jan-01"
+                                , "This is an example of the first couple of lines being presented by the control. This can be shorter or longer as desired but would be keep to a resonable length and ended with a link or button to the source of the information."
+                                , "http://www.google.com");
+                        }
+                        EditorGUILayout.EndScrollView();
+                    }
+                    catch { }
+                    EditorGUILayout.EndVertical();
+                }
+                catch { }
+                EditorGUILayout.EndHorizontal();
             }
-            EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
+            catch { }
             EditorGUILayout.EndVertical();
         }
 
         private void DrawNewsItem(string title, string body, string url)
         {
             EditorGUILayout.BeginVertical(EditorStyles.textArea);
-            EditorGUILayout.BeginHorizontal();
-            if(GUILayout.Button("Read More", EditorStyles.miniButton, GUILayout.Width(65)))
+            try
             {
-                Help.BrowseURL(url);
+                EditorGUILayout.BeginHorizontal();
+                try
+                {
+                    if (GUILayout.Button("Read More", EditorStyles.miniButton, GUILayout.Width(65)))
+                    {
+                        Help.BrowseURL(url);
+                    }
+                    EditorGUILayout.LabelField("Example Article 2020-Jan-01", EditorStyles.boldLabel);
+                }
+                catch { }
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.LabelField("This is an example of the first couple of lines being presented by the control. This can be shorter or longer as desired but would be keep to a resonable length and ended with a link or button to the source of the information.", EditorStyles.wordWrappedLabel);
             }
-            EditorGUILayout.LabelField("Example Article 2020-Jan-01", EditorStyles.boldLabel);
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.LabelField("This is an example of the first couple of lines being presented by the control. This can be shorter or longer as desired but would be keep to a resonable length and ended with a link or button to the source of the information.", EditorStyles.wordWrappedLabel);
+            catch { }
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space();
         }
 
-        
         private T CreateAsset<T>(string name) where T : ScriptableObject
         {
             T asset = ScriptableObject.CreateInstance<T>();
