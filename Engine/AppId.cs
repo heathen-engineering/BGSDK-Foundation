@@ -12,10 +12,12 @@ namespace HeathenEngineering.Arkane.Engine
     [Serializable]
     public class AppId : System.IEquatable<AppId>, System.IComparable<AppId>
     {
-        public static readonly AppId Invalid = new AppId(Guid.Empty, Guid.Empty);
+        public static readonly AppId Invalid = new AppId(Guid.Empty);
         public string id;
         public string clientId;
+#if UNITY_SERVER || UNITY_EDITOR
         public string clientSecret;
+#endif
         public string name;
         public string description;
         public string rootURL;
@@ -25,7 +27,9 @@ namespace HeathenEngineering.Arkane.Engine
         {
             this.id = id;
             clientId = string.Empty;
+#if UNITY_SERVER || UNITY_EDITOR
             clientSecret = string.Empty;
+#endif
             name = string.Empty;
             description = string.Empty;
             rootURL = string.Empty;
@@ -36,13 +40,16 @@ namespace HeathenEngineering.Arkane.Engine
         {
             this.id = id.ToString("D");
             clientId = string.Empty;
+#if UNITY_SERVER || UNITY_EDITOR
             clientSecret = string.Empty;
+#endif
             name = string.Empty;
             description = string.Empty;
             rootURL = string.Empty;
             imageUrl = string.Empty;
         }
 
+#if UNITY_SERVER || UNITY_EDITOR
         public AppId(Guid id, string secret)
         {
             this.id = id.ToString("D");
@@ -64,6 +71,7 @@ namespace HeathenEngineering.Arkane.Engine
             rootURL = string.Empty;
             imageUrl = string.Empty;
         }
+#endif
 
         public override bool Equals(object other)
         {

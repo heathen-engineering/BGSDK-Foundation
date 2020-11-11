@@ -15,7 +15,7 @@ namespace HeathenEngineering.Arkane.Engine
         [HideInInspector]
         public Contract contract;
         [HideInInspector]
-        public DataModel.Token Data;
+        public DataModel.TokenData Data;
 
         public ulong id
         { get { return Data.id; } set { Data.id = value; } }

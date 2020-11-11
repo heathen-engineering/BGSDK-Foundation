@@ -5,6 +5,6 @@ namespace HeathenEngineering.Arkane.DataModel
     [Serializable]
     public class ContractResult : ArkaneBaseResult
     {
-        public Contract? result;
+        public ContractData? result;
     }
 }

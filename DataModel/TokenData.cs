@@ -8,7 +8,7 @@ namespace HeathenEngineering.Arkane.DataModel
     /// <summary>
     /// Represents the complete set of Token data as you would recieve from a GetTokenType call
     /// </summary>
-    public struct Token
+    public struct TokenData
     {
         [Tooltip("Address of the deployed token.")]
         public string contractAddress;

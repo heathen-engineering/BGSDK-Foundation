@@ -15,6 +15,6 @@ namespace HeathenEngineering.Arkane.DataModel
         public string imageUrl;
         public string imagePreviewUrl;
         public string imageThumbnailUrl;
-        public DataModel.Contract contract;
+        public DataModel.ContractData contract;
     }
 }

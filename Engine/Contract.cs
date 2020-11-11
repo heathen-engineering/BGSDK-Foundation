@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HeathenEngineering.Arkane.DataModel;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace HeathenEngineering.Arkane.Engine
         [HideInInspector]
         public long UpdatedOn;
         [HideInInspector]
-        public DataModel.Contract Data;
+        public ContractData Data;
         [HideInInspector]
         public List<Token> Tokens = new List<Token>();
 

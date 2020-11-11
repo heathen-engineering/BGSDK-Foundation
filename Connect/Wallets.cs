@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if DONOTUSE
+using System;
 using HeathenEngineering.Arkane.DataModel;
 using HeathenEngineering.Arkane.Engine;
 
@@ -42,10 +43,9 @@ namespace HeathenEngineering.Arkane.Connect
             /// <summary>
             /// TBD
             /// </summary>
-            /// <param name="identity"></param>
             /// <param name="wallet"></param>
             /// <param name="callback"></param>
-            public static void Link(Identity identity, string redirectUri)
+            public static void Link(string redirectUri)
             {
                 //TODO: Implament
             }
@@ -53,11 +53,10 @@ namespace HeathenEngineering.Arkane.Connect
             /// <summary>
             /// TBD
             /// </summary>
-            /// <param name="identity"></param>
             /// <param name="wallet"></param>
             /// <param name="callback"></param>
             /// <returns></returns>
-            public static void Manage(Identity identity, Wallet wallet, Action<ArkaneBaseResult> callback)
+            public static void Manage(Wallet wallet, Action<ArkaneBaseResult> callback)
             {
                 //TODO: Implament
             }
@@ -159,3 +158,4 @@ namespace HeathenEngineering.Arkane.Connect
         }
     }
 }
+#endif

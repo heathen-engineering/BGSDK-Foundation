@@ -17,7 +17,7 @@ namespace HeathenEngineering.Arkane.DataModel
         public string error_description;
 
         public bool IsErrorResponce { get { return !string.IsNullOrEmpty(error); } }
-        public DateTime CreatedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime ExpiresAt { get { return CreatedAt.AddSeconds(expires_in); } }
         public DateTime RefreshExpiresAt { get { return CreatedAt.AddSeconds(refresh_expires_in); } }
 

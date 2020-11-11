@@ -34,7 +34,6 @@ namespace HeathenEngineering.Arkane.Editor
         const string refreshExperation = "Heathen.Arkane.Manager.RefreshExperation";
 
         public int tab = 0;
-        private static Identity current;
         private static string storedAccessToken;
         private static string storedTokenType;
         private static DateTime storedTokenExperation;
@@ -57,7 +56,7 @@ namespace HeathenEngineering.Arkane.Editor
         #region Arkane Editor Wraps
         public void LogOn()
         {
-            var e = Arkane.Editor.EditorUtilities.Authenticate(current, (result) =>
+            var e = Arkane.Editor.EditorUtilities.Authenticate((result) =>
             {
                 if (result.hasError)
                 {
@@ -65,11 +64,11 @@ namespace HeathenEngineering.Arkane.Editor
                 }
                 else
                 {
-                    PlayerPrefs.SetString(accessToken, current.authentication.access_token);
-                    PlayerPrefs.SetString(tokenType, current.authentication.token_type);
-                    PlayerPrefs.SetString(tokenExperation, current.authentication.ExpiresAt.ToBinary().ToString());
-                    PlayerPrefs.SetString(refreshToken, current.authentication.refresh_token);
-                    PlayerPrefs.SetString(refreshExperation, current.authentication.RefreshExpiresAt.ToBinary().ToString());
+                    PlayerPrefs.SetString(accessToken, Settings.user.authentication.access_token);
+                    PlayerPrefs.SetString(tokenType, Settings.user.authentication.token_type);
+                    PlayerPrefs.SetString(tokenExperation, Settings.user.authentication.ExpiresAt.ToBinary().ToString());
+                    PlayerPrefs.SetString(refreshToken, Settings.user.authentication.refresh_token);
+                    PlayerPrefs.SetString(refreshExperation, Settings.user.authentication.RefreshExpiresAt.ToBinary().ToString());
                     Debug.Log(result.message);
                 }
             });
@@ -83,8 +82,8 @@ namespace HeathenEngineering.Arkane.Editor
         public static void Init()
         {
             ArkaneManagerWindow window = EditorWindow.GetWindow<ArkaneManagerWindow>("Arkane Manager", new Type[] { typeof(UnityEditor.SceneView) });
-            if (current == null)
-                current = new Identity();
+            if (Settings.user == null)
+                Settings.user = new Identity();
             cooroutines = new List<IEnumerator>();
             window.TryApplySettings();
             window.Show();
@@ -195,7 +194,7 @@ namespace HeathenEngineering.Arkane.Editor
             if (GUILayout.Button("Sync", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
                 GUI.FocusControl(null);
-                var syncProc = Arkane.Editor.EditorUtilities.SyncSettings(Settings.current, current);
+                var syncProc = Arkane.Editor.EditorUtilities.SyncSettings(Settings.current);
 
                 StartCoroutine(syncProc);
             }
@@ -598,8 +597,8 @@ namespace HeathenEngineering.Arkane.Editor
             try
             {
 
-                if (current == null)
-                    current = new Identity();
+                if (Settings.user == null)
+                    Settings.user = new Identity();
 
                 EditorGUILayout.LabelField("Configuration", EditorStyles.whiteLargeLabel);
                 EditorGUILayout.Space();
@@ -625,11 +624,11 @@ namespace HeathenEngineering.Arkane.Editor
                         usernameValue = PlayerPrefs.GetString(username);
                     }
                     usernameValue = EditorGUILayout.TextField(GUIContent.none, usernameValue);
-                    current.username = usernameValue;
+                    Settings.user.username = usernameValue;
                     PlayerPrefs.SetString(username, usernameValue);
                     EditorGUILayout.Space();
                     EditorGUILayout.LabelField("Password", EditorStyles.boldLabel);
-                    current.password = EditorGUILayout.PasswordField(GUIContent.none, current.password);
+                    Settings.user.password = EditorGUILayout.PasswordField(GUIContent.none, Settings.user.password);
                     EditorGUILayout.Space();
 
                     EditorGUILayout.BeginHorizontal();
@@ -661,7 +660,7 @@ namespace HeathenEngineering.Arkane.Editor
                     {
                         AppIds = new List<AppId>();
 
-                        var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                        var e = Arkane.Editor.EditorUtilities.ListApplications((result) =>
                         {
                             if (!result.hasError)
                             {
@@ -703,7 +702,7 @@ namespace HeathenEngineering.Arkane.Editor
                             if (appIdIndex == 0)
                             {
                                 appIdIndex = 2;
-                                var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                                var e = Arkane.Editor.EditorUtilities.ListApplications((result) =>
                                 {
                                     if (!result.hasError)
                                     {
@@ -751,7 +750,7 @@ namespace HeathenEngineering.Arkane.Editor
                             if (appIdIndex == 1)
                             {
                                 appIdIndex = 0;
-                                var e = Arkane.Editor.EditorUtilities.ListApplications(current, (result) =>
+                                var e = Arkane.Editor.EditorUtilities.ListApplications((result) =>
                                 {
                                     if (!result.hasError)
                                     {
@@ -931,15 +930,15 @@ namespace HeathenEngineering.Arkane.Editor
                         titleContent.text = "Arkane Manager (Online)";
                         tResult = true;
 
-                        if (current == null)
-                            current = new Identity();
+                        if (Settings.user == null)
+                            Settings.user = new Identity();
 
-                        if (current.authentication == null)
-                            current.authentication = new AuthenticationResponce();
+                        if (Settings.user.authentication == null)
+                            Settings.user.authentication = new AuthenticationResponce();
 
-                        current.authentication.access_token = storedAccessToken;
-                        current.authentication.token_type = storedTokenType;
-                        current.authentication.refresh_token = storedRefreshToken;
+                        Settings.user.authentication.access_token = storedAccessToken;
+                        Settings.user.authentication.token_type = storedTokenType;
+                        Settings.user.authentication.refresh_token = storedRefreshToken;
                     }
                 }
 
@@ -953,28 +952,32 @@ namespace HeathenEngineering.Arkane.Editor
                     {
                         if (storedRefreshExperation > DateTime.Now)
                         {
-
-                            var e = Arkane.Editor.EditorUtilities.Authenticate(current, (result) =>
+                            if (Settings.current != null)
                             {
-                                if (result.hasError)
+                                var e = Arkane.Editor.EditorUtilities.Authenticate((result) =>
                                 {
-                                    Debug.LogError(result.message);
-                                }
-                                else
-                                {
-                                    PlayerPrefs.SetString(accessToken, current.authentication.access_token);
-                                    PlayerPrefs.SetString(tokenType, current.authentication.token_type);
-                                    PlayerPrefs.SetString(tokenExperation, current.authentication.ExpiresAt.ToBinary().ToString());
-                                    PlayerPrefs.SetString(refreshToken, current.authentication.refresh_token);
-                                    PlayerPrefs.SetString(refreshExperation, current.authentication.RefreshExpiresAt.ToBinary().ToString());
-                                    Debug.Log(result.message);
-                                }
-                            });
-                            authenticated = false;
-                            titleContent.text = "Arkane Manager (Refreshing)";
-                            StartCoroutine(e);
-
-                            
+                                    if (result.hasError)
+                                    {
+                                        Debug.LogError(result.message);
+                                    }
+                                    else
+                                    {
+                                        PlayerPrefs.SetString(accessToken, Settings.user.authentication.access_token);
+                                        PlayerPrefs.SetString(tokenType, Settings.user.authentication.token_type);
+                                        PlayerPrefs.SetString(tokenExperation, Settings.user.authentication.ExpiresAt.ToBinary().ToString());
+                                        PlayerPrefs.SetString(refreshToken, Settings.user.authentication.refresh_token);
+                                        PlayerPrefs.SetString(refreshExperation, Settings.user.authentication.RefreshExpiresAt.ToBinary().ToString());
+                                        Debug.Log(result.message);
+                                    }
+                                });
+                                authenticated = false;
+                                titleContent.text = "Arkane Manager (Refreshing)";
+                                StartCoroutine(e);
+                            }
+                            else
+                            {
+                                titleContent.text = "Arkane Manager (Settings Missing)";
+                            }
                         }
                         else
                         {

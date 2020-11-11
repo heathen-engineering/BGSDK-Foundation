@@ -6,6 +6,6 @@ namespace HeathenEngineering.Arkane.DataModel
     [Serializable]
     public class ListContractsResult : ArkaneBaseResult
     {
-        public List<DataModel.Contract> result;
+        public List<DataModel.ContractData> result;
     }
 }

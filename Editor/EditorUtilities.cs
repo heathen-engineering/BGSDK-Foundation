@@ -1,4 +1,5 @@
-﻿using HeathenEngineering.Arkane.DataModel;
+﻿#if UNITY_EDITOR
+using HeathenEngineering.Arkane.DataModel;
 using HeathenEngineering.Arkane.Engine;
 using System;
 using System.Collections;
@@ -36,10 +37,9 @@ namespace HeathenEngineering.Arkane.Editor
         /// <summary>
         /// List the available applications
         /// </summary>
-        /// <param name="identity">The Arkane identity that for which you wish to list the available applications of</param>
         /// <param name="callback">A method that will be called on completion rather success or failure</param>
         /// <returns></returns>
-        public static IEnumerator ListApplications(Identity identity, Action<ListApplicationsResult> callback)
+        public static IEnumerator ListApplications(Action<ListApplicationsResult> callback)
         {
             if (Settings.current == null)
             {
@@ -48,15 +48,15 @@ namespace HeathenEngineering.Arkane.Editor
             }
             else
             {
-                if (identity == null)
+                if (Settings.user == null)
                 {
-                    callback(new ListApplicationsResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.", result = null });
+                    callback(new ListApplicationsResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\n Please initalize the Settings.user variable before listing applications.", result = null });
                     yield return null;
                 }
                 else
                 {
                     UnityWebRequest www = UnityWebRequest.Get(Settings.current.AppsUri);
-                    www.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -87,7 +87,6 @@ namespace HeathenEngineering.Arkane.Editor
         /// For more information see <see href="https://docs.arkane.network/pages/token-management.html#_authentication">https://docs.arkane.network/pages/token-management.html</see>
         /// </para>
         /// </remarks>
-        /// <param name="identity">The identity to authenticate</param>
         /// <param name="callback">A method pointer to handle the results of the authentication</param>
         /// <returns></returns>
         /// <example>
@@ -127,7 +126,7 @@ namespace HeathenEngineering.Arkane.Editor
         /// </item>
         /// </list>
         /// </example>
-        public static IEnumerator Authenticate(Identity identity, Action<AuthenticationResult> callback)
+        public static IEnumerator Authenticate(Action<AuthenticationResult> callback)
         {
             if (Settings.current == null)
             {
@@ -136,7 +135,7 @@ namespace HeathenEngineering.Arkane.Editor
             }
             else
             {
-                if (identity == null)
+                if (Settings.user == null)
                 {
                     callback(new AuthenticationResult() { hasError = true, message = "ArkaneIdentity required, null identity provided." });
                     yield return null;
@@ -145,8 +144,8 @@ namespace HeathenEngineering.Arkane.Editor
                 {
                     WWWForm form = new WWWForm();
                     form.AddField("grant_type", Settings.current.AuthenticationMode.GrantType);
-                    form.AddField("username", identity.username);
-                    form.AddField("password", identity.password);
+                    form.AddField("username", Settings.user.username);
+                    form.AddField("password", Settings.user.password);
                     form.AddField("client_id", Settings.current.AppId.clientId);
                     form.AddField("client_secret", Settings.current.AppId.clientSecret);
 
@@ -162,9 +161,9 @@ namespace HeathenEngineering.Arkane.Editor
                     if (!www.isNetworkError && !www.isHttpError)
                     {
                         string resultContent = www.downloadHandler.text;
-                        identity.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
-                        identity.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
-                        identity.authentication.Create();
+                        Settings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+                        Settings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
+                        Settings.user.authentication.Create();
                         callback(new AuthenticationResult() { hasError = false, message = "Authentication complete.", httpCode = www.responseCode });
                     }
                     else
@@ -184,7 +183,6 @@ namespace HeathenEngineering.Arkane.Editor
         /// For more information see <see href="https://docs.arkane.network/pages/token-management.html#_authentication">https://docs.arkane.network/pages/token-management.html</see>
         /// </para>
         /// </remarks>
-        /// <param name="identity">The identity to authenticate</param>
         /// <param name="callback">A method pointer to handle the results of the authentication</param>
         /// <returns></returns>
         /// <example>
@@ -224,18 +222,18 @@ namespace HeathenEngineering.Arkane.Editor
         /// </item>
         /// </list>
         /// </example>
-        public static IEnumerator RefreshAuthenticate(Identity identity, Action<AuthenticationResult> callback)
+        public static IEnumerator RefreshAuthentication(Action<AuthenticationResult> callback)
         {
             if (Settings.current == null)
             {
-                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call Arkane.User.RefreshAuthenticate with no Arkane.Settings object applied." });
+                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call Arkane.User.RefreshAuthentication with no Arkane.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (identity == null)
+                if (Settings.user == null)
                 {
-                    callback(new AuthenticationResult() { hasError = true, message = "ArkaneIdentity required, null identity provided." });
+                    callback(new AuthenticationResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\n Please initalize the Settings.user variable before calling RefreshAuthentication" });
                     yield return null;
                 }
                 else
@@ -244,7 +242,7 @@ namespace HeathenEngineering.Arkane.Editor
                     form.AddField("grant_type", Settings.current.AuthenticationMode.GrantType);
                     form.AddField("client_id", Settings.current.AppId.clientId);
                     form.AddField("client_secret", Settings.current.AppId.clientSecret);
-                    form.AddField("refresh_token", identity.authentication.refresh_token);
+                    form.AddField("refresh_token", Settings.user.authentication.refresh_token);
 
                     UnityWebRequest www = UnityWebRequest.Post(Settings.current.AuthenticationUri, form);
 
@@ -258,9 +256,9 @@ namespace HeathenEngineering.Arkane.Editor
                     if (!www.isNetworkError && !www.isHttpError)
                     {
                         string resultContent = www.downloadHandler.text;
-                        identity.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
-                        identity.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
-                        identity.authentication.Create();
+                        Settings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+                        Settings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
+                        Settings.user.authentication.Create();
                         callback(new AuthenticationResult() { hasError = false, message = "Authentication complete.", httpCode = www.responseCode });
                     }
                     else
@@ -440,7 +438,7 @@ namespace HeathenEngineering.Arkane.Editor
         /// <param name="settings">The settings to process ... these will be set as the active settings for the Arkane API</param>
         /// <param name="identity">The identity of the user which will process the elements against the Arkane service.</param>
         /// <returns></returns>
-        public static IEnumerator SyncSettings(Settings settings, Identity identity)
+        public static IEnumerator SyncSettings(Settings settings)
         {
             /**********************************************************************************
              * First validate our model but skip the check on empty models ... this allows 
@@ -467,7 +465,7 @@ namespace HeathenEngineering.Arkane.Editor
                  **********************************************************************************/
 
                 UnityWebRequest wwwContract = UnityWebRequest.Get(settings.ContractUri);
-                wwwContract.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                wwwContract.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                 var co = wwwContract.SendWebRequest();
                 while (!co.isDone)
@@ -597,7 +595,7 @@ namespace HeathenEngineering.Arkane.Editor
 
                         #region Update token's for this contract that are on the backend service
                         UnityWebRequest wwwToken = UnityWebRequest.Get(settings.GetTokenUri(arkaneContract));
-                        wwwToken.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                        wwwToken.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                         var to = wwwToken.SendWebRequest();
                         while (!to.isDone)
@@ -612,7 +610,7 @@ namespace HeathenEngineering.Arkane.Editor
                             {
                                 //Get the token so we can get the full data set for it
                                 UnityWebRequest wwwFullToken = UnityWebRequest.Get(settings.GetTokenUri(arkaneContract) + "/" + tokenData.id.ToString());
-                                wwwFullToken.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                                wwwFullToken.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                                 var ftd = wwwFullToken.SendWebRequest();
                                 while (!ftd.isDone)
@@ -621,7 +619,7 @@ namespace HeathenEngineering.Arkane.Editor
                                 if (!wwwFullToken.isNetworkError && !wwwFullToken.isHttpError)
                                 {
                                     string resultContent = wwwFullToken.downloadHandler.text;
-                                    var fullTokenResults = JsonUtility.FromJson<DataModel.Token>(resultContent);
+                                    var fullTokenResults = JsonUtility.FromJson<DataModel.TokenData>(resultContent);
 
                                     var arkaneToken = arkaneContract.Tokens.FirstOrDefault(p => p.Data.id == tokenData.id);
                                     if (arkaneToken != default(Engine.Token))
@@ -702,7 +700,7 @@ namespace HeathenEngineering.Arkane.Editor
                             WWWForm form = token.Data.ToTokenCreateRequestData().GetForm();
 
                             UnityWebRequest www = UnityWebRequest.Post(settings.DefineTokenTypeUri(arkaneContract), form);
-                            www.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                            www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                             var ctt = www.SendWebRequest();
                             while (!ctt.isDone)
@@ -739,7 +737,7 @@ namespace HeathenEngineering.Arkane.Editor
 
                         UnityWebRequest wwwCreateContract = UnityWebRequest.Put(Settings.current.ContractUri, jsonString);
                         wwwCreateContract.method = UnityWebRequest.kHttpVerbPOST;
-                        wwwCreateContract.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                        wwwCreateContract.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
                         wwwCreateContract.uploadHandler.contentType = "application/json;charset=UTF-8";
                         wwwCreateContract.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -750,7 +748,7 @@ namespace HeathenEngineering.Arkane.Editor
                         if (!wwwCreateContract.isNetworkError && !wwwCreateContract.isHttpError)
                         {
                             string resultContent = wwwCreateContract.downloadHandler.text;
-                            var result = JsonUtility.FromJson<DataModel.Contract>(resultContent);
+                            var result = JsonUtility.FromJson<DataModel.ContractData>(resultContent);
 
                             contract.Data = result;
                             contract.UpdatedFromServer = true;
@@ -765,7 +763,7 @@ namespace HeathenEngineering.Arkane.Editor
                                 WWWForm form = token.Data.ToTokenCreateRequestData().GetForm();
 
                                 UnityWebRequest www = UnityWebRequest.Post(settings.DefineTokenTypeUri(contract), form);
-                                www.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
+                                www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                                 var ctt = www.SendWebRequest();
                                 while (!ctt.isDone)
@@ -850,7 +848,7 @@ namespace HeathenEngineering.Arkane.Editor
                 {
                     string resultContent = www.downloadHandler.text;
                     var results = new DataModel.ContractResult();
-                    results.result = JsonUtility.FromJson<DataModel.Contract>(Utilities.JSONArrayWrapper(resultContent));
+                    results.result = JsonUtility.FromJson<DataModel.ContractData>(Utilities.JSONArrayWrapper(resultContent));
                     results.message = "Deploy Contract complete.";
                     results.httpCode = www.responseCode;
                     responce(results);
@@ -877,7 +875,7 @@ namespace HeathenEngineering.Arkane.Editor
         /// <param name="properties">Additional properties to attach to the token</param>
         /// <param name="responce">A method that will be called on completion rather success or failure</param>
         /// <returns></returns>
-        public static IEnumerator CreateTokenType(Identity identity, AppId app, Engine.Contract contract, DataModel.Token request, Action<DataModel.CreateTokenTypeResult> responce)
+        public static IEnumerator CreateTokenType(Identity identity, AppId app, Engine.Contract contract, DataModel.TokenData request, Action<DataModel.CreateTokenTypeResult> responce)
         {
             //Define a type of token
             yield return null;
@@ -920,3 +918,4 @@ namespace HeathenEngineering.Arkane.Editor
         }
     }
 }
+#endif
