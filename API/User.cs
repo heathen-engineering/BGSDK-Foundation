@@ -184,7 +184,7 @@ namespace HeathenEngineering.BGSDK.API
             }
         }
 
-#if DONOTUSE
+#if false
         /// <summary>
         /// Exchanges a PlayFab Entity Token for an BGSDK token enabling the client to make future calls against the BGSDK API
         /// </summary>
