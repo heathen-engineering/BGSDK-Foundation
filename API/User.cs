@@ -2,14 +2,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using HeathenEngineering.Arkane.DataModel;
-using HeathenEngineering.Arkane.Engine;
-using System.Text;
+using HeathenEngineering.BGSDK.DataModel;
+using HeathenEngineering.BGSDK.Engine;
 
-namespace HeathenEngineering.Arkane.API
+namespace HeathenEngineering.BGSDK.API
 {
     /// <summary>
-    /// A wrapper around Arkane's User API
+    /// A wrapper around BGSDK's User API
     /// </summary>
     /// <remarks>
     /// <para>
@@ -54,21 +53,21 @@ namespace HeathenEngineering.Arkane.API
         /// How to call:
         /// </para>
         /// <code>
-        /// StartCoroutine(HeathenEngineering.Arkane.API.User.GetProfile(Identity, HandleProfileResult));
+        /// StartCoroutine(HeathenEngineering.BGSDK.API.User.GetProfile(Identity, HandleProfileResult));
         /// </code>
         /// </example>
         public static IEnumerator GetProfile(Action<UserProfileResult> callback)
         {
             if (Settings.current == null)
             {
-                callback(new UserProfileResult() { hasError = true, message = "Attempted to call Arkane.User.GetProfile with no Arkane.Settings object applied." });
+                callback(new UserProfileResult() { hasError = true, message = "Attempted to call BGSDK.User.GetProfile with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new UserProfileResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\nPlease initalize Settings.user before calling GetProfile", result = null });
+                    callback(new UserProfileResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize Settings.user before calling GetProfile", result = null });
                     yield return null;
                 }
                 else
@@ -116,10 +115,10 @@ namespace HeathenEngineering.Arkane.API
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This can be used when you have a trusted sources such as your game server or a 3rd party backend service provider handle user authentication against Arkane.
+        /// This can be used when you have a trusted sources such as your game server or a 3rd party backend service provider handle user authentication against BGSDK.
         /// In this model you would gather the nessisary information from the user at the client level and would send this securly to your trusted 3rd party source.
-        /// The 3rd party source would then perform any nessisary validation and finally authenticate against Arkane's API aquiring the access token, expires in and refresh token/expires in values.
-        /// Once the 3rd party has aquired this information it can securly pass it back to the client where you can feed that information into this method to enable this user to make further calls against Arkane directly.
+        /// The 3rd party source would then perform any nessisary validation and finally authenticate against BGSDK's API aquiring the access token, expires in and refresh token/expires in values.
+        /// Once the 3rd party has aquired this information it can securly pass it back to the client where you can feed that information into this method to enable this user to make further calls against BGSDK directly.
         /// </para>
         /// </remarks>
         /// <param name="createdAt">The date and time the token request was submited by the 3rd party source</param>
@@ -143,7 +142,7 @@ namespace HeathenEngineering.Arkane.API
         }
 
         /// <summary>
-        /// Exchanges a Facebook token for an Arkane token enabling the client to make future calls against the Arkane API
+        /// Exchanges a Facebook token for an BGSDK token enabling the client to make future calls against the BGSDK API
         /// </summary>
         /// <param name="token">The token provided to you via Facebook authentication</param>
         /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
@@ -151,7 +150,7 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call Arkane.User.Login_Facebook with no Arkane.Settings object applied." });
+                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call BGSDK.User.Login_Facebook with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
@@ -187,7 +186,7 @@ namespace HeathenEngineering.Arkane.API
 
 #if DONOTUSE
         /// <summary>
-        /// Exchanges a PlayFab Entity Token for an Arkane token enabling the client to make future calls against the Arkane API
+        /// Exchanges a PlayFab Entity Token for an BGSDK token enabling the client to make future calls against the BGSDK API
         /// </summary>
         /// <param name="token">The token provided to you via PlayFab's Entity system</param>
         /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
@@ -195,7 +194,7 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call Arkane.User.Login_PlayFab with no Arkane.Settings object applied." });
+                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call BGSDK.User.Login_PlayFab with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
@@ -230,7 +229,7 @@ namespace HeathenEngineering.Arkane.API
         }
 
         /// <summary>
-        /// Exchanges a Steam Token for an Arkane token enabling the client to make future calls against the Arkane API
+        /// Exchanges a Steam Token for an BGSDK token enabling the client to make future calls against the BGSDK API
         /// </summary>
         /// <param name="token">The token provided to you via Steam API Authentication system</param>
         /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
@@ -238,7 +237,7 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call Arkane.User.Login_Steam with no Arkane.Settings object applied." });
+                callback(new AuthenticationResult() { hasError = true, message = "Attempted to call BGSDK.User.Login_Steam with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else

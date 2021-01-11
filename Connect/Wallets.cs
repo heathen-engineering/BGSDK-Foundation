@@ -1,27 +1,27 @@
 ﻿#if DONOTUSE
 using System;
-using HeathenEngineering.Arkane.DataModel;
-using HeathenEngineering.Arkane.Engine;
+using HeathenEngineering.BGSDK.DataModel;
+using HeathenEngineering.BGSDK.Engine;
 
 /// <summary>
-/// Wrapper for the Arkane Connect endpoint
+/// Wrapper for the BGSDK Connect endpoint
 /// </summary>
 /// <remarks>
 /// <para>
 /// For more information please see <see href="https://docs-staging.arkane.network/pages/buildingblocks.html#_arkane_connect">https://docs-staging.arkane.network/pages/buildingblocks.html#_arkane_connect</see>
 /// </para>
 /// <para>
-/// Arkane Connect is an endpoint specifically designed to perform common tasks with Arkane wallets. Connect was created as a way to perform tasks which are
+/// BGSDK Connect is an endpoint specifically designed to perform common tasks with BGSDK wallets. Connect was created as a way to perform tasks which are
 ///<list type="bullet">
 ///<item>otherwise not possible due to security reasons, like creating signatures</item>
 ///<item>necessary by all applications, like linking wallets your client</item>
 ///</list>
 /// </para>
 /// </remarks>
-namespace HeathenEngineering.Arkane.Connect
+namespace HeathenEngineering.BGSDK.Connect
 {
     /// <summary>
-    /// Wraps the Arkane interface for wallets incuding User, App and Whitelable wallets.
+    /// Wraps the BGSDK interface for wallets incuding User, App and Whitelable wallets.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -56,7 +56,7 @@ namespace HeathenEngineering.Arkane.Connect
             /// <param name="wallet"></param>
             /// <param name="callback"></param>
             /// <returns></returns>
-            public static void Manage(Wallet wallet, Action<ArkaneBaseResult> callback)
+            public static void Manage(Wallet wallet, Action<BGSDKBaseResult> callback)
             {
                 //TODO: Implament
             }

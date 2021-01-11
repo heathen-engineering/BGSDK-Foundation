@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
     public struct DomainTarget

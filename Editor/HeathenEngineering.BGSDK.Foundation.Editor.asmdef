@@ -1,10 +1,12 @@
 {
-    "name": "HeathenEngineering.Arkane.Foundation.Editor",
+    "name": "HeathenEngineering.BGSDK.Foundation.Editor",
     "references": [
-        "HeathenEngineering.Arkane.Foundation"
+        "HeathenEngineering.BGSDK.Foundation"
     ],
     "optionalUnityReferences": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

@@ -1,7 +1,12 @@
-﻿using System;
+﻿using HeathenEngineering.BGSDK.Engine;
+using System;
+using System.Collections;
+using System.Numerics;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Networking;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
     public struct ContractData
@@ -10,7 +15,7 @@ namespace HeathenEngineering.Arkane.DataModel
         /// id of the contract.
         /// </summary>
         [Tooltip("id of the contract.")]
-        public ulong id;
+        public string id;
         /// <summary>
         /// name of the contract.
         /// </summary>
@@ -52,79 +57,69 @@ namespace HeathenEngineering.Arkane.DataModel
         [Tooltip("The type of the contract (ex. ERC721).")]
         public string type;
     }
+
+    [Serializable]
+    public class TokenDefinition
+    {
+        /// <summary>
+        /// name of the token type
+        /// </summary>
+        [Tooltip("Name of the token type")]
+        public string name;
+        /// <summary>
+        /// description of the token type
+        /// </summary>
+        [Tooltip("Description of the token type")]
+        public string description;
+        /// <summary>
+        /// Only applicable in case of a fungible token, this indicates the number of decimals the fungible token has
+        /// </summary>
+        [Tooltip("Only applicable in case of a fungible token, this indicates the number of decimals the fungible token has")]
+        public uint decimals;
+        /// <summary>
+        /// Flag that indicates if this type is a non-fungible (true for non-fungible, false for fungible)
+        /// </summary>
+        [Tooltip("Flag that indicates if this type is a non-fungible (true for non-fungible, false for fungible)")]
+        public bool nft;
+        /// <summary>
+        /// The backgroundcolor of the image
+        /// </summary>
+        [Tooltip("The backgroundcolor of the image")]
+        public string backgroundColor;
+        /// <summary>
+        /// The URL with more information about the token
+        /// </summary>
+        [Tooltip("The URL with more information about the token")]
+        public string url;
+        /// <summary>
+        /// Image url of the token, 250x250, preferably svg
+        /// </summary>
+        [Tooltip("Image url of the token, 250x250, preferably svg")]
+        public string imagePreview;
+        /// <summary>
+        /// Image url of the token, 128x128, preferably svg
+        /// </summary>
+        [Tooltip("Image url of the token, 128x128, preferably svg")]
+        public string imageThumbnail;
+        /// <summary>
+        /// Image url of the token, 2000x2000, preferably svg
+        /// </summary>
+        [Tooltip("Image url of the token, 2000x2000, preferably svg")]
+        public string image;
+
+        public virtual string ToJson()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
+
+    public class TokenDefinition<T> : TokenDefinition
+    {
+        public T properties;
+
+        public override string ToJson()
+        {
+            return JsonUtility.ToJson(this);
+        }
+    }
 }
-
-
-//public class TestBehaviour : MonoBehaviour
-//{
-//    public Settings settings;
-
-//    [Header("UI Elements")]
-//    public GameObject loginRoot;
-//    public UnityEngine.UI.InputField Username;
-//    public UnityEngine.UI.InputField Password;
-//    public UnityEngine.UI.Text ConsoleText;
-
-//    [Header("Results")]
-//    public Identity Identity = new Identity();
-//    public List<Wallet> wallets = new List<Wallet>();
-
-//    private void Start()
-//    {
-//        Settings.current = settings;
-
-//        if (wallets == null)
-//            wallets = new List<Wallet>();
-//        else
-//            wallets.Clear();
-
-//        ConsoleText.text = string.Empty;
-//    }
-
-//    public void Authenticate()
-//    {
-//        Identity = new Identity() { username = Username.text, password = Password.text };
-//        StartCoroutine(Editor.EditorUtilities.Authenticate(Identity, HandleAuthenticationResult));
-//    }
-
-//    public void FetchContracts()
-//    {
-//        StartCoroutine(API.TokenManagement.ListContracts(Identity, HandleListContractResults));
-//    }
-
-//    private void HandleListContractResults(ListContractsResult contractsResult)
-//    {
-//        Debug.Log("List Contracts Responce:\nHas Error: " + contractsResult.hasError + "\nMessage: " + contractsResult.message);
-//    }
-
-//    private void HandleAuthenticationResult(AuthenticationResult authenticationResult)
-//    {
-//        Debug.Log("Authenticate Responce:\nHas Error: " + authenticationResult.hasError + "\nMessage:" + authenticationResult.message);
-//        if (!authenticationResult.hasError)
-//        {
-//            loginRoot.SetActive(false);
-//            ConsoleText.text = "<color=green><b>Authenticated</b></color>";
-//            StartCoroutine(API.Wallets.List(Identity, HandleWalletRefresh));
-//        }
-//        else
-//        {
-//            ConsoleText.text = "<color=red><b>Not Authenticated</b></color>\n" + authenticationResult.message;
-//        }
-//    }
-
-//    private void HandleWalletRefresh(ListWalletResult walletResult)
-//    {
-//        wallets.Clear();
-//        Debug.Log("List Wallets Responce:\nHas Error: " + walletResult.hasError + "\nMessage:" + walletResult.message);
-
-//        if(!walletResult.hasError)
-//        {
-//            foreach(var wallet in walletResult.result)
-//            {
-//                wallets.Add(wallet);
-//                Debug.Log(wallet.description + " : " + wallet.address);
-//                ConsoleText.text += "\n\n<b>Wallet Alias: "+wallet.alias+"</b>\nType: " + wallet.walletType + "\nDescription: " + wallet.description;
-//            }
-//        }
-//    }
-//}

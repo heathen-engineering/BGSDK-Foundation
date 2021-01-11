@@ -1,14 +1,14 @@
-﻿using HeathenEngineering.Arkane.DataModel;
+﻿using HeathenEngineering.BGSDK.DataModel;
 using System;
 
-namespace HeathenEngineering.Arkane.Engine
+namespace HeathenEngineering.BGSDK.Engine
 {
     /// <summary>
-    /// Represents an ArkaneIdentity
+    /// Represents an BGSDKIdentity
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Used by the <see cref="Arkane"/> object for authenticaiton, see <see cref="Arkane.Authenticate(Identity, Action{AuthenticationResult})"/> for more information.
+    /// Used by the <see cref="BGSDK"/> object for authenticaiton, see <see cref="BGSDK.Authenticate(Identity, Action{AuthenticationResult})"/> for more information.
     /// </para>
     /// </remarks>
     [Serializable]

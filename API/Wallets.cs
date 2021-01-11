@@ -3,13 +3,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections.Generic;
-using HeathenEngineering.Arkane.DataModel;
-using HeathenEngineering.Arkane.Engine;
+using HeathenEngineering.BGSDK.DataModel;
+using HeathenEngineering.BGSDK.Engine;
 
-namespace HeathenEngineering.Arkane.API
+namespace HeathenEngineering.BGSDK.API
 {
     /// <summary>
-    /// Wraps the Arkane interface for wallets incuding User, App and Whitelable wallets.
+    /// Wraps the BGSDK interface for wallets incuding User, App and Whitelable wallets.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -55,7 +55,7 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListWalletResult() { hasError = true, message = "Attempted to call Arkane.Wallets.CreateWhitelabelWallet with no Arkane.Settings object applied." });
+                callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.CreateWhitelabelWallet with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
@@ -63,7 +63,7 @@ namespace HeathenEngineering.Arkane.API
 
                 if (Settings.user == null)
                 {
-                    callback(new ListWalletResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.\n Please initalize the Settings.user before calling CreateWhitelableWallet", result = null });
+                    callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.\n Please initalize the Settings.user before calling CreateWhitelableWallet", result = null });
                     yield return null;
                 }
                 else
@@ -126,23 +126,23 @@ namespace HeathenEngineering.Arkane.API
         /// <param name="wallet"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator Unlink(Wallet wallet, Action<ArkaneBaseResult> callback)
+        public static IEnumerator Unlink(Wallet wallet, Action<BGSDKBaseResult> callback)
         {
             if (Settings.current == null)
             {
-                callback(new ArkaneBaseResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.Unlink with no Arkane.Settings object applied." });
+                callback(new BGSDKBaseResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.Unlink with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ArkaneBaseResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided." });
+                    callback(new BGSDKBaseResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided." });
                     yield return null;
                 }
                 else
                 {
-                    //TODO: Confirm with Arkane that its the address that should be used. This doesn't appear correct as the value the API expects is a GUID and address is a HEX value
+                    //TODO: Confirm with BGSDK that its the address that should be used. This doesn't appear correct as the value the API expects is a GUID and address is a HEX value
                     UnityWebRequest www = UnityWebRequest.Delete(Settings.current.WalletUri + "/" + wallet.address + "/link");
                     www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
@@ -152,11 +152,11 @@ namespace HeathenEngineering.Arkane.API
 
                     if (!www.isNetworkError && !www.isHttpError)
                     {
-                        callback(new ArkaneBaseResult() { hasError = false, message = "Unlink request completed.", httpCode = www.responseCode });
+                        callback(new BGSDKBaseResult() { hasError = false, message = "Unlink request completed.", httpCode = www.responseCode });
                     }
                     else
                     {
-                        callback(new ArkaneBaseResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while processing an unlink request." : " a HTTP error occured while requesting the user's wallets."), httpCode = www.responseCode });
+                        callback(new BGSDKBaseResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while processing an unlink request." : " a HTTP error occured while requesting the user's wallets."), httpCode = www.responseCode });
                     }
                 }
             }
@@ -174,14 +174,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListWalletResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.List with no Arkane.Settings object applied." });
+                callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.List with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ListWalletResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -237,14 +237,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListWalletResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.Get with no Arkane.Settings object applied." });
+                callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.Get with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ListWalletResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -304,7 +304,7 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListWalletResult() { hasError = true, message = "Attempted to call Arkane.Wallets.CreateWhitelabelWallet with no Arkane.Settings object applied." });
+                callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.CreateWhitelabelWallet with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
@@ -312,7 +312,7 @@ namespace HeathenEngineering.Arkane.API
 
                 if (Settings.user == null)
                 {
-                    callback(new ListWalletResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -372,14 +372,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new BalanceResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.NativeBalance with no Arkane.Settings object applied." });
+                callback(new BalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.NativeBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new BalanceResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new BalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -422,7 +422,7 @@ namespace HeathenEngineering.Arkane.API
         }
 
         /// <summary>
-        /// Returns the balance of all tokens currently supported by Arkane.
+        /// Returns the balance of all tokens currently supported by BGSDK.
         /// </summary>
         /// <remarks>
         /// <para>
@@ -436,14 +436,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListTokenBalanceResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.TokenBalance with no Arkane.Settings object applied." });
+                callback(new ListTokenBalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.TokenBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ListTokenBalanceResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new ListTokenBalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -502,14 +502,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new TokenBalanceResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.TokenBalance with no Arkane.Settings object applied." });
+                callback(new TokenBalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.TokenBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new TokenBalanceResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new TokenBalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -571,14 +571,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListListedNFTTokenResult() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.ListNFTs with no Arkane.Settings object applied." });
+                callback(new ListListedNFTTokenResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ListListedNFTTokenResult() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new ListListedNFTTokenResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -640,7 +640,7 @@ namespace HeathenEngineering.Arkane.API
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Currently this functionallity is only supported for MATIC wallets and items minted by Arkane
+        /// Currently this functionallity is only supported for MATIC wallets and items minted by BGSDK
         /// <para>
         /// For more information please see <see href="https://docs-staging.arkane.network/pages/reference.html#_get_inventory_arkane_api">https://docs-staging.arkane.network/pages/reference.html#_get_inventory_arkane_api</see>
         /// </para>
@@ -654,14 +654,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListInventoryResults() { hasError = true, message = "Attempted to call Arkane.Wallets.UserWallet.ListNFTs with no Arkane.Settings object applied." });
+                callback(new ListInventoryResults() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ListInventoryResults() { hasError = true, message = "ArkaneSettings.user required, null Settings.user provided.", result = null });
+                    callback(new ListInventoryResults() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else

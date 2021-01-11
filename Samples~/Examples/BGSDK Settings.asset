@@ -1,0 +1,134 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f74f99d19469d44bbd5317b7ad0f0d0, type: 3}
+  m_Name: BGSDK Settings
+  m_EditorClassIdentifier: 
+  Connect:
+    Staging: https://connect-staging.arkane.network/auth/exchange
+    Production: https://connect.arkane.network/auth/exchange
+  Authentication:
+    Staging: https://login-staging.arkane.network
+    Production: https://login.arkane.network
+  Business:
+    Staging: https://api-business-staging.arkane.network
+    Production: https://api-business.arkane.network
+  API:
+    Staging: https://api-staging.arkane.network
+    Production: https://api.arkane.network
+  UseStaging: 1
+  AppId:
+    applicationId: 41b34dc4-8b3c-4150-82bf-126ed10791a2
+    clientId: Heathen-app
+    clientSecret: b5e20e59-2257-4407-a851-c45ed5f89a5e
+    name: Heathen Test App
+    description: 
+    rootURL: 
+    imageUrl: https://img.arkane.network/connected-apps/logos/Heathen-app.png
+  Contracts:
+  - {fileID: 114771782864689118}
+--- !u!114 &114086927000068904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
+  m_Name: 'X-Men Heroes : Example Type: LazyToken'
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8585912238227660904
+  contract: {fileID: 114771782864689118}
+  properties: {fileID: 0}
+--- !u!114 &114251426337458012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
+  m_Name: 'X-Men Heroes : Example Type: Hulk'
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8585912238231600918
+  contract: {fileID: 114771782864689118}
+  properties: {fileID: 0}
+--- !u!114 &114675757930812360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
+  m_Name: 'X-Men Heroes : Example Type: LazyToken v4'
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8585912238223898406
+  contract: {fileID: 114771782864689118}
+  properties: {fileID: 0}
+--- !u!114 &114680546581087770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
+  m_Name: 'X-Men Heroes : Example Type: Hulk'
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8585912238235190736
+  contract: {fileID: 114771782864689118}
+  properties: {fileID: 0}
+--- !u!114 &114771782864689118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6cbcdfaca89dd4e9d1c6e605cd139b, type: 3}
+  m_Name: X-Men Heroes
+  m_EditorClassIdentifier: 
+  UpdatedFromServer: 1
+  UpdatedOn: -8585912238240870906
+  Data:
+    id: 31
+    name: X-Men Heroes
+    description: The X-Men are a team of mutant superheroes in the Marvel Universe.
+      he basic concept of the X-Men is that under a cloud of increasing anti-mutant
+      sentiment, Professor Xavier created a haven at his Westchester mansion to train
+      young mutants to use their powers for the benefit of humanity, and to prove
+      mutants can be heroes
+    confirmed: 1
+    address: 0x28e06fe9091392f4c6b5d171c9a6d5930c60d400
+    symbol: 
+    url: 
+    imageUrl: 
+    type: 
+  Tokens:
+  - {fileID: 114680546581087770}
+  - {fileID: 114251426337458012}
+  - {fileID: 114086927000068904}
+  - {fileID: 114675757930812360}

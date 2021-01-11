@@ -2,13 +2,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
-using HeathenEngineering.Arkane.DataModel;
-using HeathenEngineering.Arkane.Engine;
+using HeathenEngineering.BGSDK.DataModel;
+using HeathenEngineering.BGSDK.Engine;
 
-namespace HeathenEngineering.Arkane.API
+namespace HeathenEngineering.BGSDK.API
 {
     /// <summary>
-    /// A wrapper around Arkane's Token Management API
+    /// A wrapper around BGSDK's Token Management API
     /// </summary>
     /// <remarks>
     /// <para>
@@ -52,21 +52,21 @@ namespace HeathenEngineering.Arkane.API
         /// How to call:
         /// </para>
         /// <code>
-        /// StartCoroutine(HeathenEngineering.Arkane.API.TokenManagement.ListContracts(Identity, HandleListContractResults));
+        /// StartCoroutine(HeathenEngineering.BGSDK.API.TokenManagement.ListContracts(Identity, HandleListContractResults));
         /// </code>
         /// </example>
         public static IEnumerator ListContracts(Action<DataModel.ListContractsResult> callback)
         {
             if (Settings.current == null)
             {
-                callback(new ListContractsResult() { hasError = true, message = "Attempted to call Arkane.TokenManagement.ListContracts with no Arkane.Settings object applied." });
+                callback(new ListContractsResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.ListContracts with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ListContractsResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling ListContracts.", result = null });
+                    callback(new ListContractsResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling ListContracts.", result = null });
                     yield return null;
                 }
                 else
@@ -117,14 +117,14 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ContractResult() { hasError = true, message = "Attempted to call Arkane.TokenManagement.GetContract with no Arkane.Settings object applied.", result = null });
+                callback(new ContractResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.GetContract with no BGSDK.Settings object applied.", result = null });
                 yield return null;
             }
             else
             {
                 if (Settings.user == null)
                 {
-                    callback(new ContractResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling GetContract", result = null });
+                    callback(new ContractResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling GetContract", result = null });
                     yield return null;
                 }
                 else
@@ -172,12 +172,12 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new ListTokenTypesResult() { hasError = true, message = "Attempted to call Arkane.TokenManagement.ListTokenTypes with no Arkane.Settings object applied.", result = null });
+                callback(new ListTokenTypesResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.ListTokenTypes with no BGSDK.Settings object applied.", result = null });
                 yield return null;
             }
             else if(Settings.user == null)
             {
-                callback(new ListTokenTypesResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling ListTokenTypes", result = null });
+                callback(new ListTokenTypesResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling ListTokenTypes", result = null });
                 yield return null;
             }
             else
@@ -225,12 +225,12 @@ namespace HeathenEngineering.Arkane.API
         {
             if (Settings.current == null)
             {
-                callback(new DataModel.DefineTokenTypeResult() { hasError = true, message = "Attempted to call Arkane.TokenManagement.GetTokenType with no Arkane.Settings object applied.", result = null });
+                callback(new DataModel.DefineTokenTypeResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.GetTokenType with no BGSDK.Settings object applied.", result = null });
                 yield return null;
             }
             else if (Settings.user == null)
             {
-                callback(new DefineTokenTypeResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling GetTokenType", result = null });
+                callback(new DefineTokenTypeResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling GetTokenType", result = null });
                 yield return null;
             }
             else
@@ -246,7 +246,7 @@ namespace HeathenEngineering.Arkane.API
                 {
                     string resultContent = www.downloadHandler.text;
                     var results = new DataModel.DefineTokenTypeResult();
-                    results.result = JsonUtility.FromJson<DataModel.TokenData>(resultContent);
+                    results.result = JsonUtility.FromJson<DataModel.TokenResponceData>(resultContent);
                     results.message = "List Token Types complete.";
                     results.httpCode = www.responseCode;
                     callback(results);
@@ -280,7 +280,7 @@ namespace HeathenEngineering.Arkane.API
             /// For more details please see <see href="https://docs.arkane.network/pages/token-management.html#_create_token">https://docs.arkane.network/pages/token-management.html#_create_token</see>
             /// </para>
             /// <para>
-            /// This requests an instance of the <paramref name="token"/> be generated, the new instance will be owned by the server or developer wallet assoceated with the Arkane app and can then be transfered to the appropreate user.
+            /// This requests an instance of the <paramref name="token"/> be generated, the new instance will be owned by the server or developer wallet assoceated with the BGSDK app and can then be transfered to the appropreate user.
             /// </para>
             /// </remarks>
             /// <param name="identity">The identity of the user to execute this action</param>
@@ -289,25 +289,25 @@ namespace HeathenEngineering.Arkane.API
             /// <param name="amount">The amount of the token to create </param>
             /// <param name="callback">An action to execute when this process completes.</param>
             /// <returns>The Unity routine enumerator</returns>
-            public static IEnumerator CreateToken(Contract contract, Token token, int amount, Action<ArkaneBaseResult> callback)
+            public static IEnumerator CreateToken(Contract contract, Token token, int amount, Action<BGSDKBaseResult> callback)
             {
                 if (Settings.current == null)
                 {
-                    callback(new DataModel.ArkaneBaseResult() { hasError = true, message = "Attempted to call Arkane.TokenManagement.CreateToken with no Arkane.Settings object applied." });
+                    callback(new DataModel.BGSDKBaseResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.CreateToken with no BGSDK.Settings object applied." });
                     yield return null;
                 }
                 else
                 {
                     if (Settings.user == null)
                     {
-                        callback(new DataModel.ArkaneBaseResult() { hasError = true, message = "ArkaneIdentity required, null identity provided.\nPlease initalize Settings.user before calling Privileged.CreateToken" });
+                        callback(new DataModel.BGSDKBaseResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize Settings.user before calling Privileged.CreateToken" });
                         yield return null;
                     }
                     else
                     {
                         WWWForm form = new WWWForm();
                         form.AddField("amount", amount);
-                        form.AddField("typeId", token.Data.id.ToString());
+                        form.AddField("typeId", token.Id.ToString());
 
                         UnityWebRequest www = UnityWebRequest.Post(Settings.current.CreateTokenUri(contract), form);
                         www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
@@ -318,11 +318,11 @@ namespace HeathenEngineering.Arkane.API
 
                         if (!www.isNetworkError && !www.isHttpError)
                         {
-                            callback(new DataModel.ArkaneBaseResult() { hasError = false, message = "Successful request to create token!", httpCode = www.responseCode });
+                            callback(new DataModel.BGSDKBaseResult() { hasError = false, message = "Successful request to create token!", httpCode = www.responseCode });
                         }
                         else
                         {
-                            callback(new DataModel.ArkaneBaseResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while attempting to create a token." : " a HTTP error occured while attempting to create a token."), httpCode = www.responseCode });
+                            callback(new DataModel.BGSDKBaseResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while attempting to create a token." : " a HTTP error occured while attempting to create a token."), httpCode = www.responseCode });
                         }
                     }
                 }

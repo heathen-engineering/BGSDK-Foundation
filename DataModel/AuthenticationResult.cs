@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class AuthenticationResult : ArkaneBaseResult
+    public class AuthenticationResult : BGSDKBaseResult
     { }
 }

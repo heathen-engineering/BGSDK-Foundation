@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class ArkaneBaseResult
+    public class BGSDKBaseResult
     {
         public bool hasError;
         public string message;

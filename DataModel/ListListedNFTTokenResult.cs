@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class ListListedNFTTokenResult : ArkaneBaseResult
+    public class ListListedNFTTokenResult : BGSDKBaseResult
     {
         public List<ListedNFTToken> result;
     }

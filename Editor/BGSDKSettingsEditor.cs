@@ -1,11 +1,11 @@
-﻿using HeathenEngineering.Arkane.Engine;
+﻿using HeathenEngineering.BGSDK.Engine;
 using UnityEditor;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.Editor
+namespace HeathenEngineering.BGSDK.Editor
 {
     [CustomEditor(typeof(Settings))]
-    public class ArkaneSettingsEditor : UnityEditor.Editor
+    public class BGSDKSettingsEditor : UnityEditor.Editor
     {
         SerializedProperty Authentication;
         SerializedProperty Business;
@@ -72,8 +72,8 @@ namespace HeathenEngineering.Arkane.Editor
             {
                 var indent = EditorGUI.indentLevel;
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(AppId, new GUIContent("Application ID", "The identity and client details for the Arkane App to connect to.") , true);
-                EditorGUILayout.PropertyField(AuthenticationMode, new GUIContent("Authentication Settings", "Details used to adjust the method of authentication with Arkane."), true);
+                EditorGUILayout.PropertyField(AppId, new GUIContent("Application ID", "The identity and client details for the BGSDK App to connect to.") , true);
+                //EditorGUILayout.PropertyField(AuthenticationMode, new GUIContent("Authentication Settings", "Details used to adjust the method of authentication with BGSDK."), true);
                 //EditorGUILayout.PropertyField(Secret);
                 EditorGUILayout.PropertyField(UseStaging);
                 EditorGUI.indentLevel = indent;

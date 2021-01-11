@@ -1,13 +1,13 @@
-﻿using HeathenEngineering.Arkane.Engine;
+﻿using HeathenEngineering.BGSDK.Engine;
 using UnityEditor;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.Editor
+namespace HeathenEngineering.BGSDK.Editor
 {
     [CustomPreview(typeof(Settings))]
-    class ArkaneDatamodelPreview : ObjectPreview
+    class BGSDKDatamodelPreview : ObjectPreview
     {
-        class ArkaneSettingsInfo
+        class BGSDKSettingsInfo
         {
             public GUIContent value;
         }
@@ -51,7 +51,7 @@ namespace HeathenEngineering.Arkane.Editor
             }
         }
 
-        ArkaneSettingsInfo info;
+        BGSDKSettingsInfo info;
         GUIContent title;
         Styles styles = new Styles();
 
@@ -88,14 +88,14 @@ namespace HeathenEngineering.Arkane.Editor
 
             if (styles == null)
                 styles = new Styles();
-            
+
             //Apply padding
             RectOffset previewPadding = new RectOffset(-5, -5, -5, -5);
             Rect paddedr = previewPadding.Add(r);
 
             GUI.Label(paddedr, info.value, styles.componentName);
         }
-        
+
         void GetSettingsInformation(Settings settings)
         {
             if (settings != null)
@@ -103,7 +103,7 @@ namespace HeathenEngineering.Arkane.Editor
                 string message;
                 EditorUtilities.ValidateSettingsModel(settings, out message);
 
-                info = new ArkaneSettingsInfo() { value = new GUIContent(message) };
+                info = new BGSDKSettingsInfo() { value = new GUIContent(message) };
             }
         }
     }

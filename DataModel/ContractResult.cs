@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class ContractResult : ArkaneBaseResult
+    public class ContractResult : BGSDKBaseResult
     {
         public ContractData? result;
     }

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class ListInventoryResults : ArkaneBaseResult
+    public class ListInventoryResults : BGSDKBaseResult
     {
         public List<InventoryContractEntry> result;
     }

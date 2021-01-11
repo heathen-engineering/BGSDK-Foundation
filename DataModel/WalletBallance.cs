@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Numerics;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
     public class WalletBallance

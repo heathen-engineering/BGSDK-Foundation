@@ -2,7 +2,7 @@
 using System.Numerics;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
     public struct TokenCreateResponceData
@@ -10,7 +10,7 @@ namespace HeathenEngineering.Arkane.DataModel
         [Tooltip("Address of the deployed token.")]
         public string contractAddress;
         [Tooltip("Internal id of the type")]
-        public ulong id;
+        public string id;
         [Tooltip("Blockchain-generated typeId.")]
         public BigInteger contractTypeId;
         [Tooltip("Whether or not the transaction has been confirmed.")]

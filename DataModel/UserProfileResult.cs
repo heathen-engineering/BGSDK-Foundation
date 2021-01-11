@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class UserProfileResult : ArkaneBaseResult
+    public class UserProfileResult : BGSDKBaseResult
     {
         public UserProfile result;
     }

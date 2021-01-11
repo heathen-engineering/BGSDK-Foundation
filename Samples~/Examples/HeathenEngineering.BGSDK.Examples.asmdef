@@ -1,8 +1,7 @@
 {
-    "name": "HeathenEngineering.Arkane.Examples",
+    "name": "HeathenEngineering.BGSDK.Examples",
     "references": [
-        "HeathenEngineering.Arkane.Foundation",
-        "HeathenEngineering.Arkane.Foundation.Editor"
+        "HeathenEngineering.BGSDK.Foundation"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

@@ -1,11 +1,11 @@
-﻿using HeathenEngineering.Arkane.DataModel;
+﻿using HeathenEngineering.BGSDK.DataModel;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.Engine
+namespace HeathenEngineering.BGSDK.Engine
 {
-    [CreateAssetMenu(menuName = "Arkane/Contract")]
+    [CreateAssetMenu(menuName = "Blockchain Game SDK/Contract")]
     public class Contract : ScriptableObject
     {
         [HideInInspector]
@@ -17,7 +17,7 @@ namespace HeathenEngineering.Arkane.Engine
         [HideInInspector]
         public List<Token> Tokens = new List<Token>();
 
-        public ulong id
+        public string id
         { get { return Data.id; } set { Data.id = value; } }
         public string systemName
         { get { return Data.name; } set { Data.name = value; } }
@@ -29,7 +29,7 @@ namespace HeathenEngineering.Arkane.Engine
         { get { return Data.address; } set { Data.address = value; } }
 
         public Token this[int tokenIndex] => Tokens[tokenIndex];
-        public Token this[ulong tokenId] => Tokens.FirstOrDefault(p => p.id == tokenId);
-        public Token this[string tokenName] => Tokens.FirstOrDefault(p => p.systemName == tokenName);
+        public Token this[string tokenId] => Tokens.FirstOrDefault(p => p.Id == tokenId);
+        public Token FindTokenByName(string tokenName) => Tokens.FirstOrDefault(p => p.SystemName == tokenName);
     }
 }

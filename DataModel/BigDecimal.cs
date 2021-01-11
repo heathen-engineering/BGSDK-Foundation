@@ -3,7 +3,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     /// <summary>
     /// Based on BigFloat class from 

@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class TokenBalanceResult : ArkaneBaseResult
+    public class TokenBalanceResult : BGSDKBaseResult
     {
         public TokenBalance result;
     }

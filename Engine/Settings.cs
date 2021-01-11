@@ -1,12 +1,12 @@
-﻿using HeathenEngineering.Arkane.DataModel;
+﻿using HeathenEngineering.BGSDK.DataModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.Engine
+namespace HeathenEngineering.BGSDK.Engine
 {
-    [CreateAssetMenu(menuName = "Arkane/Settings")]
+    [CreateAssetMenu(menuName = "Blockchain Game SDK/Settings")]
     public class Settings : ScriptableObject
     {
         public static Settings current;
@@ -19,35 +19,35 @@ namespace HeathenEngineering.Arkane.Engine
         
         public bool UseStaging = true;
         public AppId AppId;
-        public AuthenticationMode AuthenticationMode = new AuthenticationMode("<client id>", "password");
+        //public AuthenticationMode AuthenticationMode = new AuthenticationMode("<client id>", "password");
 
         public List<Engine.Contract> Contracts = new List<Engine.Contract>();
          
         public Engine.Contract this[int contractIndex] => Contracts?[contractIndex];
 
-        public Engine.Contract this[ulong contractId] => Contracts?.FirstOrDefault(p => p.id == contractId);
+        public Engine.Contract this[string contractId] => Contracts?.FirstOrDefault(p => p.id == contractId);
 
-        public Engine.Contract this[string contractName] => Contracts?.FirstOrDefault(p => p.systemName == contractName);
+        public Engine.Contract FindContractByName(string contractName) => Contracts?.FirstOrDefault(p => p.systemName == contractName);
 
         /// <summary>
-        /// Used to authenticate the user to the Arkane Network
+        /// Used to authenticate the user to the BGSDK Network
         /// </summary>
         public string AuthenticationUri { get { return Authentication[UseStaging] + "/auth/realms/Arkane/protocol/openid-connect/token"; } }
 
         public string ConnectUri => Connect[UseStaging];
 
         /// <summary>
-        /// Used to fetch the authenticated users wallets from the Arkane Network
+        /// Used to fetch the authenticated users wallets from the BGSDK Network
         /// </summary>
         public string WalletUri => API[UseStaging] + "/api/wallets";
 
         /// <summary>
-        /// Used to work against the business API for deploying, getting and working with Arkane contracts.
+        /// Used to work against the business API for deploying, getting and working with BGSDK contracts.
         /// </summary>
         public string ContractUri => GetContractUri(AppId);
 
         /// <summary>
-        /// Used to work against the business API for listing and working with Arkane applicaitons.
+        /// Used to work against the business API for listing and working with BGSDK applicaitons.
         /// </summary>
         public string AppsUri => Business[UseStaging] + "/api/apps";
 
@@ -88,7 +88,7 @@ namespace HeathenEngineering.Arkane.Engine
             if (forContract == null)
                 throw new NullReferenceException("A null contract was provided");
             else
-                return ContractUri + "/" + forContract.id.ToString() + "/token-types";
+                return ContractUri + "/" + forContract.id + "/token-types";
         }
 
         public string GetTokenUri(long forContractId)
@@ -110,7 +110,7 @@ namespace HeathenEngineering.Arkane.Engine
         }
 
         /// <summary>
-        /// Get the contract uri for a specific ArkaneApp
+        /// Get the contract uri for a specific BGSDKApp
         /// </summary>
         /// <param name="app"></param>
         /// <returns></returns>
@@ -119,7 +119,7 @@ namespace HeathenEngineering.Arkane.Engine
             if (app == AppId.Invalid)
                 throw new System.InvalidOperationException("Unable to construct a valid contract URI for an invalid app id.");
 
-            return AppsUri + "/" + app.id.ToString() + "/contracts";
+            return AppsUri + "/" + app.applicationId.ToString() + "/contracts";
         }
     }
 }

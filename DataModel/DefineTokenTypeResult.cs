@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace HeathenEngineering.Arkane.DataModel
+namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class DefineTokenTypeResult : ArkaneBaseResult
+    public class DefineTokenTypeResult : BGSDKBaseResult
     {
-        public TokenData? result;
+        public TokenResponceData result;
     }
 }

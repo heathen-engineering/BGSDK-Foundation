@@ -1,71 +1,81 @@
-﻿using System.Collections.Generic;
-using HeathenEngineering.Arkane.DataModel;
-using HeathenEngineering.Arkane.Engine;
+﻿using System;
+using System.Collections.Generic;
+using HeathenEngineering.BGSDK.DataModel;
+using HeathenEngineering.BGSDK.Engine;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.Examples
+namespace HeathenEngineering.BGSDK.Examples
 {
     public class TestBehaviour : MonoBehaviour
     {
+        [Serializable]
+        public class TestProperties
+        {
+            public string type;
+            public int level;
+            public string category;
+        }
+
+        [Serializable]
+        public class TestTokenDef : TokenDefinition<TestProperties>
+        { }
+
+        //Your BGSDK settings... should be set in the insepctor
         public Settings settings;
+        //Your target contract... should be set in the inspector
+        public Contract contract;
 
         [Header("UI Elements")]
-        public GameObject loginRoot;
-        public UnityEngine.UI.InputField Username;
-        public UnityEngine.UI.InputField Password;
-        public UnityEngine.UI.Text ConsoleText;
+        public string Username;
+        public string Password;
 
         [Header("Results")]
-        public Identity Identity = new Identity();
-        public List<Wallet> wallets = new List<Wallet>();
+        public ContractData ContractData;
 
         private void Start()
         {
             Settings.current = settings;
-
-            if (wallets == null)
-                wallets = new List<Wallet>();
-            else
-                wallets.Clear();
-
-            ConsoleText.text = string.Empty;
         }
 
-        public void Authenticate()
+        public void TestJson()
         {
-            Identity = new Identity() { username = Username.text, password = Password.text };
-            StartCoroutine(Editor.EditorUtilities.Authenticate(Identity, HandleAuthenticationResult));
+            var nToken = new TokenDefinition<TestProperties>();
+            nToken.name = "Test name";
+            nToken.description = "Test description";
+            nToken.nft = true;
+            nToken.properties = new TestProperties
+            {
+                type = "test type",
+                level = 32,
+                category = "test category"
+            };
+
+            var result = JsonUtility.ToJson(nToken);
+            Debug.Log(result);
         }
 
-        private void HandleAuthenticationResult(AuthenticationResult result)
+        public void FetchContracts()
         {
-            Debug.Log("Authenticate Responce:\nHas Error: " + result.hasError + "\nMessage:" + result.message);
-            if (!result.hasError)
-            {
-                loginRoot.SetActive(false);
-                ConsoleText.text = "<color=green><b>Authenticated</b></color>";
-                StartCoroutine(API.Wallets.List(Identity, HandleWalletRefresh));
-            }
-            else
-            {
-                ConsoleText.text = "<color=red><b>Not Authenticated</b></color>\n" + result.message;
-            }
+            StartCoroutine(API.TokenManagement.GetContract(contract, HandleGetContractResults));
         }
 
-        private void HandleWalletRefresh(ListWalletResult result)
+        private void HandleGetContractResults(ContractResult contractResult)
         {
-            wallets.Clear();
-            Debug.Log("List Wallets Responce:\nHas Error: " + result.hasError + "\nMessage:" + result.message);
-
-            if(!result.hasError)
+            Debug.Log("List Contracts Responce:\nHas Error: " + contractResult.hasError + "\nMessage: " + contractResult.message);
+            if(!contractResult.hasError)
             {
-                foreach(var wallet in result.result)
+                if (contractResult.result.HasValue)
+                    ContractData = contractResult.result.Value;
+                else
                 {
-                    wallets.Add(wallet);
-                    Debug.Log(wallet.description + " : " + wallet.address);
-                    ConsoleText.text += "\n\n<b>Wallet Alias: "+wallet.alias+"</b>\nType: " + wallet.walletType + "\nDescription: " + wallet.description;
+                    //TODO: Handle no contract found
                 }
             }
+            else
+            {
+                //TODO: Handle your errors
+            }
         }
+
     }
 }

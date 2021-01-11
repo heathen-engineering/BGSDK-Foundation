@@ -1,8 +1,8 @@
-﻿using HeathenEngineering.Arkane;
+﻿using HeathenEngineering.BGSDK;
 using UnityEditor;
 using UnityEngine;
 
-namespace HeathenEngineering.Arkane.Editor
+namespace HeathenEngineering.BGSDK.Editor
 {
     [CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
     public class ReadOnlyDrawer : PropertyDrawer
