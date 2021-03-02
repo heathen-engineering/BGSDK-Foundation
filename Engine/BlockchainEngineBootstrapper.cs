@@ -9,19 +9,47 @@ namespace HeathenEngineering.BGSDK.Engine
     public class BlockchainEngineBootstrapper : MonoBehaviour
     {
         public Settings settings;
+#if UNITY_SERVER || UNITY_EDITOR
+        public bool LoginClientSecret = false;
+#endif
+
+        [Header("Events")]
+        public BGSDKAuthenticationResultEvent authenticationResponce;
 
         void Start()
         {
             Settings.current = settings;
-
-            if(!string.IsNullOrEmpty(settings.AppId.clientSecret))
+#if UNITY_SERVER || UNITY_EDITOR
+            if (LoginClientSecret && !string.IsNullOrEmpty(settings.appId.clientSecret))
             {
-
+                StartCoroutine(ClientSecretAuthentication(HandleSecretAuthenticationResponce));
             }
+#endif
         }
 
+        public void FacebookLogin(string FacebookToken)
+        {
+            API.User.Login_Facebook(FacebookToken, HandleSecretAuthenticationResponce);
+        }
+
+        private void HandleSecretAuthenticationResponce(AuthenticationResult authResult)
+        {
+            if (authResult.hasError)
+            {
+                Debug.LogError("Authentication Result:\nError " + authResult.message);
+            }
+            else
+            {
+                Debug.Log("Authentication Complete");
+            }
+
+            authenticationResponce.Invoke(authResult);
+        }
+
+
+#if UNITY_SERVER || UNITY_EDITOR
         /// <summary>
-        /// Exchanges a Facebook token for an BGSDK token enabling the client to make future calls against the BGSDK APIs
+        /// Logs in via the client secret ... this is only usable by servers and the Unity Editor and will not have an user data
         /// </summary>
         /// <param name="token">The token provided to you via Facebook authentication</param>
         /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
@@ -36,8 +64,8 @@ namespace HeathenEngineering.BGSDK.Engine
             {
                 WWWForm form = new WWWForm();
                 form.AddField("grant_type", "client_credentials");
-                form.AddField("client_id", Settings.current.AppId.clientId);
-                form.AddField("client_secret", Settings.current.AppId.clientSecret);
+                form.AddField("client_id", Settings.current.appId.clientId);
+                form.AddField("client_secret", Settings.current.appId.clientSecret);
 
                 UnityWebRequest www = UnityWebRequest.Post(Settings.current.AuthenticationUri, form);
 
@@ -64,5 +92,8 @@ namespace HeathenEngineering.BGSDK.Engine
                 }
             }
         }
+
+        
+#endif
     }
 }

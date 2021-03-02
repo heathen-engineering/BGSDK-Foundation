@@ -3,7 +3,13 @@ guid: 146c79e4d02a72644a8bf469f2a6ae88
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - inspectorMarkup: {fileID: 9197481963319205126, guid: 301f7f5fe342ab34ca502ac3e231479c,
+      type: 3}
+  - contractMarkup: {fileID: 9197481963319205126, guid: 260aa3a8aea389c468716e207af861fd,
+      type: 3}
+  - tokenMarkup: {fileID: 9197481963319205126, guid: 64a642a8c7db0534ea4d7524fe576b80,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

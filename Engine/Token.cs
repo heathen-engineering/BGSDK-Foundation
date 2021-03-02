@@ -15,13 +15,13 @@ namespace HeathenEngineering.BGSDK.Engine
         [HideInInspector]
         public Contract contract;
 
-        public Properties properties;
+        public TokeProperties properties;
 
         public string Id
         {
             get
             {
-                return data?.id;
+                return data == null ? "" : data.id;
             }
             set
             {
@@ -34,7 +34,7 @@ namespace HeathenEngineering.BGSDK.Engine
         {
             get
             {
-                return data?.name;
+                return data == null ? "" : data.name;
             }
             set
             {
@@ -47,7 +47,7 @@ namespace HeathenEngineering.BGSDK.Engine
         {
             get
             {
-                return data?.description;
+                return data == null ? "" : data.description;
             }
             set
             {
@@ -73,7 +73,7 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             { 
-                return data?.contractAddress; 
+                return data == null ? "" : data.contractAddress; 
             } 
             set 
             {
@@ -125,7 +125,7 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             { 
-                return data?.backgroundColor; 
+                return data == null ? "" : data.backgroundColor; 
             } 
             set 
             {
@@ -138,7 +138,7 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             { 
-                return data?.url; 
+                return data == null ? "" : data.url; 
             } 
             set 
             {
@@ -151,7 +151,7 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             {
-                return data?.imagePreview; 
+                return data == null ? "" : data.imagePreview; 
             } 
             set 
             {
@@ -164,7 +164,7 @@ namespace HeathenEngineering.BGSDK.Engine
         {
             get 
             { 
-                return data?.imageThumbnail;
+                return data == null ? "" : data.imageThumbnail;
             } 
             set 
             {
@@ -177,7 +177,7 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             { 
-                return data?.image; 
+                return data == null ? "" : data.image; 
             }
             set 
             {
@@ -187,7 +187,7 @@ namespace HeathenEngineering.BGSDK.Engine
             }
         }
 
-
+        [SerializeField]
         private DataModel.TokenResponceData data;
 
         public void Set(WebResults<TokenResponceData> webResults)
@@ -201,7 +201,7 @@ namespace HeathenEngineering.BGSDK.Engine
 
             if (properties != null && properties.DataType == typeof(T))
             {
-                var prop = properties as Properties<T>;
+                var prop = properties as TokenProperties<T>;
                 prop.data = webResults.result.properties;
             }
         }
@@ -210,7 +210,7 @@ namespace HeathenEngineering.BGSDK.Engine
         {
             if (properties != null && properties.DataType == typeof(T))
             {
-                var prop = properties as Properties<T>;
+                var prop = properties as TokenProperties<T>;
                 return prop.data;
             }
             else
@@ -224,10 +224,10 @@ namespace HeathenEngineering.BGSDK.Engine
 
         public TokenDefinition<T> GetTokenDefinition<T>()
         {
-            Properties<T> prop = null;
+            TokenProperties<T> prop = null;
             if (properties != null && properties.DataType == typeof(T))
             {
-                prop = properties as Properties<T>;
+                prop = properties as TokenProperties<T>;
             }
 
             var nDef = new TokenDefinition<T>

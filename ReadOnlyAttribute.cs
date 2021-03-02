@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace HeathenEngineering.Arkane
+namespace HeathenEngineering.BGSDK
 {
     public class ReadOnlyAttribute : PropertyAttribute
     {

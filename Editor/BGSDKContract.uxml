@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <uie:Toolbar style="align-items: center; justify-content: space-around; flex-direction: row;">
+        <ui:VisualElement style="background-image: url(&apos;/Assets/_Heathen Engineering/Arkane/Framework/Foundation/Images/Contract.png&apos;); width: 16px; height: 16px; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px;" />
+        <ui:Label text="Label" name="label" style="flex-grow: 1; flex-shrink: 1; margin-left: 5px; margin-right: 5px;" />
+        <uie:ToolbarButton name="addToken" tooltip="Add token to contract" style="left: auto; width: 25px; height: auto;">
+            <ui:VisualElement style="width: 16px; height: 16px; background-image: url(&apos;/Assets/_Heathen Engineering/Arkane/Framework/Foundation/Images/Add.png&apos;);" />
+        </uie:ToolbarButton>
+        <uie:ToolbarButton name="removeContract" tooltip="Remove contract" style="width: 25px;">
+            <ui:VisualElement style="width: 16px; height: 16px; background-image: url(&apos;/Assets/_Heathen Engineering/Arkane/Framework/Foundation/Images/Remove.png&apos;);" />
+        </uie:ToolbarButton>
+    </uie:Toolbar>
+    <ui:VisualElement name="content" style="padding-left: 16px;" />
+</ui:UXML>

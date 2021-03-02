@@ -14,8 +14,6 @@ namespace HeathenEngineering.BGSDK.Engine
     [Serializable]
     public class Identity
     {
-        public string username;
-        public string password;
         public AuthenticationResponce authentication;
     }
 }

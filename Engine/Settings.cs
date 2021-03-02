@@ -18,7 +18,7 @@ namespace HeathenEngineering.BGSDK.Engine
         public DomainTarget API = new DomainTarget("https://api-staging.arkane.network", "https://api.arkane.network");
         
         public bool UseStaging = true;
-        public AppId AppId;
+        public AppId appId;
         //public AuthenticationMode AuthenticationMode = new AuthenticationMode("<client id>", "password");
 
         public List<Engine.Contract> Contracts = new List<Engine.Contract>();
@@ -44,7 +44,7 @@ namespace HeathenEngineering.BGSDK.Engine
         /// <summary>
         /// Used to work against the business API for deploying, getting and working with BGSDK contracts.
         /// </summary>
-        public string ContractUri => GetContractUri(AppId);
+        public string ContractUri => GetContractUri(appId);
 
         /// <summary>
         /// Used to work against the business API for listing and working with BGSDK applicaitons.

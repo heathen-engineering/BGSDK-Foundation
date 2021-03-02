@@ -1,4 +1,4 @@
-﻿namespace HeathenEngineering.Arkane
+﻿namespace HeathenEngineering.BGSDK
 {
 
     public enum Chains

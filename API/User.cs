@@ -158,7 +158,7 @@ namespace HeathenEngineering.BGSDK.API
                     WWWForm form = new WWWForm();
                     form.AddField("identityProvider", "FACEBOOK");
                     form.AddField("idpToken", token);
-                    form.AddField("client_id", Settings.current.AppId.clientId);
+                    form.AddField("client_id", Settings.current.appId.clientId);
 
                     UnityWebRequest www = UnityWebRequest.Post(Settings.current.AuthenticationUri, form);
 

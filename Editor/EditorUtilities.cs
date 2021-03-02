@@ -208,7 +208,7 @@ namespace HeathenEngineering.BGSDK.Editor
         public static IEnumerator SyncSettings()
         {
             //First insure we have a fresh token based on secret
-            if (string.IsNullOrEmpty(Settings.current.AppId.clientSecret) || string.IsNullOrEmpty(Settings.current.AppId.clientId))
+            if (string.IsNullOrEmpty(Settings.current.appId.clientSecret) || string.IsNullOrEmpty(Settings.current.appId.clientId))
             {
                 Debug.LogError("Failed to sync settings: you must populate the Client ID and Client Secret before you can sync settings.");
                 yield return null;
@@ -221,8 +221,8 @@ namespace HeathenEngineering.BGSDK.Editor
 
                 WWWForm authForm = new WWWForm();
                 authForm.AddField("grant_type", "client_credentials");
-                authForm.AddField("client_id", Settings.current.AppId.clientId);
-                authForm.AddField("client_secret", Settings.current.AppId.clientSecret);
+                authForm.AddField("client_id", Settings.current.appId.clientId);
+                authForm.AddField("client_secret", Settings.current.appId.clientSecret);
 
                 UnityWebRequest auth_www = UnityWebRequest.Post(Settings.current.AuthenticationUri, authForm);
 
@@ -667,7 +667,7 @@ namespace HeathenEngineering.BGSDK.Editor
             //Define a type of token
             yield return null;
 
-            if (string.IsNullOrEmpty(Settings.current.AppId.clientSecret) || string.IsNullOrEmpty(Settings.current.AppId.clientId))
+            if (string.IsNullOrEmpty(Settings.current.appId.clientSecret) || string.IsNullOrEmpty(Settings.current.appId.clientId))
             {
                 Debug.LogError("Failed to sync settings: you must populate the Client ID and Client Secret before you can sync settings.");
                 yield return null;

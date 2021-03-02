@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace HeathenEngineering.Arkane
+namespace HeathenEngineering.BGSDK
 {
     [AttributeUsage(AttributeTargets.Field, Inherited = true)]
     public class HelpAttribute : PropertyAttribute

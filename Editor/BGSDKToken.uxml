@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <uie:Toolbar style="align-items: center; flex-direction: row;">
+        <ui:VisualElement style="width: 16px; height: 16px; background-image: url(&apos;/Assets/_Heathen Engineering/Arkane/Framework/Foundation/Images/Token.png&apos;); margin-left: 2px;" />
+        <ui:Label text="Label" name="label" style="flex-grow: 1; flex-shrink: 1; padding-left: 5px; padding-right: 5px;" />
+        <uie:ToolbarButton name="removeToken" tooltip="Remove token" style="width: 25px;">
+            <ui:VisualElement style="width: 16px; height: 16px; background-image: url(&apos;/Assets/_Heathen Engineering/Arkane/Framework/Foundation/Images/Remove.png&apos;);" />
+        </uie:ToolbarButton>
+    </uie:Toolbar>
+</ui:UXML>

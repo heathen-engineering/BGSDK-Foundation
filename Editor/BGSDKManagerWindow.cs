@@ -131,7 +131,7 @@ namespace HeathenEngineering.BGSDK.Editor
                     Settings.current.Business = new DomainTarget(current.Business.Staging, current.Business.Production);
                     Settings.current.API = new DomainTarget(current.API.Staging, current.API.Production);
                     Settings.current.UseStaging = current.UseStaging;
-                    Settings.current.AppId = current.AppId;
+                    Settings.current.appId = current.appId;
                     //Settings.current.AuthenticationMode = current.AuthenticationMode;
                 }
                 Settings.current = EditorGUILayout.ObjectField(GUIContent.none, Settings.current, typeof(Settings), false, GUILayout.Width(250)) as Settings;
@@ -165,7 +165,7 @@ namespace HeathenEngineering.BGSDK.Editor
             if (GUILayout.Button("Portal", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
                 GUI.FocusControl(null);
-                Help.BrowseURL("https://business-staging.arkane.network/applications/" + Settings.current.AppId.applicationId + "/overview");
+                Help.BrowseURL("https://business-staging.arkane.network/applications/" + Settings.current.appId.applicationId + "/overview");
             }
             if (GUILayout.Button("Help", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
@@ -572,7 +572,8 @@ namespace HeathenEngineering.BGSDK.Editor
                 {
                     EditorGUILayout.Space();
                     var r = EditorGUILayout.GetControlRect(false, GUILayout.Width(250), GUILayout.Height(250));
-                    GUI.DrawTexture(r, BGSDKLogo, ScaleMode.ScaleToFit, true, 0);
+                    if (BGSDKLogo != null)
+                        GUI.DrawTexture(r, BGSDKLogo, ScaleMode.ScaleToFit, true, 0);
                     EditorGUILayout.Space();
                 }
                 catch { }
@@ -581,14 +582,14 @@ namespace HeathenEngineering.BGSDK.Editor
 
                 #region Manual Auth
                 EditorGUILayout.LabelField("Client ID", EditorStyles.boldLabel);
-                Settings.current.AppId.clientId = EditorGUILayout.TextField(GUIContent.none, Settings.current.AppId.clientId);
+                Settings.current.appId.clientId = EditorGUILayout.TextField(GUIContent.none, Settings.current.appId.clientId);
 
                 EditorGUILayout.Space();
                 showingSecretValue = EditorGUILayout.ToggleLeft("Secret", showingSecretValue, EditorStyles.boldLabel);
                 if (showingSecretValue)
-                    Settings.current.AppId.clientSecret = EditorGUILayout.TextField(GUIContent.none, Settings.current.AppId.clientSecret);
+                    Settings.current.appId.clientSecret = EditorGUILayout.TextField(GUIContent.none, Settings.current.appId.clientSecret);
                 else
-                    Settings.current.AppId.clientSecret = EditorGUILayout.PasswordField(GUIContent.none, Settings.current.AppId.clientSecret);
+                    Settings.current.appId.clientSecret = EditorGUILayout.PasswordField(GUIContent.none, Settings.current.appId.clientSecret);
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 #endregion
@@ -608,7 +609,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 if (GUILayout.Button("Portal", GUILayout.Height(25)))
                 {
                     GUI.FocusControl(null);
-                    Help.BrowseURL("https://business-staging.arkane.network/applications/" + Settings.current.AppId.applicationId + "/overview");
+                    Help.BrowseURL("https://business-staging.arkane.network/applications/" + Settings.current.appId.applicationId + "/overview");
                 }
                 if (GUILayout.Button("Marketplace", GUILayout.Height(25)))
                 {

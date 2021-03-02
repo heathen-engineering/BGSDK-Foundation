@@ -1,7 +1,7 @@
 ﻿#if UNITY_EDITOR
 #endif
 
-namespace HeathenEngineering.Arkane
+namespace HeathenEngineering.BGSDK
 {
     public static class Utilities
     {
