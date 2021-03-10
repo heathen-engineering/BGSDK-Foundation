@@ -1,7 +1,4 @@
-﻿#if UNITY_EDITOR
-#endif
-
-namespace HeathenEngineering.BGSDK
+﻿namespace HeathenEngineering.BGSDK
 {
     public static class Utilities
     {
