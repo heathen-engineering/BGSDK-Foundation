@@ -127,9 +127,9 @@ namespace HeathenEngineering.BGSDK.Editor
                     GUI.FocusControl(null);
                     var current = Settings.current;
                     Settings.current = CreateAsset<Settings>("(Clone) " + Settings.current.name.Replace("(Clone) ", ""));
-                    Settings.current.Authentication = new DomainTarget(current.Authentication.Staging, current.Authentication.Production);
-                    Settings.current.Business = new DomainTarget(current.Business.Staging, current.Business.Production);
-                    Settings.current.API = new DomainTarget(current.API.Staging, current.API.Production);
+                    Settings.current.authentication = new DomainTarget(current.authentication.Staging, current.authentication.Production);
+                    Settings.current.business = new DomainTarget(current.business.Staging, current.business.Production);
+                    Settings.current.api = new DomainTarget(current.api.Staging, current.api.Production);
                     Settings.current.UseStaging = current.UseStaging;
                     Settings.current.appId = current.appId;
                     //Settings.current.AuthenticationMode = current.AuthenticationMode;
@@ -199,8 +199,8 @@ namespace HeathenEngineering.BGSDK.Editor
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(250), GUILayout.ExpandHeight(true));
             if (Settings.current != null)
             {
-                if (Settings.current.Contracts == null)
-                    Settings.current.Contracts = new List<BGSDK.Engine.Contract>();
+                if (Settings.current.contracts == null)
+                    Settings.current.contracts = new List<BGSDK.Engine.Contract>();
 
                 EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                 var color = GUI.contentColor;
@@ -212,10 +212,10 @@ namespace HeathenEngineering.BGSDK.Editor
 
                     BGSDK.Engine.Contract nContract = new BGSDK.Engine.Contract();
                     nContract.name = "New Contract";
-                    nContract.systemName = "New Contract";
-                    nContract.UpdatedFromServer = false;
-                    nContract.Tokens = new List<BGSDK.Engine.Token>();
-                    Settings.current.Contracts.Add(nContract);
+                    nContract.SystemName = "New Contract";
+                    nContract.updatedFromServer = false;
+                    nContract.tokens = new List<BGSDK.Engine.Token>();
+                    Settings.current.contracts.Add(nContract);
                     EditorUtility.SetDirty(Settings.current);
                     AssetDatabase.AddObjectToAsset(nContract, Settings.current);
                     AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(nContract));
@@ -226,19 +226,19 @@ namespace HeathenEngineering.BGSDK.Editor
                 GUI.contentColor = color;
                 EditorGUILayout.EndHorizontal(); ;
 
-                if (Settings.current.Contracts.Count > 0)
+                if (Settings.current.contracts.Count > 0)
                 {
                     if (activeContract == null)
-                        activeContract = Settings.current.Contracts[0];
+                        activeContract = Settings.current.contracts[0];
 
                     scrollPos_ContractArea = EditorGUILayout.BeginScrollView(scrollPos_ContractArea);
-                    foreach (var con in Settings.current.Contracts)
+                    foreach (var con in Settings.current.contracts)
                     {
                         DrawContractEntryDesigner(con);
                     }
                     EditorGUILayout.EndScrollView();
 
-                    Settings.current.Contracts.RemoveAll(p => p == null);
+                    Settings.current.contracts.RemoveAll(p => p == null);
                 }
             }
             else
@@ -255,7 +255,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             EditorGUILayout.LabelField(new GUIContent(ContractIcon), GUILayout.Width(20));
-            if (GUILayout.Toggle(activeContract == contract && activeToken == null, contract.systemName, EditorStyles.toolbarButton))
+            if (GUILayout.Toggle(activeContract == contract && activeToken == null, contract.SystemName, EditorStyles.toolbarButton))
             {
                 if (activeContract != contract || activeToken != null)
                 {
@@ -277,10 +277,10 @@ namespace HeathenEngineering.BGSDK.Editor
                 nToken.UpdatedFromServer = false;
                 nToken.contract = contract;
 
-                if (contract.Tokens == null)
-                    contract.Tokens = new List<BGSDK.Engine.Token>();
+                if (contract.tokens == null)
+                    contract.tokens = new List<BGSDK.Engine.Token>();
 
-                contract.Tokens.Add(nToken);
+                contract.tokens.Add(nToken);
                 AssetDatabase.AddObjectToAsset(nToken, contract);
                 AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
 
@@ -292,9 +292,9 @@ namespace HeathenEngineering.BGSDK.Editor
                 GUI.FocusControl(null);
                 if (EditorUtility.DisplayDialog("Delete Contract", "Are you sure you want to delete [" + contract.name + "] and all of its tokens.\n\nNote this will not remove a deployed contract from the backend service it only removes the contract from the configuraiton in your applicaiton.", "Delete", "Cancel"))
                 {
-                    if (contract.Tokens != null)
+                    if (contract.tokens != null)
                     {
-                        foreach (var token in contract.Tokens)
+                        foreach (var token in contract.tokens)
                         {
                             DestroyImmediate(token, true);
                             hasRemoved = true;
@@ -311,12 +311,12 @@ namespace HeathenEngineering.BGSDK.Editor
             if (hasRemoved)
                 return;
 
-            if (contract.Tokens == null)
-                contract.Tokens = new List<BGSDK.Engine.Token>();
+            if (contract.tokens == null)
+                contract.tokens = new List<BGSDK.Engine.Token>();
 
-            contract.Tokens.Sort((a, b) => { return a.SystemName.CompareTo(b.SystemName); });
+            contract.tokens.Sort((a, b) => { return a.SystemName.CompareTo(b.SystemName); });
 
-            foreach (var token in contract.Tokens)
+            foreach (var token in contract.tokens)
             {
                 EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                 EditorGUILayout.LabelField("", GUILayout.Width(20));
@@ -346,7 +346,7 @@ namespace HeathenEngineering.BGSDK.Editor
             }
 
             if (hasRemoved)
-                contract.Tokens.RemoveAll(p => p == null);
+                contract.tokens.RemoveAll(p => p == null);
         }
 
         private void DrawEditorArea()
@@ -354,8 +354,8 @@ namespace HeathenEngineering.BGSDK.Editor
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
             if (Settings.current != null)
             {
-                if (Settings.current.Contracts == null)
-                    Settings.current.Contracts = new List<BGSDK.Engine.Contract>();
+                if (Settings.current.contracts == null)
+                    Settings.current.contracts = new List<BGSDK.Engine.Contract>();
 
                 if (activeContract != null && activeToken == null)
                 {
@@ -386,40 +386,40 @@ namespace HeathenEngineering.BGSDK.Editor
 
         private void DrawContractEditor()
         {
-            if (activeContract.UpdatedFromServer)
+            if (activeContract.updatedFromServer)
             {
-                EditorGUILayout.LabelField(new GUIContent("Published Contract Properties: " + activeContract.systemName, "Contract settings for " + activeContract.systemName), EditorStyles.whiteLargeLabel);
-                EditorGUILayout.LabelField(new GUIContent("Confirmed: " + (activeContract.Data.confirmed ? "Yes" : "No"), "Indicates rather or not the contract has been confirmed on the chain. This will always be no untill the contract is first deployed."));
-                EditorGUILayout.LabelField("Contract ID: " + activeContract.Data.id);
-                EditorGUILayout.LabelField("Contract Address: " + activeContract.Data.address);
+                EditorGUILayout.LabelField(new GUIContent("Published Contract Properties: " + activeContract.SystemName, "Contract settings for " + activeContract.SystemName), EditorStyles.whiteLargeLabel);
+                EditorGUILayout.LabelField(new GUIContent("Confirmed: " + (activeContract.data.confirmed ? "Yes" : "No"), "Indicates rather or not the contract has been confirmed on the chain. This will always be no untill the contract is first deployed."));
+                EditorGUILayout.LabelField("Contract ID: " + activeContract.data.id);
+                EditorGUILayout.LabelField("Contract Address: " + activeContract.data.address);
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
 
                 EditorGUILayout.LabelField("Description");
-                EditorGUILayout.SelectableLabel(activeContract.description, EditorStyles.textArea, GUILayout.Height(110));
+                EditorGUILayout.SelectableLabel(activeContract.Description, EditorStyles.textArea, GUILayout.Height(110));
             }
             else
             {
-                EditorGUILayout.LabelField("Contract Properties: " + activeContract.systemName, EditorStyles.whiteLargeLabel);
+                EditorGUILayout.LabelField("Contract Properties: " + activeContract.SystemName, EditorStyles.whiteLargeLabel);
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
 
-                var nameVal = EditorGUILayout.TextField("Name", activeContract.systemName);
+                var nameVal = EditorGUILayout.TextField("Name", activeContract.SystemName);
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 EditorGUILayout.LabelField("Description");
-                var descVal = EditorGUILayout.TextArea(activeContract.description, GUILayout.Height(110));
+                var descVal = EditorGUILayout.TextArea(activeContract.Description, GUILayout.Height(110));
 
-                if (nameVal != activeContract.systemName
-                    || descVal != activeContract.description)
+                if (nameVal != activeContract.SystemName
+                    || descVal != activeContract.Description)
                 {
                     Undo.RecordObject(activeContract, "textEdit");
                     activeContract.name = nameVal;
-                    activeContract.systemName = nameVal;
-                    activeContract.description = descVal;
+                    activeContract.SystemName = nameVal;
+                    activeContract.Description = descVal;
                     EditorUtility.SetDirty(activeContract);
 
-                    foreach (var token in activeContract.Tokens)
+                    foreach (var token in activeContract.tokens)
                     {
                         token.name = activeContract.name + " : " + token.SystemName;
                         EditorUtility.SetDirty(token);

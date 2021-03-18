@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -19,6 +20,8 @@ namespace HeathenEngineering.BGSDK.Editor
         private static bool api = false;
         private static bool model = false;
 
+        private string path;
+
         private UnityEditor.UIElements.ToolbarToggle tglApplication;
         private UnityEditor.UIElements.ToolbarToggle tglApi;
         private UnityEditor.UIElements.ToolbarToggle tglModel;
@@ -32,6 +35,17 @@ namespace HeathenEngineering.BGSDK.Editor
         public override VisualElement CreateInspectorGUI()
         {
             var settings = target as Settings;
+
+            path = AssetDatabase.GetAssetPath(settings);
+            if (path == "")
+            {
+                path = "Assets";
+            }
+            else if (Path.GetExtension(path) != "")
+            {
+                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+            }
+
             var root = inspectorMarkup.CloneTree();
 
             tglApplication = root.Q<UnityEditor.UIElements.ToolbarToggle>("tglApplication");
@@ -41,16 +55,21 @@ namespace HeathenEngineering.BGSDK.Editor
             var addContract = root.Q<UnityEditor.UIElements.ToolbarButton>("addContract");
             addContract.clicked += () =>
             {
-                BGSDK.Engine.Contract nContract = new BGSDK.Engine.Contract();
+                BGSDK.Engine.Contract nContract = CreateInstance<Engine.Contract>();
                 nContract.name = "New Contract";
-                nContract.UpdatedFromServer = false;
+                nContract.data.name = "New Contract";
+                nContract.updatedFromServer = false;
 
-                if (settings.Contracts == null)
-                    settings.Contracts = new List<BGSDK.Engine.Contract>();
+                if (settings.contracts == null)
+                    settings.contracts = new List<BGSDK.Engine.Contract>();
 
-                nContract.Tokens = new List<Token>();
-                AssetDatabase.AddObjectToAsset(nContract, settings);
+                nContract.tokens = new List<Token>();
+                string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + nContract.name + ".asset");
+                AssetDatabase.CreateAsset(nContract, assetPathAndName);
+                settings.contracts.Add(nContract);
                 AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
 
                 RebuildContractDisplay();
             };
@@ -59,7 +78,7 @@ namespace HeathenEngineering.BGSDK.Editor
             syncData.clicked += () =>
             {
                 Settings.current = settings;
-                var syncProc = BGSDK.Editor.EditorUtilities.SyncSettings();
+                var syncProc = BGSDK.Editor.EditorUtilities.SyncSettings(RebuildContractDisplay);
 
                 StartCoroutine(syncProc);
             };
@@ -126,7 +145,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
             contracts.Clear();
 
-            foreach(var contract in settings.Contracts)
+            foreach(var contract in settings.contracts)
             {
                 try
                 {
@@ -136,37 +155,40 @@ namespace HeathenEngineering.BGSDK.Editor
                     var content = contractRoot.Q<VisualElement>("content");
                     var addToken = contractRoot.Q<UnityEditor.UIElements.ToolbarButton>("addToken");
                     var contractRemove = contractRoot.Q<UnityEditor.UIElements.ToolbarButton>("removeContract");
-                    label.text = contract.systemName;
+                    label.text = contract.SystemName;
                     addToken.clicked += () =>
                     {
-                        BGSDK.Engine.Token nToken = new BGSDK.Engine.Token();
-                        nToken.name = "New Token";
+                        BGSDK.Engine.Token nToken = CreateInstance<Engine.Token>();
+                        nToken.name = contract.data.name + ": New Token";
+                        nToken.SystemName = "New Token";
                         nToken.UpdatedFromServer = false;
                         nToken.contract = contract;
 
-                        if (contract.Tokens == null)
-                            contract.Tokens = new List<BGSDK.Engine.Token>();
+                        if (contract.tokens == null)
+                            contract.tokens = new List<BGSDK.Engine.Token>();
 
-                        contract.Tokens.Add(nToken);
-                        AssetDatabase.AddObjectToAsset(nToken, settings);
+                        contract.tokens.Add(nToken);
+                        string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + nToken.name + ".asset");
+                        AssetDatabase.CreateAsset(nToken, assetPathAndName);
                         AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                        AssetDatabase.SaveAssets();
+                        AssetDatabase.Refresh();
 
                         RebuildContractDisplay();
                     };
                     contractRemove.clicked += () =>
                     {
-                        foreach (var token in contract.Tokens)
-                            DestroyImmediate(token, true);
+                        foreach (var token in contract.tokens)
+                            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(token));
 
-                        settings.Contracts.Remove(contract);
-                        DestroyImmediate(contract, true);
+                        settings.contracts.Remove(contract);
+                        AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(contract));
 
-                        AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
                         RebuildContractDisplay();
                     };
                     
 
-                    foreach (var token in contract.Tokens)
+                    foreach (var token in contract.tokens)
                     {
                         var tokenRoot = tokenMarkup.CloneTree();
                         content.Add(tokenRoot);
@@ -174,11 +196,8 @@ namespace HeathenEngineering.BGSDK.Editor
                         var tokenRemove = tokenRoot.Q<UnityEditor.UIElements.ToolbarButton>("removeToken");
                         tokenRemove.clicked += () =>
                         {
-                            Debug.Log("Remove Token");
-                            contract.Tokens.Remove(token);
-                            DestroyImmediate(token, true);
-
-                            AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
+                            contract.tokens.Remove(token);
+                            AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(token));
                             RebuildContractDisplay();
                         };
                         tokenLabel.text = token.SystemName;
@@ -234,6 +253,29 @@ namespace HeathenEngineering.BGSDK.Editor
                 apiPage.style.display = DisplayStyle.None;
                 modelPage.style.display = DisplayStyle.None;
             }
+        }
+
+        private T CreateAsset<T>(string name) where T : ScriptableObject
+        {
+            T asset = ScriptableObject.CreateInstance<T>();
+
+            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+            if (path == "")
+            {
+                path = "Assets";
+            }
+            else if (Path.GetExtension(path) != "")
+            {
+                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+            }
+
+            string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + name + ".asset");
+
+            AssetDatabase.CreateAsset(asset, assetPathAndName);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            return asset;
         }
     }
 }

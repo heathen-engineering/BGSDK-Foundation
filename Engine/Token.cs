@@ -12,7 +12,7 @@ namespace HeathenEngineering.BGSDK.Engine
         public bool UpdatedFromServer = false;
         [HideInInspector]
         public long UpdatedOn;
-        [HideInInspector]
+        
         public Contract contract;
 
         public TokeProperties properties;

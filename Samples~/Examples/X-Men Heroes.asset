@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c6cbcdfaca89dd4e9d1c6e605cd139b, type: 3}
+  m_Name: X-Men Heroes
+  m_EditorClassIdentifier: 
+  updatedFromServer: 1
+  updatedOn: -8585855068892372573
+  data:
+    id: 31
+    name: X-Men Heroes
+    description: The X-Men are a team of mutant superheroes in the Marvel Universe.
+      he basic concept of the X-Men is that under a cloud of increasing anti-mutant
+      sentiment, Professor Xavier created a haven at his Westchester mansion to train
+      young mutants to use their powers for the benefit of humanity, and to prove
+      mutants can be heroes
+    confirmed: 1
+    address: 0x28e06fe9091392f4c6b5d171c9a6d5930c60d400
+    symbol: 
+    url: 
+    imageUrl: 
+    type: 
+  tokens: []

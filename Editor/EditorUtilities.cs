@@ -82,7 +82,9 @@ namespace HeathenEngineering.BGSDK.Editor
             bool hasDuplicateContractAddress = false;
             bool hasDuplicateTokenName = false;
             bool hasEmptyModel = false;
+            bool hasMultiToken = false;
 
+            string TokenMultiReference = "One or more tokens is referenced by two or more contracts.";
             string EmptyContract = "One or more contracts have no tokens.";
             string OrphanedToken = "One or more tokens lack a contract reference.";
             string ContractName = "One or more contracts have no name.";
@@ -93,47 +95,50 @@ namespace HeathenEngineering.BGSDK.Editor
             string TokenName = "One or more tokens have no name.";
             string TokenDescription = "One or more tokens have no description.";
             string EmptyModel = "No datamodel elements detected.";
-            string NoErrors = "No errors detected.\nSee the BGSDK Manager window to commit this datamodel.";
+            string NoErrors = "No errors";
 
             if (!ignoreEmptyModel)
             {
-                if (settings.Contracts == null || settings.Contracts.Count < 1)
+                if (settings.contracts == null || settings.contracts.Count < 1)
                     hasEmptyModel = true;
             }
             else
             {
-                if (settings.Contracts == null)
-                    settings.Contracts = new List<Engine.Contract>();
+                if (settings.contracts == null)
+                    settings.contracts = new List<Engine.Contract>();
             }
 
             if (!hasEmptyModel)
             {
-                foreach (var contract in settings.Contracts)
+                foreach (var contract in settings.contracts)
                 {
                     if (contract == null)
                         continue;
 
-                    if (!hasDuplicateContractAddress && settings.Contracts.Where(p => p.address != string.Empty && p.address == contract.address).Count() > 1)
+                    if (!hasDuplicateContractAddress && settings.contracts.Where(p => p.Address != string.Empty && p.Address == contract.Address).Count() > 1)
                         hasDuplicateContractAddress = true;
 
-                    if (!hasEmptyContract && (contract.Tokens == null || contract.Tokens.Count == 0))
+                    if (!hasEmptyContract && (contract.tokens == null || contract.tokens.Count == 0))
                         hasEmptyContract = true;
 
-                    if (!hasDuplicateContractName && settings.Contracts.Where(p => p.systemName == contract.systemName).Count() > 1)
+                    if (!hasDuplicateContractName && settings.contracts.Where(p => p.SystemName == contract.SystemName).Count() > 1)
                         hasDuplicateContractName = true;
 
-                    if (!hasEmptyContractName && string.IsNullOrEmpty(contract.systemName))
+                    if (!hasEmptyContractName && string.IsNullOrEmpty(contract.SystemName))
                         hasEmptyContractName = true;
 
-                    if (!hasEmptyContractDescription && string.IsNullOrEmpty(contract.description))
+                    if (!hasEmptyContractDescription && string.IsNullOrEmpty(contract.Description))
                         hasEmptyContractDescription = true;
 
-                    foreach (var token in contract.Tokens)
+                    foreach (var token in contract.tokens)
                     {
                         if (token == null)
                             continue;
 
-                        if (!hasDuplicateTokenName && contract.Tokens.Where(p => p.SystemName == token.SystemName).Count() > 1)
+                        if (!hasMultiToken)
+                            hasMultiToken = settings.contracts.Where(p => p.tokens.Contains(token)).Count() > 1;
+
+                        if (!hasDuplicateTokenName && contract.tokens.Where(p => p.SystemName == token.SystemName).Count() > 1)
                             hasDuplicateTokenName = true;
 
                         if (!hasEmptyTokenName && string.IsNullOrEmpty(token.SystemName))
@@ -168,6 +173,8 @@ namespace HeathenEngineering.BGSDK.Editor
                     message += EmptyContract + "\n";
                 if (hasOrphanedToken)
                     message += OrphanedToken + "\n";
+                if (hasMultiToken)
+                    message += TokenMultiReference + "\n";
                 if (hasEmptyContractName)
                     message += ContractName + "\n";
                 if (hasEmptyContractDescription)
@@ -205,7 +212,7 @@ namespace HeathenEngineering.BGSDK.Editor
         /// <param name="settings">The settings to process ... these will be set as the active settings for the BGSDK API</param>
         /// <param name="identity">The identity of the user which will process the elements against the BGSDK service.</param>
         /// <returns></returns>
-        public static IEnumerator SyncSettings()
+        public static IEnumerator SyncSettings(Action callback = null)
         {
             //First insure we have a fresh token based on secret
             if (string.IsNullOrEmpty(Settings.current.appId.clientSecret) || string.IsNullOrEmpty(Settings.current.appId.clientId))
@@ -257,10 +264,10 @@ namespace HeathenEngineering.BGSDK.Editor
                     var message = string.Empty;
                     if (ValidateSettingsModel(settings, out message, true) != ValidationStatus.Error)
                     {
-                        foreach (var contract in settings.Contracts)
+                        foreach (var contract in settings.contracts)
                         {
-                            contract.UpdatedFromServer = false;
-                            foreach (var token in contract.Tokens)
+                            contract.updatedFromServer = false;
+                            foreach (var token in contract.tokens)
                             {
                                 token.UpdatedFromServer = false;
                             }
@@ -295,72 +302,72 @@ namespace HeathenEngineering.BGSDK.Editor
                             {
                                 #region Update for data existing on the backend service
                                 //Try to match based on address ... this is the safest method
-                                var arkaneContract = settings.Contracts.FirstOrDefault(p => p.Data.address == contractData.address);
+                                var arkaneContract = settings.contracts.FirstOrDefault(p => p.data.address == contractData.address);
                                 if (arkaneContract != default(Engine.Contract))
                                 {
-                                    arkaneContract.Data = contractData;
+                                    arkaneContract.data = contractData;
                                     if (arkaneContract.name != contractData.name)
                                     {
                                         arkaneContract.name = contractData.name;
 
-                                        if (arkaneContract.Tokens == null)
-                                            arkaneContract.Tokens = new List<Engine.Token>();
+                                        if (arkaneContract.tokens == null)
+                                            arkaneContract.tokens = new List<Engine.Token>();
 
-                                        foreach (var token in arkaneContract.Tokens)
+                                        foreach (var token in arkaneContract.tokens)
                                         {
                                             token.name = arkaneContract.name + " : " + token.SystemName;
                                         }
                                     }
-                                    arkaneContract.UpdatedFromServer = true;
-                                    arkaneContract.UpdatedOn = DateTime.Now.ToBinary();
+                                    arkaneContract.updatedFromServer = true;
+                                    arkaneContract.updatedOn = DateTime.Now.ToBinary();
 
                                     AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
                                 }
                                 else
                                 {
                                     //Try to match based on ID ... note if there are any contracts in the back end system then the first contract with an ID of 0 is likely to match
-                                    arkaneContract = settings.Contracts.FirstOrDefault(p => p.Data.id == contractData.id);
+                                    arkaneContract = settings.contracts.FirstOrDefault(p => p.data.id == contractData.id);
                                     if (arkaneContract != default(Engine.Contract))
                                     {
-                                        arkaneContract.Data = contractData;
+                                        arkaneContract.data = contractData;
                                         if (arkaneContract.name != contractData.name)
                                         {
                                             arkaneContract.name = contractData.name;
 
-                                            if (arkaneContract.Tokens == null)
-                                                arkaneContract.Tokens = new List<Engine.Token>();
+                                            if (arkaneContract.tokens == null)
+                                                arkaneContract.tokens = new List<Engine.Token>();
 
-                                            foreach (var token in arkaneContract.Tokens)
+                                            foreach (var token in arkaneContract.tokens)
                                             {
                                                 token.name = arkaneContract.name + " : " + token.SystemName;
                                             }
                                         }
-                                        arkaneContract.UpdatedFromServer = true;
-                                        arkaneContract.UpdatedOn = DateTime.Now.ToBinary();
+                                        arkaneContract.updatedFromServer = true;
+                                        arkaneContract.updatedOn = DateTime.Now.ToBinary();
 
                                         AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
                                     }
                                     else
                                     {
                                         //Least reliable match method but should be tried all the same
-                                        arkaneContract = settings.Contracts.FirstOrDefault(p => p.Data.name == contractData.name);
+                                        arkaneContract = settings.contracts.FirstOrDefault(p => p.data.name == contractData.name);
                                         if (arkaneContract != default(Engine.Contract))
                                         {
-                                            arkaneContract.Data = contractData;
+                                            arkaneContract.data = contractData;
                                             if (arkaneContract.name != contractData.name)
                                             {
                                                 arkaneContract.name = contractData.name;
 
-                                                if (arkaneContract.Tokens == null)
-                                                    arkaneContract.Tokens = new List<Engine.Token>();
+                                                if (arkaneContract.tokens == null)
+                                                    arkaneContract.tokens = new List<Engine.Token>();
 
-                                                foreach (var token in arkaneContract.Tokens)
+                                                foreach (var token in arkaneContract.tokens)
                                                 {
                                                     token.name = arkaneContract.name + " : " + token.SystemName;
                                                 }
                                             }
-                                            arkaneContract.UpdatedFromServer = true;
-                                            arkaneContract.UpdatedOn = DateTime.Now.ToBinary();
+                                            arkaneContract.updatedFromServer = true;
+                                            arkaneContract.updatedOn = DateTime.Now.ToBinary();
                                         }
                                         else
                                         {
@@ -371,26 +378,26 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                             arkaneContract = ScriptableObject.CreateInstance<Engine.Contract>();
                                             arkaneContract.name = contractData.name;
-                                            arkaneContract.Data = contractData;
-                                            arkaneContract.UpdatedFromServer = true;
-                                            arkaneContract.UpdatedOn = DateTime.Now.ToBinary();
+                                            arkaneContract.data = contractData;
+                                            arkaneContract.updatedFromServer = true;
+                                            arkaneContract.updatedOn = DateTime.Now.ToBinary();
 
-                                            string path = AssetDatabase.GetAssetPath(settings);
+                                            string path = AssetDatabase.GetAssetPath(Selection.activeObject);
                                             if (path == "")
                                             {
                                                 path = "Assets";
                                             }
                                             else if (Path.GetExtension(path) != "")
                                             {
-                                                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(settings)), "");
+                                                path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
                                             }
 
                                             string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + contractData.name + ".asset");
 
-                                            AssetDatabase.AddObjectToAsset(arkaneContract, settings);
+                                            AssetDatabase.CreateAsset(arkaneContract, assetPathAndName);
                                             AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
 
-                                            settings.Contracts.Add(arkaneContract);
+                                            settings.contracts.Add(arkaneContract);
                                         }
                                     }
                                 }
@@ -431,7 +438,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                         if (!webResult.isNetworkError && !webResult.isHttpError)
                                         {
-                                            var arkaneToken = arkaneContract.Tokens.FirstOrDefault(p => p.Id == tokenData.id);
+                                            var arkaneToken = arkaneContract.tokens.FirstOrDefault(p => p.Id == tokenData.id);
                                             if (arkaneToken != default(Engine.Token))
                                             {
                                                 arkaneToken.Set(webResult);
@@ -447,7 +454,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                             }
                                             else
                                             {
-                                                arkaneToken = arkaneContract.Tokens.FirstOrDefault(p => p.SystemName == webResult.result.name && string.IsNullOrEmpty(p.Id));
+                                                arkaneToken = arkaneContract.tokens.FirstOrDefault(p => p.SystemName == webResult.result.name && string.IsNullOrEmpty(p.Id));
                                                 if (arkaneToken != default(Engine.Token))
                                                 {
                                                     arkaneToken.Set(webResult);
@@ -473,9 +480,21 @@ namespace HeathenEngineering.BGSDK.Editor
                                                     arkaneToken.Set(webResult);
                                                     arkaneToken.UpdatedFromServer = true;
                                                     arkaneToken.UpdatedOn = DateTime.Now.ToBinary();
-                                                    arkaneContract.Tokens.Add(arkaneToken);
+                                                    arkaneContract.tokens.Add(arkaneToken);
 
-                                                    AssetDatabase.AddObjectToAsset(arkaneToken, arkaneContract);
+                                                    string path = AssetDatabase.GetAssetPath(Selection.activeObject);
+                                                    if (path == "")
+                                                    {
+                                                        path = "Assets";
+                                                    }
+                                                    else if (Path.GetExtension(path) != "")
+                                                    {
+                                                        path = path.Replace(Path.GetFileName(AssetDatabase.GetAssetPath(Selection.activeObject)), "");
+                                                    }
+
+                                                    string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + arkaneToken.name + ".asset");
+
+                                                    AssetDatabase.CreateAsset(arkaneToken, assetPathAndName);
                                                     AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
                                                 }
                                             }
@@ -503,7 +522,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                  **********************************************************************************/
 
                                 #region Add new tokens that are not yet on the backend service
-                                var newTokens = arkaneContract.Tokens.Where(p => !p.UpdatedFromServer);
+                                var newTokens = arkaneContract.tokens.Where(p => !p.UpdatedFromServer);
 
                                 foreach (var token in newTokens)
                                 {
@@ -511,11 +530,11 @@ namespace HeathenEngineering.BGSDK.Editor
                                     {
                                         if(result.hasError)
                                         {
-                                            Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + arkaneContract.systemName + "], error:  " + result.httpCode + " message: " + result.message);
+                                            Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + arkaneContract.SystemName + "], error:  " + result.httpCode + " message: " + result.message);
                                         }
                                         else
                                         {
-                                            Debug.Log("Created token [" + token.SystemName + "] for contract [" + arkaneContract.systemName + "]");
+                                            Debug.Log("Created token [" + token.SystemName + "] for contract [" + arkaneContract.SystemName + "]");
                                         }
                                     });
                                 }
@@ -527,10 +546,10 @@ namespace HeathenEngineering.BGSDK.Editor
                              * synced. We now need to get all the contracts in our settings that have not yet
                              * been synced and process them against the server.
                              **********************************************************************************/
-                            var newContracts = settings.Contracts.Where(p => !p.UpdatedFromServer);
+                            var newContracts = settings.contracts.Where(p => !p.updatedFromServer);
                             foreach (var contract in newContracts)
                             {
-                                DeployContractModel nContract = new DeployContractModel() { name = contract.Data.name, description = contract.Data.description };
+                                DeployContractModel nContract = new DeployContractModel() { name = contract.data.name, description = contract.data.description };
                                 var jsonString = JsonUtility.ToJson(nContract);
 
                                 UnityWebRequest wwwCreateContract = UnityWebRequest.Put(Settings.current.ContractUri, jsonString);
@@ -548,25 +567,25 @@ namespace HeathenEngineering.BGSDK.Editor
                                     string resultContent = wwwCreateContract.downloadHandler.text;
                                     var result = JsonUtility.FromJson<DataModel.ContractData>(resultContent);
 
-                                    contract.Data = result;
-                                    contract.UpdatedFromServer = true;
-                                    contract.UpdatedOn = DateTime.Now.ToBinary();
+                                    contract.data = result;
+                                    contract.updatedFromServer = true;
+                                    contract.updatedOn = DateTime.Now.ToBinary();
 
                                     /**********************************************************************************
                                      * Finally get all the BGSDKToken objects for this contract and create them on the 
                                      * server
                                      **********************************************************************************/
-                                    foreach (var token in contract.Tokens)
+                                    foreach (var token in contract.tokens)
                                     {
                                         yield return CreateTokenType(contract, token, (r) =>
                                         {
                                             if (r.hasError)
                                             {
-                                                Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + contract.systemName + "], error:  " + r.httpCode + " message: " + r.message);
+                                                Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + contract.SystemName + "], error:  " + r.httpCode + " message: " + r.message);
                                             }
                                             else
                                             {
-                                                Debug.Log("Created token [" + token.SystemName + "] for contract [" + contract.systemName + "]");
+                                                Debug.Log("Created token [" + token.SystemName + "] for contract [" + contract.SystemName + "]");
                                             }
                                         });
                                     }
@@ -593,6 +612,12 @@ namespace HeathenEngineering.BGSDK.Editor
 
                     }
                 }
+
+                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                if (callback != null)
+                    callback.Invoke();
             }
         }
         #endregion

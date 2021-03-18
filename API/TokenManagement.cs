@@ -129,7 +129,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.ContractUri + "/" + contract.id);
+                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.ContractUri + "/" + contract.Id);
                     www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();

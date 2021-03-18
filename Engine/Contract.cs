@@ -2,34 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace HeathenEngineering.BGSDK.Engine
 {
     [CreateAssetMenu(menuName = "Blockchain Game SDK/Contract")]
     public class Contract : ScriptableObject
     {
+        [FormerlySerializedAs("UpdatedFromServer")]
         [HideInInspector]
-        public bool UpdatedFromServer = false;
+        public bool updatedFromServer = false;
+        [FormerlySerializedAs("UpdatedOn")]
         [HideInInspector]
-        public long UpdatedOn;
-        [HideInInspector]
-        public ContractData Data;
-        [HideInInspector]
-        public List<Token> Tokens = new List<Token>();
+        public long updatedOn;
+        [FormerlySerializedAs("Data")]
+        public ContractData data;
+        
+        [FormerlySerializedAs("Tokens")]
+        public List<Token> tokens = new List<Token>();
 
-        public string id
-        { get { return Data.id; } set { Data.id = value; } }
-        public string systemName
-        { get { return Data.name; } set { Data.name = value; } }
-        public string description
-        { get { return Data.description; } set { Data.description = value; } }
-        public bool confirmed
-        { get { return Data.confirmed; } set { Data.confirmed = value; } }
-        public string address
-        { get { return Data.address; } set { Data.address = value; } }
+        public string Id
+        { get { return data.id; } set { data.id = value; } }
+        public string SystemName
+        { get { return data.name; } set { data.name = value; } }
+        public string Description
+        { get { return data.description; } set { data.description = value; } }
+        public bool Confirmed
+        { get { return data.confirmed; } set { data.confirmed = value; } }
+        public string Address
+        { get { return data.address; } set { data.address = value; } }
 
-        public Token this[int tokenIndex] => Tokens[tokenIndex];
-        public Token this[string tokenId] => Tokens.FirstOrDefault(p => p.Id == tokenId);
-        public Token FindTokenByName(string tokenName) => Tokens.FirstOrDefault(p => p.SystemName == tokenName);
+        public Token this[int tokenIndex] => tokens[tokenIndex];
+        public Token this[string tokenId] => tokens.FirstOrDefault(p => p.Id == tokenId);
+        public Token FindTokenByName(string tokenName) => tokens.FirstOrDefault(p => p.SystemName == tokenName);
     }
 }
