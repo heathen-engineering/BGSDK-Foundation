@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 
 namespace HeathenEngineering.BGSDK.Editor
 {
-    [CustomEditor(typeof(Settings))]
+    [CustomEditor(typeof(BGSDKSettings))]
     public class BGSDKSettingsEditor : UnityEditor.Editor
     {
         public VisualTreeAsset inspectorMarkup;
@@ -34,7 +34,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
         public override VisualElement CreateInspectorGUI()
         {
-            var settings = target as Settings;
+            var settings = target as BGSDKSettings;
 
             path = AssetDatabase.GetAssetPath(settings);
             if (path == "")
@@ -67,7 +67,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + nContract.name + ".asset");
                 AssetDatabase.CreateAsset(nContract, assetPathAndName);
                 settings.contracts.Add(nContract);
-                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 
@@ -77,7 +77,7 @@ namespace HeathenEngineering.BGSDK.Editor
             var syncData = root.Q<UnityEditor.UIElements.ToolbarButton>("syncButton");
             syncData.clicked += () =>
             {
-                Settings.current = settings;
+                BGSDKSettings.current = settings;
                 var syncProc = BGSDK.Editor.EditorUtilities.SyncSettings(RebuildContractDisplay);
 
                 StartCoroutine(syncProc);
@@ -141,7 +141,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
         private void RebuildContractDisplay()
         {
-            var settings = target as Settings;
+            var settings = target as BGSDKSettings;
 
             contracts.Clear();
 
@@ -170,7 +170,7 @@ namespace HeathenEngineering.BGSDK.Editor
                         contract.tokens.Add(nToken);
                         string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + nToken.name + ".asset");
                         AssetDatabase.CreateAsset(nToken, assetPathAndName);
-                        AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                        AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                         AssetDatabase.SaveAssets();
                         AssetDatabase.Refresh();
 

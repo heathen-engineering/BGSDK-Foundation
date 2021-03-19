@@ -34,8 +34,8 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <returns></returns>
         public static WebResults<TokenResponceData> GetTokenDefinition(string contractId, string tokenId)
         {
-            UnityWebRequest tokenRequest = UnityWebRequest.Get(Settings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
-            tokenRequest.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+            UnityWebRequest tokenRequest = UnityWebRequest.Get(BGSDKSettings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
+            tokenRequest.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
             var asyncOpHandle = tokenRequest.SendWebRequest();
 
@@ -65,8 +65,8 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <returns></returns>
         public static IEnumerator GetTokenDefinitionCoroutine(string contractId, string tokenId, Action<WebResults<TokenResponceData>> callback)
         {
-            UnityWebRequest tokenRequest = UnityWebRequest.Get(Settings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
-            tokenRequest.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+            UnityWebRequest tokenRequest = UnityWebRequest.Get(BGSDKSettings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
+            tokenRequest.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
             var asyncOpHandle = tokenRequest.SendWebRequest();
 
@@ -84,8 +84,8 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <returns></returns>
         public static WebResults<TokenResponceData<T>> GetTokenDefinition<T>(string contractId, string tokenId)
         {
-            UnityWebRequest tokenRequest = UnityWebRequest.Get(Settings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
-            tokenRequest.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+            UnityWebRequest tokenRequest = UnityWebRequest.Get(BGSDKSettings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
+            tokenRequest.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
             var asyncOpHandle = tokenRequest.SendWebRequest();
 
@@ -115,8 +115,8 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <returns></returns>
         public static IEnumerator GetTokenDefinitionCoroutine<T>(string contractId, string tokenId, Action<WebResults<TokenResponceData<T>>> callback)
         {
-            UnityWebRequest tokenRequest = UnityWebRequest.Get(Settings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
-            tokenRequest.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+            UnityWebRequest tokenRequest = UnityWebRequest.Get(BGSDKSettings.current.ConnectUri + "/" + contractId + "/token-types/" + tokenId);
+            tokenRequest.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
             var asyncOpHandle = tokenRequest.SendWebRequest();
 

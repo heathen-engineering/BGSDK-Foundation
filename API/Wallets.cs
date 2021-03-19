@@ -53,7 +53,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator CreateWhitelableWallet(string pincode, string alias, string description, string identifier, string secretType, Action<ListWalletResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.CreateWhitelabelWallet with no BGSDK.Settings object applied." });
                 yield return null;
@@ -61,7 +61,7 @@ namespace HeathenEngineering.BGSDK.API
             else
             {
 
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.\n Please initalize the Settings.user before calling CreateWhitelableWallet", result = null });
                     yield return null;
@@ -76,8 +76,8 @@ namespace HeathenEngineering.BGSDK.API
                     form.AddField("secretType", secretType);
                     form.AddField("walletType", "WHITE_LABEL");
 
-                    UnityWebRequest www = UnityWebRequest.Post(Settings.current.WalletUri, form); ;
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.WalletUri, form); ;
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -128,14 +128,14 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator Unlink(Wallet wallet, Action<BGSDKBaseResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new BGSDKBaseResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.Unlink with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new BGSDKBaseResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided." });
                     yield return null;
@@ -143,8 +143,8 @@ namespace HeathenEngineering.BGSDK.API
                 else
                 {
                     //TODO: Confirm with BGSDK that its the address that should be used. This doesn't appear correct as the value the API expects is a GUID and address is a HEX value
-                    UnityWebRequest www = UnityWebRequest.Delete(Settings.current.WalletUri + "/" + wallet.address + "/link");
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Delete(BGSDKSettings.current.WalletUri + "/" + wallet.address + "/link");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -172,22 +172,22 @@ namespace HeathenEngineering.BGSDK.API
         /// </remarks>
         public static IEnumerator List(Action<ListWalletResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.List with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.WalletUri);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -235,22 +235,22 @@ namespace HeathenEngineering.BGSDK.API
         /// </remarks>
         public static IEnumerator Get(ulong walletId, Action<ListWalletResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.Get with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.WalletUri + "/" + walletId.ToString());
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString());
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -302,7 +302,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator UpdateWhitelableWalletPincode(ulong walletId, string currentPincode, string newPincode, Action<ListWalletResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.CreateWhitelabelWallet with no BGSDK.Settings object applied." });
                 yield return null;
@@ -310,7 +310,7 @@ namespace HeathenEngineering.BGSDK.API
             else
             {
 
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListWalletResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
@@ -321,8 +321,8 @@ namespace HeathenEngineering.BGSDK.API
                     form.AddField("pincode", currentPincode);
                     form.AddField("newPincode", newPincode);
 
-                    UnityWebRequest www = UnityWebRequest.Post(Settings.current.WalletUri + "/" + walletId.ToString() + "/security", form);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/security", form);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -370,22 +370,22 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator NativeBalance(ulong walletId, Action<BalanceResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new BalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.NativeBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new BalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.WalletUri + "/" + walletId.ToString() + "/balance");
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/balance");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -434,22 +434,22 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator TokenBalance(ulong walletId, Action<ListTokenBalanceResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListTokenBalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.TokenBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListTokenBalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.WalletUri + "/" + walletId.ToString() + "/balance/tokens");
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/balance/tokens");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -500,22 +500,22 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator SpecificTokenBalance(ulong walletId, string tokenAddress, Action<TokenBalanceResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new TokenBalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.TokenBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new TokenBalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.WalletUri + "/" + walletId.ToString() + "/balance/tokens/" + tokenAddress);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/balance/tokens/" + tokenAddress);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -569,21 +569,21 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator ListNFTs(ulong walletId, List<string> optionalContractAddresses, Action<ListListedNFTTokenResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListListedNFTTokenResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListListedNFTTokenResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    string address = Settings.current.WalletUri + "/" + walletId.ToString() + "/nonfungibles";
+                    string address = BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/nonfungibles";
 
                     if (optionalContractAddresses != null && optionalContractAddresses.Count > 0)
                     {
@@ -598,7 +598,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
 
                     UnityWebRequest www = UnityWebRequest.Get(address);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -652,21 +652,21 @@ namespace HeathenEngineering.BGSDK.API
         /// <returns>The Unity routine enumerator</returns>
         public static IEnumerator GetInventory(ulong walletId, List<string> optionalContractAddresses, Action<ListInventoryResults> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListInventoryResults() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListInventoryResults() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    string address = Settings.current.WalletUri + "/" + walletId.ToString() + "/inventory";
+                    string address = BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/inventory";
 
                     if (optionalContractAddresses != null && optionalContractAddresses.Count > 0)
                     {
@@ -681,7 +681,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
 
                     UnityWebRequest www = UnityWebRequest.Get(address);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)

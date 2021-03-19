@@ -44,6 +44,7 @@ namespace HeathenEngineering.BGSDK.API
         /// </para>
         /// <para>
         /// The <see cref="UserProfileResult.result"/> is a <see cref="UserProfile"/> object containing details about the local user.
+        /// This method assumes you have already authenticated via one of the available login methods such as <see cref="Login_Facebook(string, Action{AuthenticationResult})"/>
         /// </para>
         /// </remarks>
         /// <param name="callback"></param>
@@ -58,22 +59,22 @@ namespace HeathenEngineering.BGSDK.API
         /// </example>
         public static IEnumerator GetProfile(Action<UserProfileResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new UserProfileResult() { hasError = true, message = "Attempted to call BGSDK.User.GetProfile with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new UserProfileResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize Settings.user before calling GetProfile", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.api[Settings.current.UseStaging] + "/api/profile");
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.api[BGSDKSettings.current.UseStaging] + "/api/profile");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -128,7 +129,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="refreshExpiresIn">The expires in value the 3rd party source aquired for the refresh token. this is the number of seconds from <paramref name="createdAt"/> before the <paramref name="refreshToken"/> expires.</param>
         public static void Login_3rdPartyAuthentication(DateTime createdAt, string accessToken, int expiresIn, string refreshToken, int refreshExpiresIn)
         {
-            Settings.user = new Identity()
+            BGSDKSettings.user = new Identity()
             {
                 authentication = new AuthenticationResponce
                 {
@@ -148,7 +149,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
         public static IEnumerator Login_Facebook(string token, Action<AuthenticationResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new AuthenticationResult() { hasError = true, message = "Attempted to call BGSDK.User.Login_Facebook with no BGSDK.Settings object applied." });
                 yield return null;
@@ -158,9 +159,9 @@ namespace HeathenEngineering.BGSDK.API
                     WWWForm form = new WWWForm();
                     form.AddField("identityProvider", "FACEBOOK");
                     form.AddField("idpToken", token);
-                    form.AddField("client_id", Settings.current.appId.clientId);
+                    form.AddField("client_id", BGSDKSettings.current.appId.clientId);
 
-                    UnityWebRequest www = UnityWebRequest.Post(Settings.current.AuthenticationUri, form);
+                    UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.AuthenticationUri, form);
 
                     var ao = www.SendWebRequest();
 
@@ -172,9 +173,9 @@ namespace HeathenEngineering.BGSDK.API
                     if (!www.isNetworkError && !www.isHttpError)
                     {
                         string resultContent = www.downloadHandler.text;
-                        Settings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
-                        Settings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
-                        Settings.user.authentication.Create();
+                        BGSDKSettings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+                        BGSDKSettings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
+                        BGSDKSettings.user.authentication.Create();
                         callback(new AuthenticationResult() { hasError = false, message = "Authentication complete.", httpCode = www.responseCode });
                     }
                     else

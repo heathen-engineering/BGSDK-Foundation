@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f74f99d19469d44bbd5317b7ad0f0d0, type: 3}
   m_Name: BGSDK Settings
   m_EditorClassIdentifier: 
-  Connect:
+  connect:
     Staging: https://connect-staging.arkane.network/auth/exchange
     Production: https://connect.arkane.network/auth/exchange
-  Authentication:
+  authentication:
     Staging: https://login-staging.arkane.network
     Production: https://login.arkane.network
-  Business:
+  business:
     Staging: https://api-business-staging.arkane.network
     Production: https://api-business.arkane.network
-  API:
+  api:
     Staging: https://api-staging.arkane.network
     Production: https://api.arkane.network
   UseStaging: 1
@@ -33,5 +33,5 @@ MonoBehaviour:
     description: 
     rootURL: 
     imageUrl: 
-  Contracts:
-  - {fileID: -5210869519728555877}
+  contracts:
+  - {fileID: 11400000, guid: df39c7d29288ccb449a2afa7385f9e7d, type: 2}

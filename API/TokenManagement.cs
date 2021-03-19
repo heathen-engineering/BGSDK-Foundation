@@ -57,22 +57,22 @@ namespace HeathenEngineering.BGSDK.API
         /// </example>
         public static IEnumerator ListContracts(Action<DataModel.ListContractsResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListContractsResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.ListContracts with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ListContractsResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling ListContracts.", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.ContractUri);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.ContractUri);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -115,22 +115,22 @@ namespace HeathenEngineering.BGSDK.API
         /// </example>
         public static IEnumerator GetContract(Engine.Contract contract, Action<ContractResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ContractResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.GetContract with no BGSDK.Settings object applied.", result = null });
                 yield return null;
             }
             else
             {
-                if (Settings.user == null)
+                if (BGSDKSettings.user == null)
                 {
                     callback(new ContractResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling GetContract", result = null });
                     yield return null;
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(Settings.current.ContractUri + "/" + contract.Id);
-                    www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.ContractUri + "/" + contract.Id);
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
                     while (!co.isDone)
@@ -170,20 +170,20 @@ namespace HeathenEngineering.BGSDK.API
         /// </example>
         public static IEnumerator ListTokenTypes(Contract contract, Action<ListTokenTypesResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new ListTokenTypesResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.ListTokenTypes with no BGSDK.Settings object applied.", result = null });
                 yield return null;
             }
-            else if(Settings.user == null)
+            else if(BGSDKSettings.user == null)
             {
                 callback(new ListTokenTypesResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling ListTokenTypes", result = null });
                 yield return null;
             }
             else
             {
-                UnityWebRequest www = UnityWebRequest.Get(Settings.current.GetTokenUri(contract));
-                www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.GetTokenUri(contract));
+                www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                 var co = www.SendWebRequest();
                 while (!co.isDone)
@@ -223,20 +223,20 @@ namespace HeathenEngineering.BGSDK.API
         /// </example>
         public static IEnumerator GetTokenType(Contract contract, long tokenId, Action<DataModel.DefineTokenTypeResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new DataModel.DefineTokenTypeResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.GetTokenType with no BGSDK.Settings object applied.", result = null });
                 yield return null;
             }
-            else if (Settings.user == null)
+            else if (BGSDKSettings.user == null)
             {
                 callback(new DefineTokenTypeResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize the Settings.user variable before calling GetTokenType", result = null });
                 yield return null;
             }
             else
             {
-                UnityWebRequest www = UnityWebRequest.Get(Settings.current.GetTokenUri(contract) + "/" + tokenId.ToString());
-                www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.GetTokenUri(contract) + "/" + tokenId.ToString());
+                www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                 var co = www.SendWebRequest();
                 while (!co.isDone)
@@ -291,14 +291,14 @@ namespace HeathenEngineering.BGSDK.API
             /// <returns>The Unity routine enumerator</returns>
             public static IEnumerator CreateToken(Contract contract, Token token, int amount, Action<BGSDKBaseResult> callback)
             {
-                if (Settings.current == null)
+                if (BGSDKSettings.current == null)
                 {
                     callback(new DataModel.BGSDKBaseResult() { hasError = true, message = "Attempted to call BGSDK.TokenManagement.CreateToken with no BGSDK.Settings object applied." });
                     yield return null;
                 }
                 else
                 {
-                    if (Settings.user == null)
+                    if (BGSDKSettings.user == null)
                     {
                         callback(new DataModel.BGSDKBaseResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize Settings.user before calling Privileged.CreateToken" });
                         yield return null;
@@ -309,8 +309,8 @@ namespace HeathenEngineering.BGSDK.API
                         form.AddField("amount", amount);
                         form.AddField("typeId", token.Id.ToString());
 
-                        UnityWebRequest www = UnityWebRequest.Post(Settings.current.CreateTokenUri(contract), form);
-                        www.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                        UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.CreateTokenUri(contract), form);
+                        www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = www.SendWebRequest();
                         while (!co.isDone)

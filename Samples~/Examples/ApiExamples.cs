@@ -25,6 +25,16 @@ namespace HeathenEngineering.BGSDK.Examples
             StartCoroutine(API.Wallets.List(HandleWalletResults));
         }
 
+        //public void GetInventory()
+        //{
+        //    StartCoroutine(API.Wallets.GetInventory(walletData[0].id, null, HandleInventoryResults));
+        //}
+
+        private void HandleInventoryResults(ListInventoryResults obj)
+        {
+            throw new NotImplementedException();
+        }
+
         private void HandleWalletResults(ListWalletResult walletResult)
         {
             if (!walletResult.hasError)

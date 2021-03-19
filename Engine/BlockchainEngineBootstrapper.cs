@@ -8,7 +8,7 @@ namespace HeathenEngineering.BGSDK.Engine
 {
     public class BlockchainEngineBootstrapper : MonoBehaviour
     {
-        public Settings settings;
+        public BGSDKSettings settings;
 #if UNITY_SERVER || UNITY_EDITOR
         public bool LoginClientSecret = false;
 #endif
@@ -18,7 +18,7 @@ namespace HeathenEngineering.BGSDK.Engine
 
         void Start()
         {
-            Settings.current = settings;
+            BGSDKSettings.current = settings;
 #if UNITY_SERVER || UNITY_EDITOR
             if (LoginClientSecret && !string.IsNullOrEmpty(settings.appId.clientSecret))
             {
@@ -55,7 +55,7 @@ namespace HeathenEngineering.BGSDK.Engine
         /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
         public static IEnumerator ClientSecretAuthentication(Action<AuthenticationResult> callback)
         {
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 callback(new AuthenticationResult() { hasError = true, message = "Attempted to call BGSDK.User.Authenticate with no BGSDK.Settings object applied." });
                 yield return null;
@@ -64,10 +64,10 @@ namespace HeathenEngineering.BGSDK.Engine
             {
                 WWWForm form = new WWWForm();
                 form.AddField("grant_type", "client_credentials");
-                form.AddField("client_id", Settings.current.appId.clientId);
-                form.AddField("client_secret", Settings.current.appId.clientSecret);
+                form.AddField("client_id", BGSDKSettings.current.appId.clientId);
+                form.AddField("client_secret", BGSDKSettings.current.appId.clientSecret);
 
-                UnityWebRequest www = UnityWebRequest.Post(Settings.current.AuthenticationUri, form);
+                UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.AuthenticationUri, form);
 
                 var ao = www.SendWebRequest();
 
@@ -79,11 +79,11 @@ namespace HeathenEngineering.BGSDK.Engine
                 if (!www.isNetworkError && !www.isHttpError)
                 {
                     string resultContent = www.downloadHandler.text;
-                    if (Settings.user == null)
-                        Settings.user = new Identity();
-                    Settings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
-                    Settings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
-                    Settings.user.authentication.Create();
+                    if (BGSDKSettings.user == null)
+                        BGSDKSettings.user = new Identity();
+                    BGSDKSettings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+                    BGSDKSettings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
+                    BGSDKSettings.user.authentication.Create();
                     callback(new AuthenticationResult() { hasError = false, message = "Authentication complete.", httpCode = www.responseCode });
                 }
                 else

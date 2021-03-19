@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HeathenEngineering.BGSDK.Editor
 {
-    [CustomPreview(typeof(Settings))]
+    [CustomPreview(typeof(BGSDKSettings))]
     class BGSDKDatamodelPreview : ObjectPreview
     {
         class BGSDKSettingsInfo
@@ -58,7 +58,7 @@ namespace HeathenEngineering.BGSDK.Editor
         public override void Initialize(UnityEngine.Object[] targets)
         {
             base.Initialize(targets);
-            GetSettingsInformation(target as Settings);
+            GetSettingsInformation(target as BGSDKSettings);
         }
 
         public override GUIContent GetPreviewTitle()
@@ -81,7 +81,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 return;
 
             // refresh the data
-            GetSettingsInformation(target as Settings);
+            GetSettingsInformation(target as BGSDKSettings);
 
             if (info == null)
                 return;
@@ -96,7 +96,7 @@ namespace HeathenEngineering.BGSDK.Editor
             GUI.Label(paddedr, info.value, styles.componentName);
         }
 
-        void GetSettingsInformation(Settings settings)
+        void GetSettingsInformation(BGSDKSettings settings)
         {
             if (settings != null)
             {

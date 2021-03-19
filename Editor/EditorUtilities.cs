@@ -70,7 +70,7 @@ namespace HeathenEngineering.BGSDK.Editor
         /// <item><term><see cref="ValidationStatus.Error"/></term><term>has an Empty Model or Empty Token Name or Empty Contract Name or Orphaned Tokens or Duplicate Contract Address</term></item>
         /// </list>
         /// </returns>
-        public static ValidationStatus ValidateSettingsModel(Settings settings, out string message, bool ignoreEmptyModel = false)
+        public static ValidationStatus ValidateSettingsModel(BGSDKSettings settings, out string message, bool ignoreEmptyModel = false)
         {
             bool hasEmptyContract = false;
             bool hasOrphanedToken = false;
@@ -207,7 +207,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
         #region Depricated
         /// <summary>
-        /// Consumes a <see cref="Settings"/> object updates it with the data found on service.
+        /// Consumes a <see cref="BGSDKSettings"/> object updates it with the data found on service.
         /// </summary>
         /// <param name="settings">The settings to process ... these will be set as the active settings for the BGSDK API</param>
         /// <param name="identity">The identity of the user which will process the elements against the BGSDK service.</param>
@@ -215,23 +215,23 @@ namespace HeathenEngineering.BGSDK.Editor
         public static IEnumerator SyncSettings(Action callback = null)
         {
             //First insure we have a fresh token based on secret
-            if (string.IsNullOrEmpty(Settings.current.appId.clientSecret) || string.IsNullOrEmpty(Settings.current.appId.clientId))
+            if (string.IsNullOrEmpty(BGSDKSettings.current.appId.clientSecret) || string.IsNullOrEmpty(BGSDKSettings.current.appId.clientId))
             {
                 Debug.LogError("Failed to sync settings: you must populate the Client ID and Client Secret before you can sync settings.");
                 yield return null;
             }
             else
             {
-                var settings = Settings.current;
+                var settings = BGSDKSettings.current;
 
                 var authenticated = false;
 
                 WWWForm authForm = new WWWForm();
                 authForm.AddField("grant_type", "client_credentials");
-                authForm.AddField("client_id", Settings.current.appId.clientId);
-                authForm.AddField("client_secret", Settings.current.appId.clientSecret);
+                authForm.AddField("client_id", BGSDKSettings.current.appId.clientId);
+                authForm.AddField("client_secret", BGSDKSettings.current.appId.clientSecret);
 
-                UnityWebRequest auth_www = UnityWebRequest.Post(Settings.current.AuthenticationUri, authForm);
+                UnityWebRequest auth_www = UnityWebRequest.Post(BGSDKSettings.current.AuthenticationUri, authForm);
 
                 var ao = auth_www.SendWebRequest();
 
@@ -243,11 +243,11 @@ namespace HeathenEngineering.BGSDK.Editor
                 if (!auth_www.isNetworkError && !auth_www.isHttpError)
                 {
                     string resultContent = auth_www.downloadHandler.text;
-                    if (Settings.user == null)
-                        Settings.user = new Identity();
-                    Settings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
-                    Settings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
-                    Settings.user.authentication.Create();
+                    if (BGSDKSettings.user == null)
+                        BGSDKSettings.user = new Identity();
+                    BGSDKSettings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+                    BGSDKSettings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
+                    BGSDKSettings.user.authentication.Create();
                     authenticated = true;
                 }
                 else
@@ -274,7 +274,7 @@ namespace HeathenEngineering.BGSDK.Editor
                         }
 
                         //Good enough process the settings
-                        Settings.current = settings;
+                        BGSDKSettings.current = settings;
 
                         /**********************************************************************************
                          * Next fetch a list of all contracts assoceated with the AppId recorded on 
@@ -282,7 +282,7 @@ namespace HeathenEngineering.BGSDK.Editor
                          **********************************************************************************/
 
                         UnityWebRequest wwwContract = UnityWebRequest.Get(settings.ContractUri);
-                        wwwContract.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                        wwwContract.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = wwwContract.SendWebRequest();
                         while (!co.isDone)
@@ -412,7 +412,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                 #region Update token's for this contract that are on the backend service
                                 UnityWebRequest wwwToken = UnityWebRequest.Get(settings.GetTokenUri(arkaneContract));
-                                wwwToken.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                                wwwToken.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                                 var to = wwwToken.SendWebRequest();
                                 while (!to.isDone)
@@ -428,7 +428,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                         Debug.Log("Found Token: " + tokenData.id);
                                         //Get the token so we can get the full data set for it
                                         UnityWebRequest wwwFullToken = UnityWebRequest.Get(settings.GetTokenUri(arkaneContract) + "/" + tokenData.id);
-                                        wwwFullToken.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                                        wwwFullToken.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                                         var ftd = wwwFullToken.SendWebRequest();
                                         while (!ftd.isDone)
@@ -552,9 +552,9 @@ namespace HeathenEngineering.BGSDK.Editor
                                 DeployContractModel nContract = new DeployContractModel() { name = contract.data.name, description = contract.data.description };
                                 var jsonString = JsonUtility.ToJson(nContract);
 
-                                UnityWebRequest wwwCreateContract = UnityWebRequest.Put(Settings.current.ContractUri, jsonString);
+                                UnityWebRequest wwwCreateContract = UnityWebRequest.Put(BGSDKSettings.current.ContractUri, jsonString);
                                 wwwCreateContract.method = UnityWebRequest.kHttpVerbPOST;
-                                wwwCreateContract.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                                wwwCreateContract.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
                                 wwwCreateContract.uploadHandler.contentType = "application/json;charset=UTF-8";
                                 wwwCreateContract.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
@@ -651,7 +651,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 form.AddField("name", name);
                 form.AddField("description", description);
 
-                UnityWebRequest www = UnityWebRequest.Post(Settings.current.GetContractUri(app), form);
+                UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.GetContractUri(app), form);
 
                 www.SetRequestHeader("Authorization", identity.authentication.token_type + " " + identity.authentication.access_token);
 
@@ -692,7 +692,7 @@ namespace HeathenEngineering.BGSDK.Editor
             //Define a type of token
             yield return null;
 
-            if (string.IsNullOrEmpty(Settings.current.appId.clientSecret) || string.IsNullOrEmpty(Settings.current.appId.clientId))
+            if (string.IsNullOrEmpty(BGSDKSettings.current.appId.clientSecret) || string.IsNullOrEmpty(BGSDKSettings.current.appId.clientId))
             {
                 Debug.LogError("Failed to sync settings: you must populate the Client ID and Client Secret before you can sync settings.");
                 yield return null;
@@ -704,11 +704,11 @@ namespace HeathenEngineering.BGSDK.Editor
             }
             else
             {
-                var request = new UnityWebRequest(Settings.current.DefineTokenTypeUri(contract), "POST");
+                var request = new UnityWebRequest(BGSDKSettings.current.DefineTokenTypeUri(contract), "POST");
                 byte[] bodyRaw = Encoding.UTF8.GetBytes(token.CreateTokenDefitionJson());
                 request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
                 request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-                request.SetRequestHeader("Authorization", Settings.user.authentication.token_type + " " + Settings.user.authentication.access_token);
+                request.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
                 request.SetRequestHeader("Content-Type", "application/json");
                 yield return request.SendWebRequest();
 

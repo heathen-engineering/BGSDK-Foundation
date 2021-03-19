@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <uie:Toolbar style="justify-content: flex-start; flex-direction: row;">
-        <uie:ToolbarToggle label="Application" name="tglApplication" value="true" style="align-items: stretch; left: auto;" />
-        <uie:ToolbarToggle label="API" name="tglApi" style="align-items: stretch; left: auto;" />
-        <uie:ToolbarToggle focusable="false" label="Model" name="tglModel" style="flex-grow: 1; display: flex;" />
+        <uie:ToolbarToggle label="Application" name="tglApplication" value="true" style="align-items: stretch; left: auto; flex-shrink: 1; flex-grow: 1;" />
+        <uie:ToolbarToggle label="API" name="tglApi" style="align-items: stretch; left: auto; flex-shrink: 1; flex-grow: 1;" />
+        <uie:ToolbarToggle focusable="false" label="Model" name="tglModel" style="flex-grow: 1; display: flex; flex-shrink: 1;" />
     </uie:Toolbar>
     <ui:VisualElement value="true" name="appPage" label="Application" style="align-items: stretch; flex-shrink: 1; display: none;">
         <uie:PropertyField binding-path="appId.applicationId" focusable="true" />

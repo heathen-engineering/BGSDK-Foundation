@@ -41,8 +41,8 @@ namespace HeathenEngineering.BGSDK.Editor
         public static void Init()
         {
             BGSDKManagerWindow window = EditorWindow.GetWindow<BGSDKManagerWindow>("BGSDK Manager", new Type[] { typeof(UnityEditor.SceneView) });
-            if (Settings.user == null)
-                Settings.user = new Identity();
+            if (BGSDKSettings.user == null)
+                BGSDKSettings.user = new Identity();
             cooroutines = new List<IEnumerator>();
             window.Show();
             EditorApplication.update += window.EditorUpdate;
@@ -96,22 +96,22 @@ namespace HeathenEngineering.BGSDK.Editor
 
             if (!string.IsNullOrEmpty(currentPath))
             {
-                var target = AssetDatabase.LoadAssetAtPath<Settings>(currentPath);
+                var target = AssetDatabase.LoadAssetAtPath<BGSDKSettings>(currentPath);
                 if (target != null)
-                    Settings.current = target;
+                    BGSDKSettings.current = target;
             }
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             EditorGUILayout.LabelField("Active Settings:", GUILayout.Width(100));
-            if (Settings.current == null)
+            if (BGSDKSettings.current == null)
             {
                 EditorGUILayout.BeginHorizontal();
                 if (GUILayout.Button("New", EditorStyles.toolbarButton, GUILayout.Width(50)))
                 {
                     GUI.FocusControl(null);
-                    Settings.current = CreateAsset<Settings>("New BGSDK Settings");
+                    BGSDKSettings.current = CreateAsset<BGSDKSettings>("New BGSDK Settings");
                 }
-                Settings.current = EditorGUILayout.ObjectField(GUIContent.none, Settings.current, typeof(Settings), false, GUILayout.Width(250)) as Settings;
+                BGSDKSettings.current = EditorGUILayout.ObjectField(GUIContent.none, BGSDKSettings.current, typeof(BGSDKSettings), false, GUILayout.Width(250)) as BGSDKSettings;
                 EditorGUILayout.EndHorizontal();
             }
             else
@@ -120,23 +120,23 @@ namespace HeathenEngineering.BGSDK.Editor
                 if (GUILayout.Button("New", EditorStyles.toolbarButton, GUILayout.Width(50)))
                 {
                     GUI.FocusControl(null);
-                    Settings.current = CreateAsset<Settings>("New BGSDK Settings");
+                    BGSDKSettings.current = CreateAsset<BGSDKSettings>("New BGSDK Settings");
                 }
                 if (GUILayout.Button("Clone", EditorStyles.toolbarButton, GUILayout.Width(50)))
                 {
                     GUI.FocusControl(null);
-                    var current = Settings.current;
-                    Settings.current = CreateAsset<Settings>("(Clone) " + Settings.current.name.Replace("(Clone) ", ""));
-                    Settings.current.authentication = new DomainTarget(current.authentication.Staging, current.authentication.Production);
-                    Settings.current.business = new DomainTarget(current.business.Staging, current.business.Production);
-                    Settings.current.api = new DomainTarget(current.api.Staging, current.api.Production);
-                    Settings.current.UseStaging = current.UseStaging;
-                    Settings.current.appId = current.appId;
+                    var current = BGSDKSettings.current;
+                    BGSDKSettings.current = CreateAsset<BGSDKSettings>("(Clone) " + BGSDKSettings.current.name.Replace("(Clone) ", ""));
+                    BGSDKSettings.current.authentication = new DomainTarget(current.authentication.Staging, current.authentication.Production);
+                    BGSDKSettings.current.api = new DomainTarget(current.api.Staging, current.api.Production);
+                    BGSDKSettings.current.walllet = new DomainTarget(current.walllet.Staging, current.walllet.Production);
+                    BGSDKSettings.current.UseStaging = current.UseStaging;
+                    BGSDKSettings.current.appId = current.appId;
                     //Settings.current.AuthenticationMode = current.AuthenticationMode;
                 }
-                Settings.current = EditorGUILayout.ObjectField(GUIContent.none, Settings.current, typeof(Settings), false, GUILayout.Width(250)) as Settings;
+                BGSDKSettings.current = EditorGUILayout.ObjectField(GUIContent.none, BGSDKSettings.current, typeof(BGSDKSettings), false, GUILayout.Width(250)) as BGSDKSettings;
 
-                var path = AssetDatabase.GetAssetPath(Settings.current);
+                var path = AssetDatabase.GetAssetPath(BGSDKSettings.current);
                 EditorPrefs.SetString(settingsPath, path);
 
                 EditorGUILayout.EndHorizontal();
@@ -165,7 +165,7 @@ namespace HeathenEngineering.BGSDK.Editor
             if (GUILayout.Button("Portal", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
                 GUI.FocusControl(null);
-                Help.BrowseURL("https://business-staging.arkane.network/applications/" + Settings.current.appId.applicationId + "/overview");
+                Help.BrowseURL("https://business-staging.arkane.network/applications/" + BGSDKSettings.current.appId.applicationId + "/overview");
             }
             if (GUILayout.Button("Help", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
@@ -197,10 +197,10 @@ namespace HeathenEngineering.BGSDK.Editor
         private void DrawContractListArea()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(250), GUILayout.ExpandHeight(true));
-            if (Settings.current != null)
+            if (BGSDKSettings.current != null)
             {
-                if (Settings.current.contracts == null)
-                    Settings.current.contracts = new List<BGSDK.Engine.Contract>();
+                if (BGSDKSettings.current.contracts == null)
+                    BGSDKSettings.current.contracts = new List<BGSDK.Engine.Contract>();
 
                 EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
                 var color = GUI.contentColor;
@@ -215,9 +215,9 @@ namespace HeathenEngineering.BGSDK.Editor
                     nContract.SystemName = "New Contract";
                     nContract.updatedFromServer = false;
                     nContract.tokens = new List<BGSDK.Engine.Token>();
-                    Settings.current.contracts.Add(nContract);
-                    EditorUtility.SetDirty(Settings.current);
-                    AssetDatabase.AddObjectToAsset(nContract, Settings.current);
+                    BGSDKSettings.current.contracts.Add(nContract);
+                    EditorUtility.SetDirty(BGSDKSettings.current);
+                    AssetDatabase.AddObjectToAsset(nContract, BGSDKSettings.current);
                     AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(nContract));
 
                     activeContract = nContract;
@@ -226,19 +226,19 @@ namespace HeathenEngineering.BGSDK.Editor
                 GUI.contentColor = color;
                 EditorGUILayout.EndHorizontal(); ;
 
-                if (Settings.current.contracts.Count > 0)
+                if (BGSDKSettings.current.contracts.Count > 0)
                 {
                     if (activeContract == null)
-                        activeContract = Settings.current.contracts[0];
+                        activeContract = BGSDKSettings.current.contracts[0];
 
                     scrollPos_ContractArea = EditorGUILayout.BeginScrollView(scrollPos_ContractArea);
-                    foreach (var con in Settings.current.contracts)
+                    foreach (var con in BGSDKSettings.current.contracts)
                     {
                         DrawContractEntryDesigner(con);
                     }
                     EditorGUILayout.EndScrollView();
 
-                    Settings.current.contracts.RemoveAll(p => p == null);
+                    BGSDKSettings.current.contracts.RemoveAll(p => p == null);
                 }
             }
             else
@@ -282,7 +282,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
                 contract.tokens.Add(nToken);
                 AssetDatabase.AddObjectToAsset(nToken, contract);
-                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
 
                 activeToken = nToken;
             }
@@ -302,7 +302,7 @@ namespace HeathenEngineering.BGSDK.Editor
                     }
 
                     DestroyImmediate(contract, true);
-                    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                 }
             }
             GUI.contentColor = color;
@@ -336,7 +336,7 @@ namespace HeathenEngineering.BGSDK.Editor
                     if (EditorUtility.DisplayDialog("Delete Token", "Are you sure you want to delete [" + contract.name + "].\n\nNote this will not remove a deployed token from the backend service it only removes the token from the configuraiton in your applicaiton.", "Delete", "Cancel"))
                     {
                         DestroyImmediate(token, true);
-                        AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                        AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                         hasRemoved = true;
                     }
                 }
@@ -352,10 +352,10 @@ namespace HeathenEngineering.BGSDK.Editor
         private void DrawEditorArea()
         {
             EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.ExpandHeight(true), GUILayout.ExpandWidth(true));
-            if (Settings.current != null)
+            if (BGSDKSettings.current != null)
             {
-                if (Settings.current.contracts == null)
-                    Settings.current.contracts = new List<BGSDK.Engine.Contract>();
+                if (BGSDKSettings.current.contracts == null)
+                    BGSDKSettings.current.contracts = new List<BGSDK.Engine.Contract>();
 
                 if (activeContract != null && activeToken == null)
                 {
@@ -425,7 +425,7 @@ namespace HeathenEngineering.BGSDK.Editor
                         EditorUtility.SetDirty(token);
                     }
 
-                    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                 }
             }
         }
@@ -551,7 +551,7 @@ namespace HeathenEngineering.BGSDK.Editor
                     activeToken.ImageThumbnail = thumbnailImageString;
                     activeToken.IsNonFungible = !fungableValue;
                     EditorUtility.SetDirty(activeToken);
-                    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(Settings.current));
+                    AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                 }
             }
         }
@@ -562,8 +562,8 @@ namespace HeathenEngineering.BGSDK.Editor
             try
             {
 
-                if (Settings.user == null)
-                    Settings.user = new Identity();
+                if (BGSDKSettings.user == null)
+                    BGSDKSettings.user = new Identity();
 
                 EditorGUILayout.LabelField("Configuration", EditorStyles.whiteLargeLabel);
                 EditorGUILayout.Space();
@@ -582,14 +582,14 @@ namespace HeathenEngineering.BGSDK.Editor
 
                 #region Manual Auth
                 EditorGUILayout.LabelField("Client ID", EditorStyles.boldLabel);
-                Settings.current.appId.clientId = EditorGUILayout.TextField(GUIContent.none, Settings.current.appId.clientId);
+                BGSDKSettings.current.appId.clientId = EditorGUILayout.TextField(GUIContent.none, BGSDKSettings.current.appId.clientId);
 
                 EditorGUILayout.Space();
                 showingSecretValue = EditorGUILayout.ToggleLeft("Secret", showingSecretValue, EditorStyles.boldLabel);
                 if (showingSecretValue)
-                    Settings.current.appId.clientSecret = EditorGUILayout.TextField(GUIContent.none, Settings.current.appId.clientSecret);
+                    BGSDKSettings.current.appId.clientSecret = EditorGUILayout.TextField(GUIContent.none, BGSDKSettings.current.appId.clientSecret);
                 else
-                    Settings.current.appId.clientSecret = EditorGUILayout.PasswordField(GUIContent.none, Settings.current.appId.clientSecret);
+                    BGSDKSettings.current.appId.clientSecret = EditorGUILayout.PasswordField(GUIContent.none, BGSDKSettings.current.appId.clientSecret);
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 #endregion
@@ -609,7 +609,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 if (GUILayout.Button("Portal", GUILayout.Height(25)))
                 {
                     GUI.FocusControl(null);
-                    Help.BrowseURL("https://business-staging.arkane.network/applications/" + Settings.current.appId.applicationId + "/overview");
+                    Help.BrowseURL("https://business-staging.arkane.network/applications/" + BGSDKSettings.current.appId.applicationId + "/overview");
                 }
                 if (GUILayout.Button("Marketplace", GUILayout.Height(25)))
                 {
