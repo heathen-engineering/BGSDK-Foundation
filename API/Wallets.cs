@@ -233,7 +233,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <remarks>
         /// <see href="https://docs.arkane.network/pages/reference.html#get-specific-user-wallet">https://docs.arkane.network/pages/reference.html#get-specific-user-wallet</see>
         /// </remarks>
-        public static IEnumerator Get(ulong walletId, Action<ListWalletResult> callback)
+        public static IEnumerator Get(string walletId, Action<ListWalletResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -249,7 +249,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString());
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId);
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
@@ -300,7 +300,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="newPincode"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator UpdateWhitelableWalletPincode(ulong walletId, string currentPincode, string newPincode, Action<ListWalletResult> callback)
+        public static IEnumerator UpdateWhitelableWalletPincode(string walletId, string currentPincode, string newPincode, Action<ListWalletResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -321,7 +321,7 @@ namespace HeathenEngineering.BGSDK.API
                     form.AddField("pincode", currentPincode);
                     form.AddField("newPincode", newPincode);
 
-                    UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/security", form);
+                    UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.WalletUri + "/" + walletId + "/security", form);
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
@@ -368,7 +368,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="walletId"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator NativeBalance(ulong walletId, Action<BalanceResult> callback)
+        public static IEnumerator NativeBalance(string walletId, Action<BalanceResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -384,7 +384,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/balance");
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId + "/balance");
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
@@ -432,7 +432,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="walletId"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator TokenBalance(ulong walletId, Action<ListTokenBalanceResult> callback)
+        public static IEnumerator TokenBalance(string walletId, Action<ListTokenBalanceResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -448,7 +448,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/balance/tokens");
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId + "/balance/tokens");
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
@@ -498,7 +498,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="tokenAddress"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator SpecificTokenBalance(ulong walletId, string tokenAddress, Action<TokenBalanceResult> callback)
+        public static IEnumerator SpecificTokenBalance(string walletId, string tokenAddress, Action<TokenBalanceResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -514,7 +514,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/balance/tokens/" + tokenAddress);
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId + "/balance/tokens/" + tokenAddress);
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();
@@ -567,7 +567,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="optionalContractAddresses">List of contract addresses to filter for, if empty or null all will be returned. Can be null</param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator ListNFTs(ulong walletId, List<string> optionalContractAddresses, Action<ListListedNFTTokenResult> callback)
+        public static IEnumerator ListNFTs(string walletId, List<string> optionalContractAddresses, Action<ListListedNFTTokenResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -583,7 +583,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    string address = BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/nonfungibles";
+                    string address = BGSDKSettings.current.WalletUri + "/" + walletId + "/nonfungibles";
 
                     if (optionalContractAddresses != null && optionalContractAddresses.Count > 0)
                     {
@@ -650,7 +650,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="optionalContractAddresses">List of contract addresses to filter for, if empty or null all will be returned. Can be null</param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator GetInventory(ulong walletId, List<string> optionalContractAddresses, Action<ListInventoryResults> callback)
+        public static IEnumerator GetInventory(string walletId, List<string> optionalContractAddresses, Action<ListInventoryResults> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -666,7 +666,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
                 else
                 {
-                    string address = BGSDKSettings.current.WalletUri + "/" + walletId.ToString() + "/inventory";
+                    string address = BGSDKSettings.current.WalletUri + "/" + walletId + "/inventory";
 
                     if (optionalContractAddresses != null && optionalContractAddresses.Count > 0)
                     {
