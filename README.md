@@ -1,6 +1,6 @@
-# Arkane Foundation
+# Blockchain Game Software Development Kit (BGSDK): Foundation
 
-Heathen Engineering's Arkane Foundation allows you to manage in-game items as blockchain assets. It is a complete wrapper around [Arkane Network](https://arkane.network/)'s Web API. The tool simplifies integration with Arkane API exposing all features and functions to C# classes and includes Editor extensions to aid in design and deployment of Contracts and Tokens.
+Heathen Engineering's BGSDK Foundation allows you to manage in-game items as blockchain assets. It is a complete wrapper around [Arkane Network](https://arkane.network/)'s Web API. The tool simplifies integration with Arkane API exposing all features and functions to C# classes and includes Editor extensions to aid in design and deployment of Contracts and Tokens.
 
 ## Documentaiton
 * [Code Documentation](https://heathen-engineering.github.io/Arkane-Documentation/annotated.html)
