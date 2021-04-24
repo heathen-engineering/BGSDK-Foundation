@@ -1,9 +1,9 @@
 {
     "name": "com.heathenengineering.bgsdkfoundation",
     "author": "Heathen Engineering",
-    "displayName": "Arkane Foundation",
-    "version": "0.3.0",
-    "unity": "2019.4.22f1",
+    "displayName": "BGSDK Foundation",
+    "version": "0.4.0",
+    "unity": "2019.4",
     "keywords": [
         "unity",
         "editor",
@@ -13,9 +13,9 @@
     "description": "Heathen Engineering's wrapper, integration, and editor extensions; around Arkane Network's web API .",
     "samples": [
         {
-            "displayName": "Examples",
+            "displayName": "Demo",
             "description": "(WIP) A set of examples highlighting various features of the package",
-            "path": "Samples~/Examples"
+            "path": "Samples~/Demo"
         }
     ]
 }

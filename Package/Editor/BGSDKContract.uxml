@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <uie:Toolbar style="align-items: center; justify-content: space-around; flex-direction: row;">
+        <ui:Label text="Label" name="label" style="flex-grow: 1; flex-shrink: 1; margin-left: 5px; margin-right: 5px;" />
+        <uie:ToolbarButton name="addToken" tooltip="Add token to contract" text="+" style="left: auto; width: 25px; height: auto; color: rgba(1, 190, 4, 255);" />
+        <uie:ToolbarButton name="removeContract" tooltip="Remove contract" text="-" style="width: 25px; color: rgba(180, 0, 0, 255);" />
+    </uie:Toolbar>
+    <ui:VisualElement name="content" style="padding-left: 16px;" />
+</ui:UXML>

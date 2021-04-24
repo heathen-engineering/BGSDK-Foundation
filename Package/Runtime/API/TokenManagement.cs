@@ -258,6 +258,14 @@ namespace HeathenEngineering.BGSDK.API
             }
         }
 
+        /// <summary>
+        /// Returns tokens for given token type
+        /// </summary>
+        /// <param name="token">The token type to query</param>
+        /// <param name="callback">The callback to invoke with the results</param>
+        /// <returns></returns>
+        public static IEnumerator GetTokens(Token token, Action<Token.ResultList> callback) => token.Get(callback);
+
 #if UNITY_EDITOR || UNITY_SERVER
         /// <summary>
         /// Privileged features only work in restricted environments with restricted cradentials.

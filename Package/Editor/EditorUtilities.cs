@@ -20,6 +20,9 @@ namespace HeathenEngineering.BGSDK.Editor
     /// <para>
     /// This funcitonality will not compile for builds and is only avialable within the Unity Editor
     /// </para>
+    /// <para>
+    /// This object is used by editor tools to handle tasks such as syncing the data model between Unity and Arkane
+    /// </para>
     /// </remarks>
     public static partial class EditorUtilities
     {
@@ -32,6 +35,29 @@ namespace HeathenEngineering.BGSDK.Editor
         {
             public string name;
             public string description;
+        }
+
+        /// <summary>
+        /// Used by the <see cref="GetAppResult"/> object
+        /// </summary>
+        [Serializable]
+        public class AppDataModel
+        {
+            public string id;
+            public string clientId;
+            public string name;
+            public string rootURL;
+            public string[] redirectURIs;
+            public string imageUrl;
+        }
+
+        /// <summary>
+        /// Used by the <see cref="EditorUtilities.GetApps"/> method
+        /// </summary>
+        [Serializable]
+        public class GetAppResult : BGSDKBaseResult
+        {
+            public List<AppDataModel> result;
         }
         #endregion
 
@@ -205,7 +231,6 @@ namespace HeathenEngineering.BGSDK.Editor
                 return ValidationStatus.Okay;
         }
 
-        #region Depricated
         /// <summary>
         /// Consumes a <see cref="BGSDKSettings"/> object updates it with the data found on service.
         /// </summary>
@@ -620,7 +645,6 @@ namespace HeathenEngineering.BGSDK.Editor
                     callback.Invoke();
             }
         }
-        #endregion
 
         /// <summary>
         /// <para>Deploying a new Token Contract. This token contract represents the game inventory (all items that can exist within the game).</para>
@@ -724,6 +748,65 @@ namespace HeathenEngineering.BGSDK.Editor
                 else
                 {
                     responce(new DataModel.CreateTokenTypeResult() { hasError = true, message = "Error:" + (request.isNetworkError ? " a network error occured while attempting to define the token type." : " a HTTP error occured while attempting to define the token type."), httpCode = request.responseCode });
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the list of apps available to the authenticated user
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <returns></returns>
+        public static IEnumerator GetApps(Action<GetAppResult> callback = null)
+        {
+            if (BGSDKSettings.current == null)
+            {
+                callback?.Invoke(new GetAppResult() { hasError = true, message = "Attempted to call BGSDK.User.GetProfile with no BGSDK.Settings object applied." });
+                yield return null;
+            }
+            else
+            {
+                if (BGSDKSettings.user == null)
+                {
+                    callback?.Invoke(new GetAppResult() { hasError = true, message = "BGSDKIdentity required, null identity provided.\nPlease initalize Settings.user before calling GetProfile", result = null });
+                    yield return null;
+                }
+                else
+                {
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.api[BGSDKSettings.current.UseStaging] + "/api/profile");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
+
+                    var co = www.SendWebRequest();
+                    while (!co.isDone)
+                        yield return null;
+
+                    if (!www.isNetworkError && !www.isHttpError)
+                    {
+                        var results = new GetAppResult();
+                        try
+                        {
+                            string resultContent = www.downloadHandler.text;
+                            results = JsonUtility.FromJson<GetAppResult>(Utilities.JSONArrayWrapper(resultContent));
+                            results.message = "Get App complete.";
+                            results.httpCode = www.responseCode;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            results = null;
+                            results.message = "An error occured while processing JSON results, see exception for more details.";
+                            results.exception = ex;
+                            results.httpCode = www.responseCode;
+                        }
+                        finally
+                        {
+                            callback?.Invoke(results);
+                        }
+                    }
+                    else
+                    {
+                        callback?.Invoke(new GetAppResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting the list of apps." : " a HTTP error occured while requesting the list of apps."), result = null, httpCode = www.responseCode });
+                    }
                 }
             }
         }

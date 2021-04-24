@@ -15,11 +15,9 @@
     <ui:VisualElement name="modelPage" style="flex-grow: 1;">
         <uie:Toolbar>
             <uie:ToolbarButton name="addContract" tooltip="Add contract" style="width: auto; align-items: center; flex-direction: row;">
-                <ui:VisualElement style="width: 16px; height: 16px; background-image: url(&apos;/Assets/_Heathen Engineering/BGSDK/Framework/Foundation/Images/Add.png&apos;);" />
                 <ui:Label text="Add Contract" style="padding-left: 5px;" />
             </uie:ToolbarButton>
             <uie:ToolbarButton name="syncButton" tooltip="Sync data with blockchain" style="width: auto; align-items: center; flex-direction: row; padding-left: 4px; padding-right: 4px;">
-                <ui:VisualElement style="width: 16px; height: 16px; background-image: url(&apos;/Assets/_Heathen Engineering/BGSDK/Framework/Foundation/Images/Sync.png&apos;);" />
                 <ui:Label text="Synchronise" />
             </uie:ToolbarButton>
         </uie:Toolbar>

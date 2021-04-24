@@ -1,13 +1,32 @@
 ﻿using HeathenEngineering;
 using HeathenEngineering.BGSDK.DataModel;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace HeathenEngineering.BGSDK.Engine
 {
     [CreateAssetMenu(menuName = "Blockchain Game SDK/Token")]
     public class Token : ScriptableObject
     {
+        #region JSON Results
+        [Serializable]
+        public class Result
+        {
+            public string id;
+            public string contractTokenId;
+        }
+
+        [Serializable]
+        public class ResultList : BGSDKBaseResult
+        {
+            public List<Result> result;
+        }
+        #endregion
+
         [HideInInspector]
         public bool UpdatedFromServer = false;
         [HideInInspector]
@@ -247,6 +266,60 @@ namespace HeathenEngineering.BGSDK.Engine
                 nDef.properties = prop.data;
 
             return nDef;
+        }
+
+        public IEnumerator Get(Action<ResultList> callback)
+        {
+            if (BGSDKSettings.current == null)
+            {
+                callback(new ResultList() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
+                yield return null;
+            }
+            else
+            {
+                if (BGSDKSettings.user == null)
+                {
+                    callback(new ResultList() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
+                    yield return null;
+                }
+                else
+                {
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.GetTokenUri(contract) + "/" + Id + "/tokens");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
+
+                    var co = www.SendWebRequest();
+                    while (!co.isDone)
+                        yield return null;
+
+                    if (!www.isNetworkError && !www.isHttpError)
+                    {
+                        var results = new ResultList();
+                        try
+                        {
+                            string resultContent = www.downloadHandler.text;
+                            results = JsonUtility.FromJson<ResultList>(Utilities.JSONArrayWrapper(resultContent));
+                            results.message = "List NFTs complete.";
+                            results.httpCode = www.responseCode;
+
+                        }
+                        catch (Exception ex)
+                        {
+                            results = null;
+                            results.message = "An error occured while processing JSON results, see exception for more details.";
+                            results.exception = ex;
+                            results.httpCode = www.responseCode;
+                        }
+                        finally
+                        {
+                            callback(results);
+                        }
+                    }
+                    else
+                    {
+                        callback(new ResultList() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting NFTs." : " a HTTP error occured while requesting NFTs."), result = null, httpCode = www.responseCode });
+                    }
+                }
+            }
         }
 
 #if UNITY_EDITOR
