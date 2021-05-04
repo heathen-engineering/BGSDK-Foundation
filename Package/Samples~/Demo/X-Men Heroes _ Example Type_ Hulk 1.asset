@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: X-Men Heroes _ Example Type_ Hulk 1
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585855068883340975
-  contract: {fileID: 0}
+  UpdatedOn: -8585814647277842986
+  contract: {fileID: 11400000, guid: df39c7d29288ccb449a2afa7385f9e7d, type: 2}
   properties: {fileID: 0}
   data:
     name: 'Example Type: Hulk'

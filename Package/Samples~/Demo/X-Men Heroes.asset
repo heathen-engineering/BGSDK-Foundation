@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: X-Men Heroes
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585855068892372573
+  updatedOn: -8585814647250872812
   data:
-    id: 31
+    id: 214
     name: X-Men Heroes
     description: The X-Men are a team of mutant superheroes in the Marvel Universe.
       he basic concept of the X-Men is that under a cloud of increasing anti-mutant
@@ -23,9 +23,13 @@ MonoBehaviour:
       young mutants to use their powers for the benefit of humanity, and to prove
       mutants can be heroes
     confirmed: 1
-    address: 0x28e06fe9091392f4c6b5d171c9a6d5930c60d400
+    address: 0x7911a4d89096c8b452a09ba9ffaa560dc53a074f
     symbol: 
     url: 
     imageUrl: 
     type: 
-  tokens: []
+  tokens:
+  - {fileID: 11400000, guid: 647525344e677aa4fb0f7676e31523c2, type: 2}
+  - {fileID: 11400000, guid: 2743e470dbdf7f14f92ba1e0c7b1ad0d, type: 2}
+  - {fileID: 11400000, guid: 98bc47905e9902d4f9e1ae04c55281f7, type: 2}
+  - {fileID: 11400000, guid: e4edd9703b0827641bec3b5327915c56, type: 2}

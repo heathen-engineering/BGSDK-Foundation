@@ -126,7 +126,10 @@ namespace HeathenEngineering.BGSDK.Editor
                 foreach (var e in cooroutines)
                 {
                     if (!e.MoveNext())
+                    {
                         done.Add(e);
+                        EditorUtility.SetDirty(target);
+                    }
                     else
                     {
                         if (e.Current != null)
@@ -175,6 +178,7 @@ namespace HeathenEngineering.BGSDK.Editor
                         AssetDatabase.Refresh();
 
                         RebuildContractDisplay();
+                        EditorUtility.SetDirty(target);
                     };
                     contractRemove.clicked += () =>
                     {
@@ -185,6 +189,7 @@ namespace HeathenEngineering.BGSDK.Editor
                         AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(contract));
 
                         RebuildContractDisplay();
+                        EditorUtility.SetDirty(target);
                     };
                     
 
@@ -199,6 +204,7 @@ namespace HeathenEngineering.BGSDK.Editor
                             contract.tokens.Remove(token);
                             AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(token));
                             RebuildContractDisplay();
+                            EditorUtility.SetDirty(target);
                         };
                         tokenLabel.text = token.SystemName;
                     }

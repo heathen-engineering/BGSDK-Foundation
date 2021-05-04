@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: X-Men Heroes _ Example Type_ LazyToken v4
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585855068880896415
-  contract: {fileID: 0}
+  UpdatedOn: -8585814647271295165
+  contract: {fileID: 11400000, guid: df39c7d29288ccb449a2afa7385f9e7d, type: 2}
   properties: {fileID: 0}
   data:
     name: 'Example Type: LazyToken v4'
