@@ -6,8 +6,7 @@ Heathen Engineering's BGSDK Foundation allows you to manage in-game items as blo
 Please note that you will need to register for an account with [Arkane Network](https://arkane.network/) to recieve the required Client ID and Secret used by the kit to connect to the [Arkane Network](https://arkane.network/) backend. This must be aquired from [Arkane Network](https://arkane.network/) directly.
 
 ## Documentaiton
-* [Code Documentation](https://heathen-engineering.github.io/Arkane-Documentation/annotated.html)
-* [Developer Network](https://heathen-engineering.mn.co/discovery)
+* [Knowledge Base](https://kb.heathenengineering.com/assets/bgsdk)
 * [Discord Server](https://discord.gg/6X3xrRc)
 
 ## Installation
