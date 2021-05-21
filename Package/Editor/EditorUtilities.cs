@@ -35,6 +35,11 @@ namespace HeathenEngineering.BGSDK.Editor
         {
             public string name;
             public string description;
+            public string chain = "MATIC";
+            public string symbol;
+            public string image;
+            public string externalUrl;
+            public TypeValuePair[] media;
         }
 
         /// <summary>
@@ -576,7 +581,16 @@ namespace HeathenEngineering.BGSDK.Editor
                             var newContracts = settings.contracts.Where(p => !p.updatedFromServer);
                             foreach (var contract in newContracts)
                             {
-                                DeployContractModel nContract = new DeployContractModel() { name = contract.data.name, description = contract.data.description };
+                                DeployContractModel nContract = new DeployContractModel() 
+                                { 
+                                    name = contract.data.name, 
+                                    description = contract.data.description,
+                                    image = contract.data.image,
+                                    symbol = contract.data.symbol,
+                                    media = contract.data.media,
+                                    chain = contract.data.secretType,
+                                    externalUrl = contract.data.externalUrl
+                                };
                                 var jsonString = JsonUtility.ToJson(nContract);
 
                                 UnityWebRequest wwwCreateContract = UnityWebRequest.Put(BGSDKSettings.current.ContractUri, jsonString);

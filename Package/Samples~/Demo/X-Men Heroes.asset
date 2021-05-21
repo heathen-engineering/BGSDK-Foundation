@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: X-Men Heroes
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585800837820443199
+  updatedOn: -8585800183984154959
   data:
     id: 214
     name: X-Men Heroes
@@ -23,11 +23,12 @@ MonoBehaviour:
       young mutants to use their powers for the benefit of humanity, and to prove
       mutants can be heroes
     confirmed: 1
+    secretType: MATIC
     address: 0x7911a4d89096c8b452a09ba9ffaa560dc53a074f
     symbol: 
-    url: 
-    imageUrl: 
-    type: 
+    externalUrl: 
+    image: 
+    media: []
   tokens:
   - {fileID: 11400000, guid: 647525344e677aa4fb0f7676e31523c2, type: 2}
   - {fileID: 11400000, guid: 2743e470dbdf7f14f92ba1e0c7b1ad0d, type: 2}

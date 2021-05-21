@@ -58,6 +58,9 @@ namespace HeathenEngineering.BGSDK.Editor
                 BGSDK.Engine.Contract nContract = CreateInstance<Engine.Contract>();
                 nContract.name = "New Contract";
                 nContract.data.name = "New Contract";
+                nContract.data.symbol = "NEWCONTRACT";
+                nContract.data.secretType = "MATIC";
+
                 nContract.updatedFromServer = false;
 
                 if (settings.contracts == null)

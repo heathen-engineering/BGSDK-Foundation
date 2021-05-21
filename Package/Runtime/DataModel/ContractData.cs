@@ -27,6 +27,11 @@ namespace HeathenEngineering.BGSDK.DataModel
         [Tooltip("Whether it’s been confirmed or not (on the blockchain).")]
         public bool confirmed;
         /// <summary>
+        /// The chain the contract will be part of
+        /// </summary>
+        [Tooltip("The chain the contract will be part of")]
+        public string secretType;
+        /// <summary>
         /// Address on the blockchain.
         /// </summary>
         [Tooltip("Address on the blockchain.")]
@@ -40,16 +45,16 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// Link to the website/application that issued this contract
         /// </summary>
         [Tooltip("Link to the website/application that issued this contract.")]
-        public string url;
+        public string externalUrl;
         /// <summary>
         /// Link to an image (logo) of this contract.
         /// </summary>
         [Tooltip("Link to an image (logo) of this contract.")]
-        public string imageUrl;
+        public string image;
         /// <summary>
-        /// The type of the contract (ex. ERC721)
+        /// Additional data used by the contract.
         /// </summary>
-        [Tooltip("The type of the contract (ex. ERC721).")]
-        public string type;
+        [Tooltip("Additional data used by the contract.")]
+        public TypeValuePair[] media;
     }
 }
