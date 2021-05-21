@@ -131,7 +131,8 @@ namespace HeathenEngineering.BGSDK.Editor
                     if (!e.MoveNext())
                     {
                         done.Add(e);
-                        EditorUtility.SetDirty(target);
+                        if (target != null)
+                            EditorUtility.SetDirty(target);
                     }
                     else
                     {
