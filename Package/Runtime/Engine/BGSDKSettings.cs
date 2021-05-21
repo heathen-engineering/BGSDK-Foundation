@@ -33,7 +33,7 @@ namespace HeathenEngineering.BGSDK.Engine
         [FormerlySerializedAs("Connect")]
         public DomainTarget connect = new DomainTarget("https://connect-staging.arkane.network/auth/exchange", "https://connect.arkane.network/auth/exchange");
         [FormerlySerializedAs("Business")]
-        public DomainTarget business = new DomainTarget("https://business-staging.arkane.network", "https://business.arkane.network");
+        public DomainTarget business = new DomainTarget("https://api-business-staging.arkane.network", "https://api-business.arkane.network");
 
 
 

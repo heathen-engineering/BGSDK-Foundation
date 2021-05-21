@@ -270,7 +270,9 @@ namespace HeathenEngineering.BGSDK.Editor
                     string resultContent = auth_www.downloadHandler.text;
                     if (BGSDKSettings.user == null)
                         BGSDKSettings.user = new Identity();
-                    BGSDKSettings.user.authentication = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+
+                    var auth = JsonUtility.FromJson<AuthenticationResponce>(resultContent);
+                    BGSDKSettings.user.authentication = auth;
                     BGSDKSettings.user.authentication.not_before_policy = resultContent.Contains("not-before-policy:1");
                     BGSDKSettings.user.authentication.Create();
                     authenticated = true;
