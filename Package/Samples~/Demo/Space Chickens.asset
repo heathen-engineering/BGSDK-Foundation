@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Space Chickens
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585800184452133815
+  updatedOn: -8585800147373826490
   data:
     id: 270
     name: Space Chickens
@@ -23,9 +23,9 @@ MonoBehaviour:
       taken from their home and mistakenly enrolled in an elite intergalactic former
       military academy. It would take all their strength, and teamwork, to survive
       every escapade they have."
-    confirmed: 0
+    confirmed: 1
     secretType: MATIC
-    address: 
+    address: 0xfcfd73f466db5c1373c813fc7cdb09150a2f0aef
     symbol: TCC
     externalUrl: https://en.wikipedia.org/wiki/Space_Chickens_in_Space
     image: https://dg31sz3gwrwan.cloudfront.net/fanart/355763/1357791-0-q80.jpg

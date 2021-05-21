@@ -254,6 +254,13 @@ namespace HeathenEngineering.BGSDK.Editor
             {
                 var settings = BGSDKSettings.current;
 
+                //Remove any nulls 
+                settings.contracts.RemoveAll(p => p == null);
+                foreach(var contract in settings.contracts)
+                {
+                    contract.tokens.RemoveAll(p => p == null);
+                }
+
                 var authenticated = false;
 
                 WWWForm authForm = new WWWForm();
@@ -558,17 +565,37 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                 foreach (var token in newTokens)
                                 {
-                                    yield return CreateTokenType(arkaneContract, token, (result) =>
+                                    yield return null;
+
+                                    if (string.IsNullOrEmpty(BGSDKSettings.current.appId.clientSecret) || string.IsNullOrEmpty(BGSDKSettings.current.appId.clientId))
                                     {
-                                        if(result.hasError)
-                                        {
-                                            Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + arkaneContract.SystemName + "], error:  " + result.httpCode + " message: " + result.message);
-                                        }
-                                        else
+                                        Debug.LogError("Failed to sync settings: you must populate the Client ID and Client Secret before you can sync settings.");
+                                        yield return null;
+                                    }
+                                    else if (string.IsNullOrEmpty(token.SystemName))
+                                    {
+                                        Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + arkaneContract.SystemName + "], message: name required, null or empty name provided.");
+                                        yield return null;
+                                    }
+                                    else
+                                    {
+                                        var request = new UnityWebRequest(BGSDKSettings.current.DefineTokenTypeUri(arkaneContract), "POST");
+                                        byte[] bodyRaw = Encoding.UTF8.GetBytes(token.CreateTokenDefitionJson());
+                                        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+                                        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+                                        request.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
+                                        request.SetRequestHeader("Content-Type", "application/json");
+                                        yield return request.SendWebRequest();
+
+                                        if (!request.isNetworkError && !request.isHttpError)
                                         {
                                             Debug.Log("Created token [" + token.SystemName + "] for contract [" + arkaneContract.SystemName + "]");
                                         }
-                                    });
+                                        else
+                                        {
+                                            Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + arkaneContract.SystemName + "], error:  " + request.responseCode + " message: " + "Error:" + (request.isNetworkError ? " a network error occured while attempting to define the token type." : " a HTTP error occured while attempting to define the token type."));
+                                        }
+                                    }
                                 }
                                 #endregion
                             }
@@ -618,17 +645,37 @@ namespace HeathenEngineering.BGSDK.Editor
                                      **********************************************************************************/
                                     foreach (var token in contract.tokens)
                                     {
-                                        yield return CreateTokenType(contract, token, (r) =>
+                                        yield return null;
+
+                                        if (string.IsNullOrEmpty(BGSDKSettings.current.appId.clientSecret) || string.IsNullOrEmpty(BGSDKSettings.current.appId.clientId))
                                         {
-                                            if (r.hasError)
-                                            {
-                                                Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + contract.SystemName + "], error:  " + r.httpCode + " message: " + r.message);
-                                            }
-                                            else
+                                            Debug.LogError("Failed to sync settings: you must populate the Client ID and Client Secret before you can sync settings.");
+                                            yield return null;
+                                        }
+                                        else if (string.IsNullOrEmpty(token.SystemName))
+                                        {
+                                            Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + contract.SystemName + "], message: name required, null or empty name provided.");
+                                            yield return null;
+                                        }
+                                        else
+                                        {
+                                            var request = new UnityWebRequest(BGSDKSettings.current.DefineTokenTypeUri(contract), "POST");
+                                            byte[] bodyRaw = Encoding.UTF8.GetBytes(token.CreateTokenDefitionJson());
+                                            request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+                                            request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+                                            request.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
+                                            request.SetRequestHeader("Content-Type", "application/json");
+                                            yield return request.SendWebRequest();
+
+                                            if (!request.isNetworkError && !request.isHttpError)
                                             {
                                                 Debug.Log("Created token [" + token.SystemName + "] for contract [" + contract.SystemName + "]");
                                             }
-                                        });
+                                            else
+                                            {
+                                                Debug.LogError("Failed to create token [" + token.SystemName + "] for contract [" + contract.SystemName + "], error:  " + request.responseCode + " message: " + "Error:" + (request.isNetworkError ? " a network error occured while attempting to define the token type." : " a HTTP error occured while attempting to define the token type."));
+                                            }
+                                        }
                                     }
                                 }
                                 else

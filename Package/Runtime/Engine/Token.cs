@@ -34,6 +34,8 @@ namespace HeathenEngineering.BGSDK.Engine
         
         public Contract contract;
 
+        [Obsolete("No longer used")]
+        [HideInInspector]
         public TokeProperties properties;
 
         public string Id
@@ -131,13 +133,13 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             { 
-                return data != null ? data.nft : false; 
+                return data != null ? !data.fungible : false; 
             } 
             set 
             {
                 if (data == null)
                     data = new TokenResponceData();
-                data.nft = value; 
+                data.fungible = !value; 
             } 
         }
         public string BackgroundColor
@@ -157,13 +159,13 @@ namespace HeathenEngineering.BGSDK.Engine
         { 
             get 
             { 
-                return data == null ? "" : data.url; 
+                return data == null ? "" : data.externalUrl; 
             } 
             set 
             {
                 if (data == null)
                     data = new TokenResponceData(); 
-                data.url = value; 
+                data.externalUrl = value; 
             }
         }
         public string ImagePreview
@@ -214,6 +216,7 @@ namespace HeathenEngineering.BGSDK.Engine
             data = webResults.result;
         }
 
+        [Obsolete("No longer used")]
         public void Set<T>(WebResults<TokenResponceData<T>> webResults)
         {
             data = webResults.result;
@@ -225,6 +228,7 @@ namespace HeathenEngineering.BGSDK.Engine
             }
         }
 
+        [Obsolete("No longer used")]
         public T GetProperties<T>()
         {
             if (properties != null && properties.DataType == typeof(T))
@@ -241,6 +245,7 @@ namespace HeathenEngineering.BGSDK.Engine
             return data;
         }
 
+        [Obsolete("No longer used")]
         public TokenDefinition<T> GetTokenDefinition<T>()
         {
             TokenProperties<T> prop = null;
@@ -254,9 +259,9 @@ namespace HeathenEngineering.BGSDK.Engine
                 name = data.name,
                 description = data.description,
                 decimals = data.decimals,
-                nft = data.nft,
+                fungible = data.fungible,
                 backgroundColor = data.backgroundColor,
-                url = data.url,
+                externalUrl = data.externalUrl,
                 imagePreview = data.imagePreview,
                 imageThumbnail = data.imageThumbnail,
                 image = data.image,
@@ -325,8 +330,10 @@ namespace HeathenEngineering.BGSDK.Engine
 #if UNITY_EDITOR
         public string CreateTokenDefitionJson()
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             if (properties != null)
                 return properties.ToJsonDef(data);
+#pragma warning restore CS0618 // Type or member is obsolete
             else
                 return data.ToJson();
         }

@@ -13,15 +13,16 @@ MonoBehaviour:
   m_Name: New Contract
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585814647271285157
+  updatedOn: -8585800147394325266
   data:
     id: 159
     name: New Contract
     description: 
     confirmed: 1
+    secretType: MATIC
     address: 0x4059a8f02d3b3493e22a3a296460b8cb8156d73d
     symbol: 
-    url: 
-    imageUrl: 
-    type: 
+    externalUrl: 
+    image: 
+    media: []
   tokens: []

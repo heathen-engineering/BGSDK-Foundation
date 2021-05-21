@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace HeathenEngineering.BGSDK.DataModel
 {
+
     [Serializable]
     public class TokenDefinition
     {
@@ -21,11 +22,10 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// </summary>
         [Tooltip("Only applicable in case of a fungible token, this indicates the number of decimals the fungible token has")]
         public uint decimals;
-        /// <summary>
-        /// Flag that indicates if this type is a non-fungible (true for non-fungible, false for fungible)
-        /// </summary>
-        [Tooltip("Flag that indicates if this type is a non-fungible (true for non-fungible, false for fungible)")]
-        public bool nft;
+        public ulong currentSupply;
+        public bool fungible;
+        public bool burnable;
+
         /// <summary>
         /// The backgroundcolor of the image
         /// </summary>
@@ -35,7 +35,7 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// The URL with more information about the token
         /// </summary>
         [Tooltip("The URL with more information about the token")]
-        public string url;
+        public string externalUrl;
         /// <summary>
         /// Image url of the token, 250x250, preferably svg
         /// </summary>
@@ -51,6 +51,9 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// </summary>
         [Tooltip("Image url of the token, 2000x2000, preferably svg")]
         public string image;
+
+        public TypeValuePair[] animationUrls;
+        public TokenAttributes[] attributes;
 
         public virtual string ToJson()
         {

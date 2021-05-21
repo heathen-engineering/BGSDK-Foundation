@@ -10,22 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
-  m_Name: 'X-Men Heroes : Example Type: LazyToken'
+  m_Name: X-Men Heroes _ Example Type_ LazyToken
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585800184003528063
-  contract: {fileID: 11400000, guid: df39c7d29288ccb449a2afa7385f9e7d, type: 2}
+  UpdatedOn: -8585800147404634716
+  contract: {fileID: 0}
   properties: {fileID: 0}
   data:
     name: 'Example Type: LazyToken'
     description: This is a lazy supperhero token
     decimals: 0
-    nft: 0
+    currentSupply: 0
+    fungible: 1
+    burnable: 0
     backgroundColor: 
-    url: 
+    externalUrl: 
     imagePreview: 
     imageThumbnail: 
     image: 
+    animationUrls: []
+    attributes: []
     contractAddress: 
     id: 2950
     confirmed: 1
