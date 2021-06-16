@@ -9,7 +9,7 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <summary>
         /// id of the contract.
         /// </summary>
-        [Tooltip("id of the contract.")]
+        [HideInInspector]
         public string id;
         /// <summary>
         /// name of the contract.
@@ -24,17 +24,17 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <summary>
         /// Whether it’s been confirmed or not (on the blockchain).
         /// </summary>
-        [Tooltip("Whether it’s been confirmed or not (on the blockchain).")]
+        [HideInInspector]
         public bool confirmed;
         /// <summary>
         /// The chain the contract will be part of
         /// </summary>
         [Tooltip("The chain the contract will be part of")]
-        public string secretType;
+        public API.Wallets.SecretType secretType;
         /// <summary>
         /// Address on the blockchain.
         /// </summary>
-        [Tooltip("Address on the blockchain.")]
+        [HideInInspector]
         public string address;
         /// <summary>
         /// Symbol of the contract (e.g. GODS, CKITTY, STRK)
@@ -44,7 +44,7 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// <summary>
         /// Link to the website/application that issued this contract
         /// </summary>
-        [Tooltip("Link to the website/application that issued this contract.")]
+        [HideInInspector]
         public string externalUrl;
         /// <summary>
         /// Link to an image (logo) of this contract.

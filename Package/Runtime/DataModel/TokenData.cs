@@ -15,13 +15,13 @@ namespace HeathenEngineering.BGSDK.DataModel
     [Serializable]
     public class TokenResponceData : TokenDefinition
     {
-        [Tooltip("Address of the deployed token.")]
+        [HideInInspector]
         public string contractAddress;
-        [Tooltip("Internal id of the type")]
+        [HideInInspector]
         public string id;
-        [Tooltip("Blockchain-generated typeId.")]
+        [HideInInspector]
         public BigInteger contractTypeId;
-        [Tooltip("Whether or not the transaction has been confirmed.")]
+        [HideInInspector]
         public bool confirmed;
         [HideInInspector]
         public string rawData;

@@ -7,7 +7,7 @@ namespace HeathenEngineering.BGSDK.Engine
     /// </summary>
     /// <remarks>
     /// <para>Used by <see cref="BGSDK.Editor.ListApplications(BGSDKIdentity, Action{ListApplicationsResult})"/> to list available applications.</para>
-    /// <para>See <a href="https://docs-staging.arkane.network/pages/token-management.html#_list_applications">https://docs-staging.arkane.network/pages/token-management.html#_list_applications</a> for more information.</para>
+    /// <para>See <a href="https://docs-staging.venly.io/pages/token-management.html#_list_applications">https://docs-staging.venly.io/pages/token-management.html#_list_applications</a> for more information.</para>
     /// </remarks>
     [Serializable]
     public class AppId : System.IEquatable<AppId>, System.IComparable<AppId>

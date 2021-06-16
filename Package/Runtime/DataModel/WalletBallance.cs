@@ -12,8 +12,8 @@ namespace HeathenEngineering.BGSDK.DataModel
         public BigDecimal gasBalance;
         public string symbol;
         public string gasSymbol;
-        public BigInteger rawBalance;
-        public BigInteger rawGasBalance;
+        public string rawBalance;
+        public string rawGasBalance;
         public ulong decimals;
     }
 }

@@ -17,23 +17,23 @@ namespace HeathenEngineering.BGSDK.Engine
         /// Endpoint to authenticate users with
         /// </summary>
         [FormerlySerializedAs("Authentication")]
-        public DomainTarget authentication = new DomainTarget("https://login-staging.arkane.network", "https://login.arkane.network");
+        public DomainTarget authentication = new DomainTarget("https://login-staging.venly.io", "https://login.venly.io");
         /// <summary>
         /// Wallet user interface endpoint
         /// </summary>
-        public DomainTarget walllet = new DomainTarget("https://staging.arkane.network/", "https://app.arkane.network");
+        public DomainTarget walllet = new DomainTarget("https://staging.venly.io/", "https://app.venly.io");
         /// <summary>
         /// Endpoint for API calls
         /// </summary>
         [FormerlySerializedAs("API")]
-        public DomainTarget api = new DomainTarget("https://api-staging.arkane.network", "https://api.arkane.network");
+        public DomainTarget api = new DomainTarget("https://api-staging.venly.io", "https://api.venly.io");
         /// <summary>
         /// Endpoint used by the widget
         /// </summary>
         [FormerlySerializedAs("Connect")]
-        public DomainTarget connect = new DomainTarget("https://connect-staging.arkane.network/auth/exchange", "https://connect.arkane.network/auth/exchange");
+        public DomainTarget connect = new DomainTarget("https://connect-staging.venly.io/auth/exchange", "https://connect.venly.io/auth/exchange");
         [FormerlySerializedAs("Business")]
-        public DomainTarget business = new DomainTarget("https://api-business-staging.arkane.network", "https://api-business.arkane.network");
+        public DomainTarget business = new DomainTarget("https://api-business-staging.venly.io", "https://api-business.venly.io");
 
 
 
@@ -49,6 +49,34 @@ namespace HeathenEngineering.BGSDK.Engine
         public Engine.Contract this[string contractId] => contracts?.FirstOrDefault(p => p.Id == contractId);
 
         public Engine.Contract FindContractByName(string contractName) => contracts?.FirstOrDefault(p => p.SystemName == contractName);
+
+        public Engine.Token FindTokenById(string id)
+        {
+            foreach(var contract in contracts)
+            {
+                foreach(var token in contract.tokens)
+                {
+                    if (token.Id == id)
+                        return token;
+                }
+            }
+
+            return null;
+        }
+
+        public Engine.Token FindTokenByName(string name)
+        {
+            foreach (var contract in contracts)
+            {
+                foreach (var token in contract.tokens)
+                {
+                    if (token.SystemName == name)
+                        return token;
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Used to authenticate the user to the BGSDK Network
@@ -87,7 +115,7 @@ namespace HeathenEngineering.BGSDK.Engine
                 return GetContractUri(onApp) + "/" + forContract.Id.ToString() + "/define-token-type";
         }
 
-        public string CreateTokenUri(Engine.Contract forContract)
+        public string MintTokenUri(Engine.Contract forContract)
         {
             if (forContract == null)
                 throw new NullReferenceException("A null contract was provided");
@@ -95,7 +123,7 @@ namespace HeathenEngineering.BGSDK.Engine
                 return ContractUri + "/" + forContract.Id.ToString() + "/tokens";
         }
 
-        public string CreateTokenUri(AppId onApp, Engine.Contract forContract)
+        public string MintTokenUri(AppId onApp, Engine.Contract forContract)
         {
             if (forContract == null)
                 throw new NullReferenceException("A null contract was provided");

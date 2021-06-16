@@ -8,7 +8,7 @@ using HeathenEngineering.BGSDK.Engine;
 /// </summary>
 /// <remarks>
 /// <para>
-/// For more information please see <see href="https://docs-staging.arkane.network/pages/buildingblocks.html#_arkane_connect">https://docs-staging.arkane.network/pages/buildingblocks.html#_arkane_connect</see>
+/// For more information please see <see href="https://docs-staging.venly.io/pages/buildingblocks.html#_arkane_connect">https://docs-staging.venly.io/pages/buildingblocks.html#_arkane_connect</see>
 /// </para>
 /// <para>
 /// BGSDK Connect is an endpoint specifically designed to perform common tasks with BGSDK wallets. Connect was created as a way to perform tasks which are
@@ -25,7 +25,7 @@ namespace HeathenEngineering.BGSDK.Connect
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Wallet funcitonality is discribed in the <see href="https://docs.arkane.network/pages/reference.html">https://docs.arkane.network/pages/reference.html</see> documentation.
+    /// Wallet funcitonality is discribed in the <see href="https://docs.venly.io/pages/reference.html">https://docs.venly.io/pages/reference.html</see> documentation.
     /// </para>
     /// </remarks>
     public static partial class Wallets
@@ -35,7 +35,7 @@ namespace HeathenEngineering.BGSDK.Connect
         /// </summary>
         /// <remarks>
         /// <para>
-        /// See <see href="https://docs.arkane.network/pages/reference.html#_wallet">https://docs.arkane.network/pages/reference.html#_wallet</see> for more information.
+        /// See <see href="https://docs.venly.io/pages/reference.html#_wallet">https://docs.venly.io/pages/reference.html#_wallet</see> for more information.
         /// </para>
         /// </remarks>
         public static partial class UserWallet
@@ -67,7 +67,7 @@ namespace HeathenEngineering.BGSDK.Connect
         /// </summary>
         /// <remarks>
         /// <para>
-        /// For more information please see <see href="https://docs.arkane.network/pages/reference.html#_application_wallet">https://docs.arkane.network/pages/reference.html#_application_wallet</see>
+        /// For more information please see <see href="https://docs.venly.io/pages/reference.html#_application_wallet">https://docs.venly.io/pages/reference.html#_application_wallet</see>
         /// </para>
         /// </remarks>
         public static partial class ApplicationWallet
@@ -94,7 +94,7 @@ namespace HeathenEngineering.BGSDK.Connect
         /// </summary>
         /// <remarks>
         /// <para>
-        /// For more information please see <see href="https://docs.arkane.network/pages/reference.html#_transactions">https://docs.arkane.network/pages/reference.html#_transactions</see>
+        /// For more information please see <see href="https://docs.venly.io/pages/reference.html#_transactions">https://docs.venly.io/pages/reference.html#_transactions</see>
         /// </para>
         /// </remarks>
         public static partial class Transactions

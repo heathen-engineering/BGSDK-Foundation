@@ -4,8 +4,40 @@ using System.Collections.Generic;
 namespace HeathenEngineering.BGSDK.DataModel
 {
     [Serializable]
-    public class ListTokenBalanceResult : BGSDKBaseResult
+    public class NFTBalanceResult : BGSDKBaseResult
     {
-        public List<TokenBalance> result;
+        [Serializable]
+        public class Token
+        {
+            [Serializable]
+            public class Contract
+            {
+                public string name;
+                public string description;
+                public string address;
+                public string symbol;
+                public string url;
+                public string imageUrl;
+                public TypeValuePair[] media;
+                public string type;
+                public bool verified;
+            }
+
+            public string id;
+            public string name;
+            public string description;
+            public string url;
+            public string backgroundColor;
+            public string imageUrl;
+            public string imagePreviewUrl;
+            public string imageThumbnailUrl;
+            public string animationUrl;
+            public TypeValuePair[] animationUrls;
+            public bool fungible;
+            public ulong maxSupply;
+            public TokenAttributes[] attributes;
+        }
+
+        public List<Token> result;
     }
 }

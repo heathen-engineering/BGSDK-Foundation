@@ -59,7 +59,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 nContract.name = "New Contract";
                 nContract.data.name = "New Contract";
                 nContract.data.symbol = "NEWCONTRACT";
-                nContract.data.secretType = "MATIC";
+                nContract.data.secretType = API.Wallets.SecretType.MATIC;
 
                 nContract.updatedFromServer = false;
 
@@ -73,7 +73,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-
+                UnityEditor.EditorUtility.SetDirty(target);
                 RebuildContractDisplay();
             };
 
@@ -183,6 +183,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
                         RebuildContractDisplay();
                         EditorUtility.SetDirty(target);
+                        UnityEditor.EditorUtility.SetDirty(contract);
                     };
                     contractRemove.clicked += () =>
                     {

@@ -17,7 +17,49 @@ namespace HeathenEngineering.BGSDK.Engine
         public class Result
         {
             public string id;
-            public string contractTokenId;
+            public string typeId;
+            public Metadata metadata;
+            public string mineDate;
+            public bool confirmed;
+            public ulong amount;
+            public string transactionHash;
+        }
+
+        [Serializable]
+        public class Metadata
+        {
+            [Serializable]
+            public class Contract
+            {
+                public string address;
+                public string name;
+                public string symbol;
+                public string image;
+                public string imageUrl;
+                public string image_url;
+                public string description;
+                public string externalLink;
+                public string external_link;
+                public string externalUrl;
+                public string external_url;
+                public TypeValuePair[] media;
+                public string type;
+            }
+
+            public string name;
+            public string description;
+            public string image;
+            public string imagePreview;
+            public string ImageThumbnail;
+            public string backgroundColor;
+            public string background_color;
+            public string externalUrl;
+            public string external_url;
+            public TypeValuePair[] animationUrls;
+            public TokenAttributes[] attributes;
+            public Contract contract;
+            public Contract asset_contract;
+            public bool fungible;
         }
 
         [Serializable]
@@ -33,10 +75,6 @@ namespace HeathenEngineering.BGSDK.Engine
         public long UpdatedOn;
         
         public Contract contract;
-
-        [Obsolete("No longer used")]
-        [HideInInspector]
-        public TokeProperties properties;
 
         public string Id
         {
@@ -216,68 +254,16 @@ namespace HeathenEngineering.BGSDK.Engine
             data = webResults.result;
         }
 
-        [Obsolete("No longer used")]
-        public void Set<T>(WebResults<TokenResponceData<T>> webResults)
-        {
-            data = webResults.result;
-
-            if (properties != null && properties.DataType == typeof(T))
-            {
-                var prop = properties as TokenProperties<T>;
-                prop.data = webResults.result.properties;
-            }
-        }
-
-        [Obsolete("No longer used")]
-        public T GetProperties<T>()
-        {
-            if (properties != null && properties.DataType == typeof(T))
-            {
-                var prop = properties as TokenProperties<T>;
-                return prop.data;
-            }
-            else
-                return default;
-        }
-
         public TokenDefinition GetTokenDefinition()
         {
             return data;
-        }
-
-        [Obsolete("No longer used")]
-        public TokenDefinition<T> GetTokenDefinition<T>()
-        {
-            TokenProperties<T> prop = null;
-            if (properties != null && properties.DataType == typeof(T))
-            {
-                prop = properties as TokenProperties<T>;
-            }
-
-            var nDef = new TokenDefinition<T>
-            {
-                name = data.name,
-                description = data.description,
-                decimals = data.decimals,
-                fungible = data.fungible,
-                backgroundColor = data.backgroundColor,
-                externalUrl = data.externalUrl,
-                imagePreview = data.imagePreview,
-                imageThumbnail = data.imageThumbnail,
-                image = data.image,
-            };
-
-            if (prop != null)
-                nDef.properties = prop.data;
-
-            return nDef;
         }
 
         public IEnumerator Get(Action<ResultList> callback)
         {
             if (BGSDKSettings.current == null)
             {
-                callback(new ResultList() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
+                callback(new ResultList() { hasError = true, message = "Attempted to call BGSDK.Wallets.NFTs with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
@@ -330,12 +316,7 @@ namespace HeathenEngineering.BGSDK.Engine
 #if UNITY_EDITOR
         public string CreateTokenDefitionJson()
         {
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (properties != null)
-                return properties.ToJsonDef(data);
-#pragma warning restore CS0618 // Type or member is obsolete
-            else
-                return data.ToJson();
+            return data.ToJson();
         }
 #endif
     }

@@ -12,7 +12,7 @@ namespace HeathenEngineering.BGSDK.API
     /// </summary>
     /// <remarks>
     /// <para>
-    /// For more detrails see <see href="https://docs-staging.arkane.network/pages/reference.html#_user_profile_arkane_api">https://docs-staging.arkane.network/pages/reference.html#_user_profile_arkane_api</see>.
+    /// For more detrails see <see href="https://docs-staging.venly.io/pages/reference.html#_user_profile_arkane_api">https://docs-staging.venly.io/pages/reference.html#_user_profile_arkane_api</see>.
     /// All functions of this class and child classes are designed to be used with Unity's StartCoroutine method.
     /// All funcitons of this class will take an Action as the final paramiter which is called when the process completes.
     /// Actions can be defined as a funciton in the calling script or can be passed as an expression.
@@ -40,7 +40,7 @@ namespace HeathenEngineering.BGSDK.API
         /// </summary>
         /// <remarks>
         /// <para>
-        /// Form more information please see <see href="https://docs-staging.arkane.network/pages/reference.html#_user_profile_arkane_api">https://docs-staging.arkane.network/pages/reference.html#_user_profile_arkane_api</see>
+        /// Form more information please see <see href="https://docs-staging.venly.io/pages/reference.html#_user_profile_arkane_api">https://docs-staging.venly.io/pages/reference.html#_user_profile_arkane_api</see>
         /// </para>
         /// <para>
         /// The <see cref="UserProfileResult.result"/> is a <see cref="UserProfile"/> object containing details about the local user.

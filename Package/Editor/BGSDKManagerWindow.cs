@@ -165,7 +165,7 @@ namespace HeathenEngineering.BGSDK.Editor
             if (GUILayout.Button("Portal", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
                 GUI.FocusControl(null);
-                Help.BrowseURL("https://business-staging.arkane.network/applications/" + BGSDKSettings.current.appId.applicationId + "/overview");
+                Help.BrowseURL("https://business-staging.venly.io/applications/" + BGSDKSettings.current.appId.applicationId + "/overview");
             }
             if (GUILayout.Button("Help", EditorStyles.toolbarButton, GUILayout.Width(100)))
             {
@@ -609,7 +609,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 if (GUILayout.Button("Portal", GUILayout.Height(25)))
                 {
                     GUI.FocusControl(null);
-                    Help.BrowseURL("https://business-staging.arkane.network/applications/" + BGSDKSettings.current.appId.applicationId + "/overview");
+                    Help.BrowseURL("https://business-staging.venly.io/applications/" + BGSDKSettings.current.appId.applicationId + "/overview");
                 }
                 if (GUILayout.Button("Marketplace", GUILayout.Height(25)))
                 {

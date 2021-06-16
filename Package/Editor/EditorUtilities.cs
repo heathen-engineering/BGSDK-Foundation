@@ -265,8 +265,8 @@ namespace HeathenEngineering.BGSDK.Editor
 
                 WWWForm authForm = new WWWForm();
                 authForm.AddField("grant_type", "client_credentials");
-                authForm.AddField("client_id", BGSDKSettings.current.appId.clientId);
-                authForm.AddField("client_secret", BGSDKSettings.current.appId.clientSecret);
+                authForm.AddField("client_id", BGSDKSettings.current.appId.clientId.Trim());
+                authForm.AddField("client_secret", BGSDKSettings.current.appId.clientSecret.Trim());
 
                 UnityWebRequest auth_www = UnityWebRequest.Post(BGSDKSettings.current.AuthenticationUri, authForm);
 
@@ -344,7 +344,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                 var arkaneContract = settings.contracts.FirstOrDefault(p => p.data.address == contractData.address);
                                 if (arkaneContract != default(Engine.Contract))
                                 {
-                                    arkaneContract.data = contractData;
+                                    arkaneContract.data = contractData.ToContractData();
                                     if (arkaneContract.name != contractData.name)
                                     {
                                         arkaneContract.name = contractData.name;
@@ -368,7 +368,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                     arkaneContract = settings.contracts.FirstOrDefault(p => p.data.id == contractData.id);
                                     if (arkaneContract != default(Engine.Contract))
                                     {
-                                        arkaneContract.data = contractData;
+                                        arkaneContract.data = contractData.ToContractData();
                                         if (arkaneContract.name != contractData.name)
                                         {
                                             arkaneContract.name = contractData.name;
@@ -392,7 +392,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                         arkaneContract = settings.contracts.FirstOrDefault(p => p.data.name == contractData.name);
                                         if (arkaneContract != default(Engine.Contract))
                                         {
-                                            arkaneContract.data = contractData;
+                                            arkaneContract.data = contractData.ToContractData();
                                             if (arkaneContract.name != contractData.name)
                                             {
                                                 arkaneContract.name = contractData.name;
@@ -417,7 +417,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                             arkaneContract = ScriptableObject.CreateInstance<Engine.Contract>();
                                             arkaneContract.name = contractData.name;
-                                            arkaneContract.data = contractData;
+                                            arkaneContract.data = contractData.ToContractData();
                                             arkaneContract.updatedFromServer = true;
                                             arkaneContract.updatedOn = DateTime.Now.ToBinary();
 
@@ -506,6 +506,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                                     arkaneToken.UpdatedFromServer = true;
                                                     arkaneToken.UpdatedOn = DateTime.Now.ToBinary();
+                                                    UnityEditor.EditorUtility.SetDirty(arkaneToken);
                                                 }
                                                 else
                                                 {
@@ -520,7 +521,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                                     arkaneToken.UpdatedFromServer = true;
                                                     arkaneToken.UpdatedOn = DateTime.Now.ToBinary();
                                                     arkaneContract.tokens.Add(arkaneToken);
-
+                                                    
                                                     string path = AssetDatabase.GetAssetPath(Selection.activeObject);
                                                     if (path == "")
                                                     {
@@ -534,6 +535,7 @@ namespace HeathenEngineering.BGSDK.Editor
                                                     string assetPathAndName = AssetDatabase.GenerateUniqueAssetPath(path + "/" + arkaneToken.name + ".asset");
 
                                                     AssetDatabase.CreateAsset(arkaneToken, assetPathAndName);
+                                                    UnityEditor.EditorUtility.SetDirty(arkaneContract);
                                                     AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(settings));
                                                 }
                                             }
@@ -615,9 +617,46 @@ namespace HeathenEngineering.BGSDK.Editor
                                     image = contract.data.image,
                                     symbol = contract.data.symbol,
                                     media = contract.data.media,
-                                    chain = contract.data.secretType,
                                     externalUrl = contract.data.externalUrl
                                 };
+
+                                switch(contract.data.secretType)
+                                {
+                                    case API.Wallets.SecretType.AETERNITY:
+                                        nContract.chain = "AETERNITY";
+                                        break;
+                                    case API.Wallets.SecretType.AVAC:
+                                        nContract.chain = "AVAC";
+                                        break;
+                                    case API.Wallets.SecretType.BITCOIN:
+                                        nContract.chain = "BITCOIN";
+                                        break;
+                                    case API.Wallets.SecretType.BSC:
+                                        nContract.chain = "BSC";
+                                        break;
+                                    case API.Wallets.SecretType.ETHEREUM:
+                                        nContract.chain = "ETHEREUM";
+                                        break;
+                                    case API.Wallets.SecretType.GOCHAIN:
+                                        nContract.chain = "GOCHAIN";
+                                        break;
+                                    case API.Wallets.SecretType.LITECOIN:
+                                        nContract.chain = "LITECOIN";
+                                        break;
+                                    case API.Wallets.SecretType.MATIC:
+                                        nContract.chain = "MATIC";
+                                        break;
+                                    case API.Wallets.SecretType.NEO:
+                                        nContract.chain = "NEO";
+                                        break;
+                                    case API.Wallets.SecretType.TRON:
+                                        nContract.chain = "TRON";
+                                        break;
+                                    case API.Wallets.SecretType.VECHAIN:
+                                        nContract.chain = "VECHAIN";
+                                        break;
+                                }
+
                                 var jsonString = JsonUtility.ToJson(nContract);
 
                                 UnityWebRequest wwwCreateContract = UnityWebRequest.Put(BGSDKSettings.current.ContractUri, jsonString);
@@ -711,7 +750,7 @@ namespace HeathenEngineering.BGSDK.Editor
 
         /// <summary>
         /// <para>Deploying a new Token Contract. This token contract represents the game inventory (all items that can exist within the game).</para>
-        /// <see href ="https://docs.arkane.network/pages/token-management.html">https://docs.arkane.network/pages/token-management.html</see>
+        /// <see href ="https://docs.venly.io/pages/token-management.html">https://docs.venly.io/pages/token-management.html</see>
         /// </summary>
         /// <param name="identity">The authenticated identity to operate with</param>
         /// <param name="name">The name of the new contract to deploy</param>
@@ -720,7 +759,7 @@ namespace HeathenEngineering.BGSDK.Editor
         /// <returns></returns>
         public static IEnumerator DeployContract(Identity identity, AppId app, string name, string description, Action<DataModel.ContractResult> responce)
         {
-            //https://docs.arkane.network/pages/token-management.html
+            //https://docs.venly.io/pages/token-management.html
 
             if (string.IsNullOrEmpty(name))
             {
@@ -766,7 +805,7 @@ namespace HeathenEngineering.BGSDK.Editor
         /// <para>
         /// Before generating tokens, we need to define the type which will describe the token.
         /// </para>
-        /// <see href ="https://docs-staging.arkane.network/pages/token-management.html#_create_token_type" />
+        /// <see href ="https://docs-staging.venly.io/pages/token-management.html#_create_token_type" />
         /// </summary>
         /// <param name="identity"></param>
         /// <param name="app"></param>

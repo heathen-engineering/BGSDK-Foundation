@@ -13,7 +13,7 @@ namespace HeathenEngineering.BGSDK.API
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Wallet funcitonality is discribed in the <see href="https://docs.arkane.network/pages/reference.html">https://docs.arkane.network/pages/reference.html</see> documentation.
+    /// Wallet funcitonality is discribed in the <see href="https://docs.venly.io/pages/reference.html">https://docs.venly.io/pages/reference.html</see> documentation.
     /// All functions of this class and child classes are designed to be used with Unity's StartCoroutine method.
     /// All funcitons of this class will take an Action as the final paramiter which is called when the process completes.
     /// Actions can be defined as a funciton in the calling script or can be passed as an expression.
@@ -36,22 +36,41 @@ namespace HeathenEngineering.BGSDK.API
     /// </remarks>
     public static partial class Wallets
     {
+        public enum Type
+        {
+            WHITE_LABEL,
+            UNRECOVERABLE_WHITE_LABEL
+        }
+
+        public enum SecretType
+        {
+            AETERNITY,
+            AVAC,
+            BITCOIN,
+            BSC,
+            ETHEREUM,
+            GOCHAIN,
+            LITECOIN,
+            TRON,
+            VECHAIN,
+            NEO,
+            MATIC,
+        }
+
         /// <summary>
-        /// Create a whitelabel wallet
+        /// Create a new white label style wallet for the user
         /// </summary>
         /// <remarks>
-        /// <para>
-        /// For more information see <see href="https://docs-staging.arkane.network/pages/whitelabel.html#_create_wallet_arkane_api">https://docs-staging.arkane.network/pages/whitelabel.html#_create_wallet_arkane_api</see>
-        /// </para>
+        /// See <see href="https://docs.venly.io/api/api-products/wallet-api/create-wallet"/> for more details
         /// </remarks>
-        /// <param name="pincode"></param>
-        /// <param name="alias"></param>
-        /// <param name="description"></param>
-        /// <param name="identifier"></param>
-        /// <param name="secretType"></param>
+        /// <param name="pincode">[Required] The pin that will encrypt and decrypt the wallet</param>
+        /// <param name="identifier">[Optional] An identifier that can be used to query or group wallets</param>
+        /// <param name="description">[Optional] A description to describe the wallet.</param>
+        /// <param name="chain">The blockchain on which to create the wallet</param>
+        /// <param name="type">Define if the wallet is recoverable or unrecoverable</param>
         /// <param name="callback"></param>
-        /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator CreateWhitelableWallet(string pincode, string alias, string description, string identifier, string secretType, Action<ListWalletResult> callback)
+        /// <returns></returns>
+        public static IEnumerator Create(string pincode, string identifier, string description, SecretType chain, Type type, Action<ListWalletResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -70,11 +89,57 @@ namespace HeathenEngineering.BGSDK.API
                 {
                     WWWForm form = new WWWForm();
                     form.AddField("pincode", pincode);
-                    form.AddField("alias", alias);
-                    form.AddField("description", description);
-                    form.AddField("identifier", identifier);
-                    form.AddField("secretType", secretType);
-                    form.AddField("walletType", "WHITE_LABEL");
+                    if (!string.IsNullOrEmpty(description))
+                        form.AddField("description", description);
+                    if (!string.IsNullOrEmpty(identifier))
+                        form.AddField("identifier", identifier);
+
+                    switch (type)
+                    {
+                        case Type.WHITE_LABEL:
+                            form.AddField("walletType", "WHITE_LABEL");
+                            break;
+                        case Type.UNRECOVERABLE_WHITE_LABEL:
+                            form.AddField("walletType", "UNRECOVERABLE_WHITE_LABEL");
+                            break;
+                    }
+
+                    switch(chain)
+                    {
+                        case SecretType.AETERNITY:
+                            form.AddField("secretType", "AETERNITY");
+                            break;
+                        case SecretType.AVAC:
+                            form.AddField("secretType", "AVAC");
+                            break;
+                        case SecretType.BITCOIN:
+                            form.AddField("secretType", "BITCOIN");
+                            break;
+                        case SecretType.BSC:
+                            form.AddField("secretType", "BSC");
+                            break;
+                        case SecretType.ETHEREUM:
+                            form.AddField("secretType", "ETHEREUM");
+                            break;
+                        case SecretType.GOCHAIN:
+                            form.AddField("secretType", "GOCHAIN");
+                            break;
+                        case SecretType.LITECOIN:
+                            form.AddField("secretType", "LITECOIN");
+                            break;
+                        case SecretType.MATIC:
+                            form.AddField("secretType", "MATIC");
+                            break;
+                        case SecretType.NEO:
+                            form.AddField("secretType", "NEO");
+                            break;
+                        case SecretType.TRON:
+                            form.AddField("secretType", "TRON");
+                            break;
+                        case SecretType.VECHAIN:
+                            form.AddField("secretType", "VECHAIN");
+                            break;
+                    }
 
                     UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.WalletUri, form); ;
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
@@ -108,55 +173,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        callback(new ListWalletResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while attempting creat a whitelable wallet." : " a HTTP error occured while attempting to creat a whitelable wallet."), result = null, httpCode = www.responseCode });
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// This allows applications to unlink a wallet from their app.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// For more information see <see href="https://docs.arkane.network/pages/reference.html#_link_wallets_arkane_connect">https://docs.arkane.network/pages/reference.html#_link_wallets_arkane_connect</see>
-        /// </para>
-        /// </remarks>
-        
-        /// <param name="wallet"></param>
-        /// <param name="callback"></param>
-        /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator Unlink(Wallet wallet, Action<BGSDKBaseResult> callback)
-        {
-            if (BGSDKSettings.current == null)
-            {
-                callback(new BGSDKBaseResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.Unlink with no BGSDK.Settings object applied." });
-                yield return null;
-            }
-            else
-            {
-                if (BGSDKSettings.user == null)
-                {
-                    callback(new BGSDKBaseResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided." });
-                    yield return null;
-                }
-                else
-                {
-                    //TODO: Confirm with BGSDK that its the address that should be used. This doesn't appear correct as the value the API expects is a GUID and address is a HEX value
-                    UnityWebRequest www = UnityWebRequest.Delete(BGSDKSettings.current.WalletUri + "/" + wallet.address + "/link");
-                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
-
-                    var co = www.SendWebRequest();
-                    while (!co.isDone)
-                        yield return null;
-
-                    if (!www.isNetworkError && !www.isHttpError)
-                    {
-                        callback(new BGSDKBaseResult() { hasError = false, message = "Unlink request completed.", httpCode = www.responseCode });
-                    }
-                    else
-                    {
-                        callback(new BGSDKBaseResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while processing an unlink request." : " a HTTP error occured while requesting the user's wallets."), httpCode = www.responseCode });
+                        callback(new ListWalletResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while attempting creat wallet." : " a HTTP error occured while attempting to creat wallet."), result = null, httpCode = www.responseCode });
                     }
                 }
             }
@@ -168,7 +185,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="callback">A method pointer to handle the results of the query</param>
         /// <returns>The Unity routine enumerator</returns>
         /// <remarks>
-        /// <see href="https://docs.arkane.network/pages/reference.html#_list_wallets_arkane_api">https://docs.arkane.network/pages/reference.html#_list_wallets_arkane_api</see>
+        /// <see href="https://docs.venly.io/pages/reference.html#_list_wallets_arkane_api">https://docs.venly.io/pages/reference.html#_list_wallets_arkane_api</see>
         /// </remarks>
         public static IEnumerator List(Action<ListWalletResult> callback)
         {
@@ -231,7 +248,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="callback">A method pointer to handle the results of the query</param>
         /// <returns>The Unity routine enumerator</returns>
         /// <remarks>
-        /// <see href="https://docs.arkane.network/pages/reference.html#get-specific-user-wallet">https://docs.arkane.network/pages/reference.html#get-specific-user-wallet</see>
+        /// <see href="https://docs.venly.io/pages/reference.html#get-specific-user-wallet">https://docs.venly.io/pages/reference.html#get-specific-user-wallet</see>
         /// </remarks>
         public static IEnumerator Get(string walletId, Action<ListWalletResult> callback)
         {
@@ -292,7 +309,7 @@ namespace HeathenEngineering.BGSDK.API
         /// </summary>
         /// <remarks>
         /// <para>
-        /// For more information please see <see href="https://docs-staging.arkane.network/pages/whitelabel.html#_update_wallet_arkane_api">https://docs-staging.arkane.network/pages/whitelabel.html#_update_wallet_arkane_api</see>
+        /// For more information please see <see href="https://docs-staging.venly.io/pages/whitelabel.html#_update_wallet_arkane_api">https://docs-staging.venly.io/pages/whitelabel.html#_update_wallet_arkane_api</see>
         /// </para>
         /// </remarks>
         /// <param name="walletId"></param>
@@ -300,7 +317,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <param name="newPincode"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator UpdateWhitelableWalletPincode(string walletId, string currentPincode, string newPincode, Action<ListWalletResult> callback)
+        public static IEnumerator UpdatePincode(string walletId, string currentPincode, string newPincode, Action<ListWalletResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -363,12 +380,12 @@ namespace HeathenEngineering.BGSDK.API
         /// Returns the "native" balance for a wallet. This is the balance of the native token used by the chain. Ex. ETH for Ethereum.
         /// </summary>
         /// <remarks>
-        /// For more information see <see href="https://docs.arkane.network/pages/reference.html#_native_balance_arkane_api">https://docs.arkane.network/pages/reference.html#_native_balance_arkane_api</see>
+        /// For more information see <see href="https://docs.venly.io/pages/reference.html#_native_balance_arkane_api">https://docs.venly.io/pages/reference.html#_native_balance_arkane_api</see>
         /// </remarks>
         /// <param name="walletId"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator NativeBalance(string walletId, Action<BalanceResult> callback)
+        public static IEnumerator Balance(string walletId, Action<BalanceResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
@@ -397,7 +414,7 @@ namespace HeathenEngineering.BGSDK.API
                         try
                         {
                             string resultContent = www.downloadHandler.text;
-                            results.result = JsonUtility.FromJson<WalletBallance>(resultContent);
+                            results = JsonUtility.FromJson<BalanceResult>(resultContent);
                             results.message = "Wallet balance updated.";
                             results.httpCode = www.responseCode;
                         }
@@ -426,24 +443,24 @@ namespace HeathenEngineering.BGSDK.API
         /// </summary>
         /// <remarks>
         /// <para>
-        /// For more details see <see href="https://docs.arkane.network/pages/reference.html#_token_balances_arkane_api">https://docs.arkane.network/pages/reference.html#_token_balances_arkane_api</see>
+        /// For more details see <see href="https://docs.venly.io/pages/reference.html#_token_balances_arkane_api">https://docs.venly.io/pages/reference.html#_token_balances_arkane_api</see>
         /// </para>
         /// </remarks>
         /// <param name="walletId"></param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator TokenBalance(string walletId, Action<ListTokenBalanceResult> callback)
+        public static IEnumerator TokenBalance(string walletId, Action<TokenBalanceResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
-                callback(new ListTokenBalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.TokenBalance with no BGSDK.Settings object applied." });
+                callback(new TokenBalanceResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.TokenBalance with no BGSDK.Settings object applied." });
                 yield return null;
             }
             else
             {
                 if (BGSDKSettings.user == null)
                 {
-                    callback(new ListTokenBalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
+                    callback(new TokenBalanceResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
                     yield return null;
                 }
                 else
@@ -457,11 +474,11 @@ namespace HeathenEngineering.BGSDK.API
 
                     if (!www.isNetworkError && !www.isHttpError)
                     {
-                        var results = new ListTokenBalanceResult();
+                        var results = new TokenBalanceResult();
                         try
                         {
                             string resultContent = www.downloadHandler.text;
-                            results = JsonUtility.FromJson<ListTokenBalanceResult>(Utilities.JSONArrayWrapper(resultContent));
+                            results = JsonUtility.FromJson<TokenBalanceResult>(Utilities.JSONArrayWrapper(resultContent));
                             results.message = "Fetch token balance complete.";
                             results.httpCode = www.responseCode;
 
@@ -480,7 +497,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        callback(new ListTokenBalanceResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting the token balance from a wallet." : " a HTTP error occured while requesting the token balance from a wallet."), result = null, httpCode = www.responseCode });
+                        callback(new TokenBalanceResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting the token balance from a wallet." : " a HTTP error occured while requesting the token balance from a wallet."), result = null, httpCode = www.responseCode });
                     }
                 }
             }
@@ -491,7 +508,7 @@ namespace HeathenEngineering.BGSDK.API
         /// </summary>
         /// <remarks>
         /// <para>
-        /// For more details see <see href="https://docs.arkane.network/pages/reference.html#_specific_token_balance_arkane_api">https://docs.arkane.network/pages/reference.html#_specific_token_balance_arkane_api</see>
+        /// For more details see <see href="https://docs.venly.io/pages/reference.html#_specific_token_balance_arkane_api">https://docs.venly.io/pages/reference.html#_specific_token_balance_arkane_api</see>
         /// </para>
         /// </remarks>
         /// <param name="walletId"></param>
@@ -553,32 +570,33 @@ namespace HeathenEngineering.BGSDK.API
         }
 
         /// <summary>
-        /// Returns the list of NFT’s owned by a wallet
+        /// NFTs can be queried either by wallet ID or by wallet address, if required multiple NFT contract addresses can be passed as a query parameter to act as a filter. 
         /// </summary>
         /// <remarks>
-        /// <para>
-        /// Currently this functionallity is only supported for Ethereum wallets (ERC-721), other chains will follow
-        /// <para>
-        /// For more information please see <see href="https://docs.arkane.network/pages/reference.html#_list_non_fungible_tokens_nfts_arkane_api">https://docs.arkane.network/pages/reference.html#_list_non_fungible_tokens_nfts_arkane_api</see>
-        /// </para>
-        /// </para>
+        /// For more information please see <see href="https://docs.venly.io/api/api-products/wallet-api/retrieve-non-fungible-tokens"/>
         /// </remarks>
         /// <param name="walletId"></param>
         /// <param name="optionalContractAddresses">List of contract addresses to filter for, if empty or null all will be returned. Can be null</param>
         /// <param name="callback"></param>
         /// <returns>The Unity routine enumerator</returns>
-        public static IEnumerator ListNFTs(string walletId, List<string> optionalContractAddresses, Action<ListListedNFTTokenResult> callback)
+        public static IEnumerator NFTs(string walletId, List<string> optionalContractAddresses, Action<NFTBalanceResult> callback)
         {
             if (BGSDKSettings.current == null)
             {
-                callback(new ListListedNFTTokenResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." });
+                callback(new NFTBalanceResult() {
+                    hasError = true, 
+                    message = "Attempted to call BGSDK.Wallets.UserWallet.ListNFTs with no BGSDK.Settings object applied." 
+                });
                 yield return null;
             }
             else
             {
                 if (BGSDKSettings.user == null)
                 {
-                    callback(new ListListedNFTTokenResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided.", result = null });
+                    callback(new NFTBalanceResult() { 
+                        hasError = true, 
+                        message = "BGSDKSettings.user required, null Settings.user provided."
+                    });
                     yield return null;
                 }
                 else
@@ -606,11 +624,11 @@ namespace HeathenEngineering.BGSDK.API
 
                     if (!www.isNetworkError && !www.isHttpError)
                     {
-                        var results = new ListListedNFTTokenResult();
+                        var results = new NFTBalanceResult();
                         try
                         {
                             string resultContent = www.downloadHandler.text;
-                            results = JsonUtility.FromJson<ListListedNFTTokenResult>(Utilities.JSONArrayWrapper(resultContent));
+                            results = JsonUtility.FromJson<NFTBalanceResult>(resultContent);
                             results.message = "List NFTs complete.";
                             results.httpCode = www.responseCode;
 
@@ -629,7 +647,53 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        callback(new ListListedNFTTokenResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting NFTs." : " a HTTP error occured while requesting NFTs."), result = null, httpCode = www.responseCode });
+                        callback(new NFTBalanceResult() 
+                        { 
+                            hasError = true, 
+                            message = "Error:" + (www.isNetworkError ? " a network error occured while requesting NFTs." : " a HTTP error occured while requesting NFTs."), 
+                            httpCode = www.responseCode });
+                    }
+                }
+            }
+        }
+
+        #region Legacy
+#if false
+
+        /// <param name="wallet"></param>
+        /// <param name="callback"></param>
+        /// <returns>The Unity routine enumerator</returns>
+        public static IEnumerator Unlink(Wallet wallet, Action<BGSDKBaseResult> callback)
+        {
+            if (BGSDKSettings.current == null)
+            {
+                callback(new BGSDKBaseResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.Unlink with no BGSDK.Settings object applied." });
+                yield return null;
+            }
+            else
+            {
+                if (BGSDKSettings.user == null)
+                {
+                    callback(new BGSDKBaseResult() { hasError = true, message = "BGSDKSettings.user required, null Settings.user provided." });
+                    yield return null;
+                }
+                else
+                {
+                    //TODO: Confirm with BGSDK that its the address that should be used. This doesn't appear correct as the value the API expects is a GUID and address is a HEX value
+                    UnityWebRequest www = UnityWebRequest.Delete(BGSDKSettings.current.WalletUri + "/" + wallet.address + "/link");
+                    www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
+
+                    var co = www.SendWebRequest();
+                    while (!co.isDone)
+                        yield return null;
+
+                    if (!www.isNetworkError && !www.isHttpError)
+                    {
+                        callback(new BGSDKBaseResult() { hasError = false, message = "Unlink request completed.", httpCode = www.responseCode });
+                    }
+                    else
+                    {
+                        callback(new BGSDKBaseResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while processing an unlink request." : " a HTTP error occured while requesting the user's wallets."), httpCode = www.responseCode });
                     }
                 }
             }
@@ -642,7 +706,7 @@ namespace HeathenEngineering.BGSDK.API
         /// <para>
         /// Currently this functionallity is only supported for MATIC wallets and items minted by BGSDK
         /// <para>
-        /// For more information please see <see href="https://docs-staging.arkane.network/pages/reference.html#_get_inventory_arkane_api">https://docs-staging.arkane.network/pages/reference.html#_get_inventory_arkane_api</see>
+        /// For more information please see <see href="https://docs-staging.venly.io/pages/reference.html#_get_inventory_arkane_api">https://docs-staging.venly.io/pages/reference.html#_get_inventory_arkane_api</see>
         /// </para>
         /// </para>
         /// </remarks>
@@ -717,5 +781,7 @@ namespace HeathenEngineering.BGSDK.API
                 }
             }
         }
+#endif
+        #endregion
     }
 }
