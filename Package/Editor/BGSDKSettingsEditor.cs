@@ -1,4 +1,5 @@
-﻿using HeathenEngineering.BGSDK.Engine;
+﻿using HeathenEngineering.BGSDK.DataModel;
+using HeathenEngineering.BGSDK.Engine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -59,7 +60,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 nContract.name = "New Contract";
                 nContract.data.name = "New Contract";
                 nContract.data.symbol = "NEWCONTRACT";
-                nContract.data.secretType = API.Wallets.SecretType.MATIC;
+                nContract.data.secretType = SecretType.MATIC;
 
                 nContract.updatedFromServer = false;
 

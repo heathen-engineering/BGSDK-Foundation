@@ -141,19 +141,6 @@ namespace HeathenEngineering.BGSDK.Engine
                 data.contractAddress = value; 
             }
         }
-        public uint Decimals
-        { 
-            get 
-            { 
-                return data != null ? data.decimals : 0; 
-            } 
-            set 
-            {
-                if (data == null)
-                    data = new TokenResponceData(); 
-                data.decimals = value; 
-            } 
-        }
         public BigInteger TypeId
         { 
             get 
@@ -180,19 +167,6 @@ namespace HeathenEngineering.BGSDK.Engine
                 data.fungible = !value; 
             } 
         }
-        public string BackgroundColor
-        { 
-            get 
-            { 
-                return data == null ? "" : data.backgroundColor; 
-            } 
-            set 
-            {
-                if (data == null)
-                    data = new TokenResponceData(); 
-                data.backgroundColor = value; 
-            }
-        }
         public string Url
         { 
             get 
@@ -204,32 +178,6 @@ namespace HeathenEngineering.BGSDK.Engine
                 if (data == null)
                     data = new TokenResponceData(); 
                 data.externalUrl = value; 
-            }
-        }
-        public string ImagePreview
-        { 
-            get 
-            {
-                return data == null ? "" : data.imagePreview; 
-            } 
-            set 
-            {
-                if (data == null)
-                    data = new TokenResponceData(); 
-                data.imagePreview = value; 
-            }
-        }
-        public string ImageThumbnail
-        {
-            get 
-            { 
-                return data == null ? "" : data.imageThumbnail;
-            } 
-            set 
-            {
-                if (data == null)
-                    data = new TokenResponceData(); 
-                data.imageThumbnail = value; 
             }
         }
         public string Image

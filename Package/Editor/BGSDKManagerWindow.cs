@@ -37,7 +37,7 @@ namespace HeathenEngineering.BGSDK.Editor
         private bool showingSecretValue = false;
         GUIStyle wordWrapTextField;
 
-        [MenuItem("Window/BGSDK Manager")]
+        //[MenuItem("Window/BGSDK Manager")]
         public static void Init()
         {
             BGSDKManagerWindow window = EditorWindow.GetWindow<BGSDKManagerWindow>("BGSDK Manager", new Type[] { typeof(UnityEditor.SceneView) });
@@ -438,7 +438,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 if (activeToken.IsNonFungible)
                     EditorGUILayout.LabelField(new GUIContent("Non Fungible", "Non fungible token definition, counts of this token are always a whole number typically used to represent items."));
                 else
-                    EditorGUILayout.LabelField("Fungible (" + (activeToken.Decimals == 0 ? "whole numbers" : (activeToken.Decimals.ToString() + " decimal places")) + ")");
+                    EditorGUILayout.LabelField("Fungible (whole numbers)");
                 EditorGUILayout.LabelField(new GUIContent("Confirmed: " + (activeToken.Confirmed ? "Yes" : "No"), "Indicates rather or not the token has been confirmed on the chain. This will always be no untill the tokin is first deployed."));
                 EditorGUILayout.SelectableLabel("Token ID: " + activeToken.Id.ToString());
                 EditorGUILayout.SelectableLabel("Token Address: " + activeToken.Address);
@@ -459,19 +459,6 @@ namespace HeathenEngineering.BGSDK.Editor
                 EditorGUILayout.Space();
                 //EditorGUILayout.SelectableLabel("Properties: " + (string.IsNullOrEmpty(activeToken.Data.properties) ? "[NULL]" : activeToken.Data.properties));
 
-                Color newCol;
-                if (!string.IsNullOrEmpty(activeToken.BackgroundColor) && ColorUtility.TryParseHtmlString(activeToken.BackgroundColor, out newCol))
-                {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.SelectableLabel("Background Color: " + activeToken.BackgroundColor);
-                    EditorGUILayout.ColorField(newCol);
-                    EditorGUILayout.EndHorizontal();
-                }
-                else
-                {
-                    EditorGUILayout.SelectableLabel("Background Color: [NULL]");
-                }
-
                 if (!string.IsNullOrEmpty(activeToken.Image))
                 {
                     if (GUILayout.Button("Main Image URL: " + activeToken.Image, linkLableStyle))
@@ -481,74 +468,31 @@ namespace HeathenEngineering.BGSDK.Editor
                 }
                 else
                     EditorGUILayout.LabelField("Main Image URL: [NULL]");
-
-                if (!string.IsNullOrEmpty(activeToken.ImagePreview))
-                {
-                    if (GUILayout.Button("Preview Image URL: " + activeToken.ImagePreview, linkLableStyle))
-                    {
-                        Help.BrowseURL(activeToken.ImagePreview);
-                    }
-                }
-                else
-                    EditorGUILayout.LabelField("Preview Image URL: [NULL]");
-
-                if (!string.IsNullOrEmpty(activeToken.ImageThumbnail))
-                {
-                    if (GUILayout.Button("Thumbnail Image URL: " + activeToken.ImageThumbnail, linkLableStyle))
-                    {
-                        Help.BrowseURL(activeToken.ImageThumbnail);
-                    }
-                }
-                else
-                    EditorGUILayout.LabelField("Thumbnail Image URL: [NULL]");
             }
             else
             {
                 EditorGUILayout.LabelField(new GUIContent("New Token Properties: " + activeToken.SystemName, "Token settings for " + activeToken.SystemName + " token."), EditorStyles.whiteLargeLabel);
                 var nameVal = EditorGUILayout.TextField(new GUIContent("Name", "The name to be assigned to the token."), activeToken.SystemName);
                 var fungableValue = EditorGUILayout.Toggle(new GUIContent("Is Fungible", "If true then the token will be created as type fungible meaning that its value can be a fraction of a whole such as with currency values.\nIf false then this token is non fungible and counts of it are a whole number typical of items."), !activeToken.IsNonFungible);
-                var decimalValue = activeToken.Decimals;
-                if (fungableValue)
-                {
-                    decimalValue = System.Convert.ToUInt32(EditorGUILayout.IntField(new GUIContent("Decimals", "The number of decimal places the fungible token has."), System.Convert.ToInt32(decimalValue)));
-                }
                 var metadataUrl = EditorGUILayout.TextField(new GUIContent("Metadata URL", "The URL with more information about the token."), activeToken.Url);
                 EditorGUILayout.LabelField(new GUIContent("Description", "Discription of the token"));
                 var descVal = EditorGUILayout.TextArea(activeToken.Description, GUILayout.Height(110));
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
-                //var propertyString = EditorGUILayout.TextField(new GUIContent("Properties", "Free text field of extra properties assoceated with this token."), activeToken.Data.properties);
-
-                Color newCol;
-                string HTMLColorString;
-                ColorUtility.TryParseHtmlString("#" + activeToken.BackgroundColor, out newCol);
-                newCol = EditorGUILayout.ColorField(new GUIContent("Background Color", "Background color to be applied behing the image."), newCol);
-                HTMLColorString = ColorUtility.ToHtmlStringRGBA(newCol);
-
                 var imageString = EditorGUILayout.TextField(new GUIContent("Main Image URL", "The main image used for this token."), activeToken.Image);
-                var previewImageString = EditorGUILayout.TextField(new GUIContent("Preview Image URL", "Preview image used for this token."), activeToken.ImagePreview);
-                var thumbnailImageString = EditorGUILayout.TextField(new GUIContent("Thumbnail Image URL", "Thumbnail image used for this token."), activeToken.ImageThumbnail);
 
                 if (nameVal != activeToken.SystemName
                     || descVal != activeToken.Description
                     || fungableValue == activeToken.IsNonFungible
-                    || decimalValue != activeToken.Decimals
                     || metadataUrl != activeToken.Url
-                    || HTMLColorString != activeToken.BackgroundColor
-                    || imageString != activeToken.Image
-                    || previewImageString != activeToken.ImagePreview
-                    || thumbnailImageString != activeToken.ImageThumbnail)
+                    || imageString != activeToken.Image)
                 {
                     Undo.RecordObject(activeToken, "textEdit");
                     activeToken.name = activeContract.name + " : " + nameVal;
                     activeToken.SystemName = nameVal;
                     activeToken.Description = descVal;
-                    activeToken.Decimals = decimalValue;
                     activeToken.Url = metadataUrl;
-                    activeToken.BackgroundColor = HTMLColorString;
                     activeToken.Image = imageString;
-                    activeToken.ImagePreview = previewImageString;
-                    activeToken.ImageThumbnail = thumbnailImageString;
                     activeToken.IsNonFungible = !fungableValue;
                     EditorUtility.SetDirty(activeToken);
                     AssetDatabase.ImportAsset(AssetDatabase.GetAssetPath(BGSDKSettings.current));

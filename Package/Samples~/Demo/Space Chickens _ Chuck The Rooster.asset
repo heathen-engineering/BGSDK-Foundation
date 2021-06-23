@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Space Chickens _ Chuck The Rooster
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585800147369877881
+  UpdatedOn: -8585771475404560295
   contract: {fileID: 0}
-  properties: {fileID: 0}
   data:
     name: Chuck The Rooster
     description: Chuck is a Male Tall Chicken Who is the Leader of The Chicken Siblings.
@@ -25,26 +24,25 @@ MonoBehaviour:
       The Bad and The Clucky, It also Revealed that He Used to Be one Of the Scouts
       from Slurp,s Little Cowboys Scout Camp along With Finley, Ainta and Hugo. He
       is the youngest of the three.
-    decimals: 0
     currentSupply: 0
     fungible: 0
     burnable: 0
-    backgroundColor: '#eeeeee'
     externalUrl: 
-    imagePreview: 
-    imageThumbnail: 
     image: 
     animationUrls: []
     attributes:
     - name: Talent
-      type: property
+      type: 0
       value: Leadership
+      maxValue: 0
     - name: Allergic
-      type: property
+      type: 0
       value: Monstonuts
+      maxValue: 0
     - name: Hobby
-      type: property
+      type: 0
       value: Scouts
+      maxValue: 0
     contractAddress: 
     id: 1
     confirmed: 1

@@ -13,20 +13,15 @@ MonoBehaviour:
   m_Name: X-Men Heroes _ Example Type_ Hulk
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585800147402742996
+  UpdatedOn: -8585771475434403755
   contract: {fileID: 0}
-  properties: {fileID: 0}
   data:
     name: 'Example Type: Hulk'
     description: Robert Bruce Banner a.k.a The Incredible Hulk
-    decimals: 0
     currentSupply: 0
     fungible: 0
     burnable: 0
-    backgroundColor: '#d9d9d9'
     externalUrl: 
-    imagePreview: https://upload.wikimedia.org/wikipedia/en/a/aa/Hulk_%28circa_2019%29.png
-    imageThumbnail: https://upload.wikimedia.org/wikipedia/en/a/aa/Hulk_%28circa_2019%29.png
     image: https://upload.wikimedia.org/wikipedia/en/a/aa/Hulk_%28circa_2019%29.png
     animationUrls: []
     attributes: []

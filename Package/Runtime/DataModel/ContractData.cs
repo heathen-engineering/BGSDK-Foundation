@@ -3,6 +3,14 @@ using UnityEngine;
 
 namespace HeathenEngineering.BGSDK.DataModel
 {
+    public enum SecretType
+    {
+        AVAC,
+        BSC,
+        ETHEREUM,
+        MATIC,
+    }
+
     [Serializable]
     public struct ContractData
     {
@@ -30,7 +38,7 @@ namespace HeathenEngineering.BGSDK.DataModel
         /// The chain the contract will be part of
         /// </summary>
         [Tooltip("The chain the contract will be part of")]
-        public API.Wallets.SecretType secretType;
+        public SecretType secretType;
         /// <summary>
         /// Address on the blockchain.
         /// </summary>

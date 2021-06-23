@@ -6,7 +6,8 @@ using System;
 
 namespace HeathenEngineering.BGSDK.Engine
 {
-    public class BlockchainEngineBootstrapper : MonoBehaviour
+    [AddComponentMenu("BGSDK Behaviour")]
+    public class BGSDKBehaviour : MonoBehaviour
     {
         public BGSDKSettings settings;
 #if UNITY_SERVER || UNITY_EDITOR
@@ -27,26 +28,7 @@ namespace HeathenEngineering.BGSDK.Engine
 #endif
         }
 
-        public void FacebookLogin(string FacebookToken)
-        {
-            API.User.Login_Facebook(FacebookToken, HandleSecretAuthenticationResponce);
-        }
-
-        private void HandleSecretAuthenticationResponce(AuthenticationResult authResult)
-        {
-            if (authResult.hasError)
-            {
-                Debug.LogError("Authentication Result:\nError " + authResult.message);
-            }
-            else
-            {
-                Debug.Log("Authentication Complete");
-            }
-
-            authenticationResponce.Invoke(authResult);
-        }
-
-
+        #region Server
 #if UNITY_SERVER || UNITY_EDITOR
         /// <summary>
         /// Logs in via the client secret ... this is only usable by servers and the Unity Editor and will not have an user data
@@ -93,7 +75,29 @@ namespace HeathenEngineering.BGSDK.Engine
             }
         }
 
-        
+        private void HandleSecretAuthenticationResponce(AuthenticationResult authResult)
+        {
+            if (authResult.hasError)
+            {
+                Debug.LogError("Authentication Result:\nError " + authResult.message);
+            }
+            else
+            {
+                Debug.Log("Authentication Complete");
+            }
+
+            authenticationResponce.Invoke(authResult);
+        }
 #endif
+        #endregion
+
+        #region Client
+#if !UNITY_SERVER
+        public void FacebookLogin(string FacebookToken)
+        {
+            API.Client.User.Login_Facebook(FacebookToken, HandleSecretAuthenticationResponce);
+        }
+#endif
+        #endregion
     }
 }

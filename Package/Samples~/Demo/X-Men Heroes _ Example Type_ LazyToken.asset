@@ -13,20 +13,15 @@ MonoBehaviour:
   m_Name: X-Men Heroes _ Example Type_ LazyToken
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585800147404634716
+  UpdatedOn: -8585771475440581026
   contract: {fileID: 0}
-  properties: {fileID: 0}
   data:
     name: 'Example Type: LazyToken'
     description: This is a lazy supperhero token
-    decimals: 0
     currentSupply: 0
     fungible: 1
     burnable: 0
-    backgroundColor: 
     externalUrl: 
-    imagePreview: 
-    imageThumbnail: 
     image: 
     animationUrls: []
     attributes: []

@@ -37,38 +37,17 @@ namespace HeathenEngineering.BGSDK.DataModel
 
                 switch (secretType)
                 {
-                    case "AETERNITY":
-                        data.secretType = API.Wallets.SecretType.AETERNITY;
-                        break;
                     case "AVAC":
-                        data.secretType = API.Wallets.SecretType.AVAC;
-                        break;
-                    case "BITCOIN":
-                        data.secretType = API.Wallets.SecretType.BITCOIN;
+                        data.secretType = SecretType.AVAC;
                         break;
                     case "BSC":
-                        data.secretType = API.Wallets.SecretType.BSC;
+                        data.secretType = SecretType.BSC;
                         break;
                     case "ETHEREUM":
-                        data.secretType = API.Wallets.SecretType.ETHEREUM;
-                        break;
-                    case "GOCHAIN":
-                        data.secretType = API.Wallets.SecretType.GOCHAIN;
-                        break;
-                    case "LITECOIN":
-                        data.secretType = API.Wallets.SecretType.LITECOIN;
+                        data.secretType = SecretType.ETHEREUM;
                         break;
                     case "MATIC":
-                        data.secretType = API.Wallets.SecretType.MATIC;
-                        break;
-                    case "NEO":
-                        data.secretType = API.Wallets.SecretType.NEO;
-                        break;
-                    case "TRON":
-                        data.secretType = API.Wallets.SecretType.TRON;
-                        break;
-                    case "VECHAIN":
-                        data.secretType = API.Wallets.SecretType.VECHAIN;
+                        data.secretType = SecretType.MATIC;
                         break;
                 }
 

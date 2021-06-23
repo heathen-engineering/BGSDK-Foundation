@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Kaiden Contract
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585800147379681814
+  updatedOn: -8585771475417278650
   data:
     id: 171
     name: Kaiden Contract
     description: 
     confirmed: 1
-    secretType: MATIC
+    secretType: 3
     address: 0x2dc1049f2bed2ff4e163054831e1aad8932a7c21
     symbol: 
     externalUrl: 

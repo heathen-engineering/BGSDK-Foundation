@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Space Chickens
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585800147373826490
+  updatedOn: -8585771475401481166
   data:
-    id: 270
+    id: 271
     name: Space Chickens
     description: "Space Chickens in Space is an American-Australian-Mexican-British-Irish
       animated television series produced by \xC1nima Estudios in Mexico, Studio
@@ -24,12 +24,14 @@ MonoBehaviour:
       military academy. It would take all their strength, and teamwork, to survive
       every escapade they have."
     confirmed: 1
-    secretType: MATIC
-    address: 0xfcfd73f466db5c1373c813fc7cdb09150a2f0aef
+    secretType: 3
+    address: 0xe0279aed19f1a33920893bd270d7fdb15fb8bbf4
     symbol: TCC
     externalUrl: https://en.wikipedia.org/wiki/Space_Chickens_in_Space
     image: https://dg31sz3gwrwan.cloudfront.net/fanart/355763/1357791-0-q80.jpg
     media:
     - type: image
       value: https://dg31sz3gwrwan.cloudfront.net/fanart/355763/1357791-0-q80.jpg
-  tokens: []
+  tokens:
+  - {fileID: 11400000, guid: b65d3ef4b76a9494db748691411f4a7a, type: 2}
+  - {fileID: 11400000, guid: 508af31c23f247a4095b1d5f12d05772, type: 2}

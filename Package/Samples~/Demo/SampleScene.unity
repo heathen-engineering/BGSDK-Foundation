@@ -151,17 +151,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008bf4c32b4dfba4abb6dd56a41b50b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contract: {fileID: 11400000, guid: df39c7d29288ccb449a2afa7385f9e7d, type: 2}
+  contract: {fileID: 0}
   contractData:
     id: 
     name: 
     description: 
     confirmed: 0
+    secretType: 0
     address: 
     symbol: 
-    url: 
-    imageUrl: 
-    type: 
+    externalUrl: 
+    image: 
+    media: []
   walletData: []
 --- !u!114 &54474536
 MonoBehaviour:

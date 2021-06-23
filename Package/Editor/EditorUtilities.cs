@@ -622,38 +622,17 @@ namespace HeathenEngineering.BGSDK.Editor
 
                                 switch(contract.data.secretType)
                                 {
-                                    case API.Wallets.SecretType.AETERNITY:
-                                        nContract.chain = "AETERNITY";
-                                        break;
-                                    case API.Wallets.SecretType.AVAC:
+                                    case SecretType.AVAC:
                                         nContract.chain = "AVAC";
                                         break;
-                                    case API.Wallets.SecretType.BITCOIN:
-                                        nContract.chain = "BITCOIN";
-                                        break;
-                                    case API.Wallets.SecretType.BSC:
+                                    case SecretType.BSC:
                                         nContract.chain = "BSC";
                                         break;
-                                    case API.Wallets.SecretType.ETHEREUM:
+                                    case SecretType.ETHEREUM:
                                         nContract.chain = "ETHEREUM";
                                         break;
-                                    case API.Wallets.SecretType.GOCHAIN:
-                                        nContract.chain = "GOCHAIN";
-                                        break;
-                                    case API.Wallets.SecretType.LITECOIN:
-                                        nContract.chain = "LITECOIN";
-                                        break;
-                                    case API.Wallets.SecretType.MATIC:
+                                    case SecretType.MATIC:
                                         nContract.chain = "MATIC";
-                                        break;
-                                    case API.Wallets.SecretType.NEO:
-                                        nContract.chain = "NEO";
-                                        break;
-                                    case API.Wallets.SecretType.TRON:
-                                        nContract.chain = "TRON";
-                                        break;
-                                    case API.Wallets.SecretType.VECHAIN:
-                                        nContract.chain = "VECHAIN";
                                         break;
                                 }
 

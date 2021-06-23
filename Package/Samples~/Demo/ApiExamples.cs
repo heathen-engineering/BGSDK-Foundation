@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using HeathenEngineering.BGSDK.DataModel;
 using HeathenEngineering.BGSDK.Engine;
@@ -17,18 +18,13 @@ namespace HeathenEngineering.BGSDK.Examples
 
         public void FetchContracts()
         {
-            StartCoroutine(API.TokenManagement.GetContract(contract, HandleGetContractResults));
+            StartCoroutine(API.Server.Tokens.GetContract(contract, HandleGetContractResults));
         }
 
         public void FetchWallets()
         {
-            StartCoroutine(API.Wallets.List(HandleWalletResults));
+            StartCoroutine(API.Server.Wallets.List(HandleWalletResults));
         }
-
-        //public void GetInventory()
-        //{
-        //    StartCoroutine(API.Wallets.GetInventory(walletData[0].id, null, HandleInventoryResults));
-        //}
 
         private void HandleInventoryResults(ListInventoryResults obj)
         {
@@ -72,3 +68,4 @@ namespace HeathenEngineering.BGSDK.Examples
         }
     }
 }
+#endif

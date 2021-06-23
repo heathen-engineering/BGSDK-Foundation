@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: 420 Test It Contract
   m_EditorClassIdentifier: 
   updatedFromServer: 1
-  updatedOn: -8585800147389801052
+  updatedOn: -8585771475426520395
   data:
     id: 188
     name: 420 Test It Contract
     description: A simple test
     confirmed: 1
-    secretType: MATIC
+    secretType: 3
     address: 0xa37bebcd3ec7dcf3644a9c2c2a3c9a65179761c8
     symbol: 
     externalUrl: 

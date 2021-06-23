@@ -19,14 +19,14 @@ MonoBehaviour:
     Staging: https://staging.arkane.network/
     Production: https://app.arkane.network
   api:
-    Staging: https://api-staging.arkane.network
-    Production: https://api.arkane.network
+    Staging: https://api-staging.venly.io
+    Production: https://api.venly.io
   connect:
-    Staging: https://connect-staging.arkane.network/auth/exchange
-    Production: https://connect.arkane.network/auth/exchange
+    Staging: https://connect-staging.venly.io/auth/exchange
+    Production: https://connect.venly.io/auth/exchange
   business:
-    Staging: https://api-business-staging.arkane.network
-    Production: https://api-business.arkane.network
+    Staging: https://api-business-staging.venly.io
+    Production: https://api-business.venly.io
   UseStaging: 1
   appId:
     applicationId: 41b34dc4-8b3c-4150-82bf-126ed10791a2

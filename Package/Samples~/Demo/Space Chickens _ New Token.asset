@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 827e0ca428c9a5e4aaa8b54b5e4f7d3b, type: 3}
-  m_Name: X-Men Heroes _ Example Type_ LazyToken v4
+  m_Name: Space Chickens _ New Token
   m_EditorClassIdentifier: 
   UpdatedFromServer: 1
-  UpdatedOn: -8585771475429505526
+  UpdatedOn: -8585771475402051425
   contract: {fileID: 0}
   data:
-    name: 'Example Type: LazyToken v4'
-    description: quick test
+    name: New Token
+    description: 
     currentSupply: 0
     fungible: 0
     burnable: 0
@@ -26,6 +26,6 @@ MonoBehaviour:
     animationUrls: []
     attributes: []
     contractAddress: 
-    id: 2972
+    id: 51
     confirmed: 1
     rawData: 
