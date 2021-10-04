@@ -4,15 +4,15 @@
         <uie:ToolbarToggle label="API" name="tglApi" style="align-items: stretch; left: auto; flex-shrink: 1; flex-grow: 1;" />
         <uie:ToolbarToggle focusable="false" label="Model" name="tglModel" style="flex-grow: 1; display: flex; flex-shrink: 1;" />
     </uie:Toolbar>
-    <ui:VisualElement value="true" name="appPage" label="Application" style="align-items: stretch; flex-shrink: 1; display: none;">
+    <ui:VisualElement value="true" name="appPage" label="Application" style="align-items: stretch; flex-shrink: 1; display: flex;">
         <uie:PropertyField binding-path="appId.applicationId" focusable="true" />
         <uie:PropertyField binding-path="appId.clientId" focusable="true" />
         <uie:PropertyField binding-path="appId.clientSecret" style="flex-grow: 1; display: flex;" />
     </ui:VisualElement>
     <ui:VisualElement name="apiPage" style="display: none; visibility: visible;">
-        <ui:Toggle label="Use Stageing" name="tglUseStageing" value="true" />
+        <uie:PropertyField binding-path="useStaging" />
     </ui:VisualElement>
-    <ui:VisualElement name="modelPage" style="flex-grow: 1;">
+    <ui:VisualElement name="modelPage" style="flex-grow: 1; display: none;">
         <uie:Toolbar>
             <uie:ToolbarButton name="addContract" tooltip="Add contract" style="width: auto; align-items: center; flex-direction: row;">
                 <ui:Label text="Add Contract" style="padding-left: 5px;" />

@@ -738,7 +738,7 @@ namespace HeathenEngineering.BGSDK.API
             /// <param name="optionalContractAddresses">List of contract addresses to filter for, if empty or null all will be returned. Can be null</param>
             /// <param name="callback"></param>
             /// <returns>The Unity routine enumerator</returns>
-            public static IEnumerator NFTs(string walletId, List<string> optionalContractAddresses, Action<NFTBalanceResult> callback)
+            public static IEnumerator NFTs(string walletId, SecretType chain, List<string> optionalContractAddresses, Action<NFTBalanceResult> callback)
             {
                 if (BGSDKSettings.current == null)
                 {
@@ -762,7 +762,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        string address = BGSDKSettings.current.WalletUri + "/" + walletId + "/nonfungibles";
+                        string address = BGSDKSettings.current.WalletUri + "/" + chain.ToString() + "/" + walletId + "/nonfungibles";
 
                         if (optionalContractAddresses != null && optionalContractAddresses.Count > 0)
                         {

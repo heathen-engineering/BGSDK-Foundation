@@ -93,6 +93,9 @@ namespace HeathenEngineering.BGSDK.Engine
 
         #region Client
 #if !UNITY_SERVER
+        public void Login_3rdPartyAuthentication(DateTime createdAt, string accessToken, int expiresIn, string refreshToken, int refreshExpiresIn) => API.Client.User.Login_3rdPartyAuthentication(createdAt, accessToken, expiresIn, refreshToken, refreshExpiresIn);
+
+        [Obsolete("Temporarily depricated by Venly; please use the API.Client.Login_3rdPartyAuthentication method", true)]
         public void FacebookLogin(string FacebookToken)
         {
             API.Client.User.Login_Facebook(FacebookToken, HandleSecretAuthenticationResponce);

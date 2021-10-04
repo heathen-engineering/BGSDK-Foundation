@@ -17,27 +17,30 @@ namespace HeathenEngineering.BGSDK.Engine
         /// Endpoint to authenticate users with
         /// </summary>
         [FormerlySerializedAs("Authentication")]
-        public DomainTarget authentication = new DomainTarget("https://login-staging.venly.io", "https://login.venly.io");
+        public DomainTarget authentication = new DomainTarget("https://login-staging.arkane.network", "https://login.arkane.network");
+        
+        [FormerlySerializedAs("walllet")]
         /// <summary>
         /// Wallet user interface endpoint
         /// </summary>
-        public DomainTarget walllet = new DomainTarget("https://staging.venly.io/", "https://app.venly.io");
+        public DomainTarget wallet = new DomainTarget("https://staging.arkane.network/", "https://app.arkane.network");
         /// <summary>
         /// Endpoint for API calls
         /// </summary>
         [FormerlySerializedAs("API")]
-        public DomainTarget api = new DomainTarget("https://api-staging.venly.io", "https://api.venly.io");
+        public DomainTarget api = new DomainTarget("https://api-staging.arkane.network", "https://api.arkane.network");
         /// <summary>
         /// Endpoint used by the widget
         /// </summary>
         [FormerlySerializedAs("Connect")]
-        public DomainTarget connect = new DomainTarget("https://connect-staging.venly.io/auth/exchange", "https://connect.venly.io/auth/exchange");
+        public DomainTarget connect = new DomainTarget("https://connect-staging.arkane.network/auth/exchange", "https://connect.arkane.network/auth/exchange");
         [FormerlySerializedAs("Business")]
-        public DomainTarget business = new DomainTarget("https://api-business-staging.venly.io", "https://api-business.venly.io");
+        public DomainTarget business = new DomainTarget("https://api-business-staging.arkane.network", "https://api-business.arkane.network");
 
 
-
-        public bool UseStaging = true;
+        [Obsolete("Use useSettings instead.")]
+        public bool UseStaging => useStaging;
+        public bool useStaging = true;
         public AppId appId;
         //public AuthenticationMode AuthenticationMode = new AuthenticationMode("<client id>", "password");
 
@@ -81,14 +84,14 @@ namespace HeathenEngineering.BGSDK.Engine
         /// <summary>
         /// Used to authenticate the user to the BGSDK Network
         /// </summary>
-        public string AuthenticationUri { get { return authentication[UseStaging] + "/auth/realms/Arkane/protocol/openid-connect/token"; } }
+        public string AuthenticationUri { get { return authentication[useStaging] + "/auth/realms/Arkane/protocol/openid-connect/token"; } }
 
-        public string ConnectUri => connect[UseStaging];
+        public string ConnectUri => connect[useStaging];
 
         /// <summary>
         /// Used to fetch the authenticated users wallets from the BGSDK Network
         /// </summary>
-        public string WalletUri => api[UseStaging] + "/api/wallets";
+        public string WalletUri => api[useStaging] + "/api/wallets";
 
         /// <summary>
         /// Used to work against the business API for deploying, getting and working with BGSDK contracts.
@@ -97,7 +100,7 @@ namespace HeathenEngineering.BGSDK.Engine
         /// <summary>
         /// Used to work against the business API for listing and working with BGSDK applicaitons.
         /// </summary>
-        public string AppsUri => business[UseStaging] + "/api/apps";
+        public string AppsUri => business[useStaging] + "/api/apps";
 
         public string DefineTokenTypeUri(Engine.Contract forContract)
         {

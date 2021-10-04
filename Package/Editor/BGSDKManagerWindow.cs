@@ -129,8 +129,8 @@ namespace HeathenEngineering.BGSDK.Editor
                     BGSDKSettings.current = CreateAsset<BGSDKSettings>("(Clone) " + BGSDKSettings.current.name.Replace("(Clone) ", ""));
                     BGSDKSettings.current.authentication = new DomainTarget(current.authentication.Staging, current.authentication.Production);
                     BGSDKSettings.current.api = new DomainTarget(current.api.Staging, current.api.Production);
-                    BGSDKSettings.current.walllet = new DomainTarget(current.walllet.Staging, current.walllet.Production);
-                    BGSDKSettings.current.UseStaging = current.UseStaging;
+                    BGSDKSettings.current.wallet = new DomainTarget(current.wallet.Staging, current.wallet.Production);
+                    BGSDKSettings.current.useStaging = current.useStaging;
                     BGSDKSettings.current.appId = current.appId;
                     //Settings.current.AuthenticationMode = current.AuthenticationMode;
                 }

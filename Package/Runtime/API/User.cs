@@ -75,7 +75,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.api[BGSDKSettings.current.UseStaging] + "/api/profile");
+                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.api[BGSDKSettings.current.useStaging] + "/api/profile");
                         www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = www.SendWebRequest();
@@ -89,7 +89,7 @@ namespace HeathenEngineering.BGSDK.API
                             {
                                 string resultContent = www.downloadHandler.text;
                                 results.result = JsonUtility.FromJson<UserProfile>(resultContent);
-                                results.message = "Wallet refresh complete.";
+                                results.message = "Profile request complete.";
                                 results.httpCode = www.responseCode;
 
                             }
@@ -107,7 +107,7 @@ namespace HeathenEngineering.BGSDK.API
                         }
                         else
                         {
-                            callback(new UserProfileResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting the user's wallets." : " a HTTP error occured while requesting the user's wallets."), result = null, httpCode = www.responseCode });
+                            callback(new UserProfileResult() { hasError = true, message = "Error:" + (www.isNetworkError ? " a network error occured while requesting the user's profile." : " a HTTP error occured while requesting the user's profile."), result = null, httpCode = www.responseCode });
                         }
                     }
                 }
@@ -149,6 +149,7 @@ namespace HeathenEngineering.BGSDK.API
             /// </summary>
             /// <param name="token">The token provided to you via Facebook authentication</param>
             /// <param name="Callback">Called when the process is complete and indicates rather or not it was successful</param>
+            [Obsolete("Temporarily depricated by Venly; please use the Login_3rdPartyAuthentication method", true)]
             public static IEnumerator Login_Facebook(string token, Action<AuthenticationResult> callback)
             {
                 if (BGSDKSettings.current == null)

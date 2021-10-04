@@ -854,7 +854,7 @@ namespace HeathenEngineering.BGSDK.Editor
                 }
                 else
                 {
-                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.api[BGSDKSettings.current.UseStaging] + "/api/profile");
+                    UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.api[BGSDKSettings.current.useStaging] + "/api/profile");
                     www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                     var co = www.SendWebRequest();

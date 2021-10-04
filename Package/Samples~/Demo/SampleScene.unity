@@ -151,19 +151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 008bf4c32b4dfba4abb6dd56a41b50b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  contract: {fileID: 0}
-  contractData:
-    id: 
-    name: 
-    description: 
-    confirmed: 0
-    secretType: 0
-    address: 
-    symbol: 
-    externalUrl: 
-    image: 
-    media: []
+  walletAddress: 0xe7754189E64CC1B6c593cB7C4B3265Ec5C6073f7
+  chainType: 3
   walletData: []
+  tokenData: []
 --- !u!114 &54474536
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -538,7 +529,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Get Contract
+  m_Text: Get NFTs
 --- !u!222 &686415469
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -645,7 +636,7 @@ RectTransform:
   m_Children:
   - {fileID: 1691206449}
   m_Father: {fileID: 877589363}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -772,8 +763,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1257741413}
   - {fileID: 859851291}
+  - {fileID: 1257741413}
   m_Father: {fileID: 77330527}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -834,7 +825,7 @@ GameObject:
   - component: {fileID: 1257741415}
   - component: {fileID: 1257741414}
   m_Layer: 5
-  m_Name: Get Contract Example Button
+  m_Name: Get NFTs Example Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -853,7 +844,7 @@ RectTransform:
   m_Children:
   - {fileID: 686415467}
   m_Father: {fileID: 877589363}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -904,7 +895,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 54474535}
-        m_MethodName: FetchContracts
+        m_MethodName: FetchNFTs
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -9,26 +9,34 @@ namespace HeathenEngineering.BGSDK.Examples
 {
     public class ApiExamples : MonoBehaviour
     {
-        //Your target contract... should be set in the inspector
-        public Contract contract;
+        public string walletAddress;
+        public SecretType chainType = SecretType.MATIC;
 
         [Header("Results")]
-        public ContractData contractData;
         public List<Wallet> walletData;
-
-        public void FetchContracts()
-        {
-            StartCoroutine(API.Server.Tokens.GetContract(contract, HandleGetContractResults));
-        }
+        public List<NFTBalanceResult.Token> tokenData;
 
         public void FetchWallets()
         {
             StartCoroutine(API.Server.Wallets.List(HandleWalletResults));
         }
 
-        private void HandleInventoryResults(ListInventoryResults obj)
+        public void FetchNFTs()
         {
-            throw new NotImplementedException();
+            StartCoroutine(API.Server.Wallets.NFTs(walletAddress, chainType, null, HandleNFTBalanceResult));
+        }
+
+        private void HandleNFTBalanceResult(NFTBalanceResult balanceResult)
+        {
+            if(!balanceResult.hasError)
+            {
+                tokenData = balanceResult.result;
+                Debug.Log("List NFT Responce:\nReturned " + balanceResult.result.Count.ToString() + " NFTs. You can review the results in the inspector.");
+            }
+            else
+            {
+                Debug.Log("List NFT Responce:\nHas Error: " + balanceResult.hasError + "\nMessage: " + balanceResult.message + "\nCode:" + balanceResult.httpCode);
+            }
         }
 
         private void HandleWalletResults(ListWalletResult walletResult)
@@ -40,30 +48,7 @@ namespace HeathenEngineering.BGSDK.Examples
             }
             else
             {
-                Debug.Log("List Wallets Responce:\nHas Error: " + walletResult.hasError + "\nMessage: " + walletResult.message);
-            }
-        }
-
-        private void HandleGetContractResults(ContractResult contractResult)
-        {
-            
-            if(!contractResult.hasError)
-            {
-                if (contractResult.result.HasValue)
-                {
-                    contractData = contractResult.result.Value;
-                    Debug.Log("List Contracts Responce:\nContract Data Found ... please view the inspector.");
-                }
-                else
-                {
-                    //TODO: Handle no contract found
-                    Debug.Log("List Contracts Responce:\nNo contract found.");
-                }
-            }
-            else
-            {
-                //TODO: Handle your errors
-                Debug.Log("List Contracts Responce:\nHas Error: " + contractResult.hasError + "\nMessage: " + contractResult.message);
+                Debug.Log("List Wallets Responce:\nHas Error: " + walletResult.hasError + "\nMessage: " + walletResult.message + "\nCode:" + walletResult.httpCode);
             }
         }
     }
