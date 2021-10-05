@@ -4,26 +4,57 @@ using System.Collections.Generic;
 using HeathenEngineering.BGSDK.DataModel;
 using HeathenEngineering.BGSDK.Engine;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HeathenEngineering.BGSDK.Examples
 {
     public class ApiExamples : MonoBehaviour
     {
-        public string walletAddress;
+        public InputField walletId;
+        public InputField walletPin;
+        public InputField walletAddress;
+        public Dropdown createWalletType;
+        public Dropdown listNFTWalletType;
         public SecretType chainType = SecretType.MATIC;
 
         [Header("Results")]
         public List<Wallet> walletData;
         public List<NFTBalanceResult.Token> tokenData;
 
+        public void CreateWallet()
+        {
+            if (!string.IsNullOrEmpty(walletId.text)
+                && !string.IsNullOrEmpty(walletPin.text))
+            {
+                StartCoroutine(API.Server.Wallets.Create(walletPin.text, walletId.text, (SecretType)createWalletType.value, HandleCreateWalletResult));
+            }
+            else
+            {
+                Debug.LogWarning("You must provide a wallet ID and Pin in order to create a new wallet.");
+            }
+        }
+
         public void FetchWallets()
         {
-            StartCoroutine(API.Server.Wallets.List(HandleWalletResults));
+            StartCoroutine(API.Server.Wallets.List(HandleListWalletResults));
         }
 
         public void FetchNFTs()
         {
-            StartCoroutine(API.Server.Wallets.NFTs(walletAddress, chainType, null, HandleNFTBalanceResult));
+            StartCoroutine(API.Server.Wallets.NFTs(walletAddress.text, (SecretType)listNFTWalletType.value, null, HandleNFTBalanceResult));
+        }
+
+        private void HandleCreateWalletResult(ListWalletResult walletResult)
+        {
+            if (!walletResult.hasError)
+            {
+                walletData = walletResult.result;
+                Debug.Log("Create Wallets Responce:\nReturned " + walletResult.result.Count.ToString() + " wallets. You can review the results in the inspector.");
+            }
+            else
+            {
+                Debug.Log("Create Wallets Responce:\nHas Error: " + walletResult.hasError + "\nMessage: " + walletResult.message + "\nCode:" + walletResult.httpCode);
+            }
         }
 
         private void HandleNFTBalanceResult(NFTBalanceResult balanceResult)
@@ -39,7 +70,7 @@ namespace HeathenEngineering.BGSDK.Examples
             }
         }
 
-        private void HandleWalletResults(ListWalletResult walletResult)
+        private void HandleListWalletResults(ListWalletResult walletResult)
         {
             if (!walletResult.hasError)
             {
