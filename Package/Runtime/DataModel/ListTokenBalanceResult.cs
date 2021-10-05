@@ -23,8 +23,8 @@ namespace HeathenEngineering.BGSDK.DataModel
                 public bool verified;
             }
 
-            public string id;
             public string name;
+            public string id;            
             public string description;
             public string url;
             public string backgroundColor;

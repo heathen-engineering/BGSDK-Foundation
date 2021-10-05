@@ -88,7 +88,7 @@ namespace HeathenEngineering.BGSDK.API
                             try
                             {
                                 string resultContent = www.downloadHandler.text;
-                                results.result = JsonUtility.FromJson<UserProfile>(resultContent);
+                                results = JsonUtility.FromJson<UserProfileResult>(resultContent);
                                 results.message = "Profile request complete.";
                                 results.httpCode = www.responseCode;
 

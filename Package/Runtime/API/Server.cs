@@ -240,6 +240,15 @@ namespace HeathenEngineering.BGSDK.API
         /// </remarks>
         public static class Wallets
         {
+            [HideInInspector]
+            public class CreateWalletModel
+            {
+                public string walletType;
+                public string secretType;
+                public string identifier;
+                public string pincode;
+            }
+
             public enum Type
             {
                 WHITE_LABEL,
@@ -276,32 +285,36 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        WWWForm form = new WWWForm();
-                        form.AddField("pincode", pincode);
-
-                        if (!string.IsNullOrEmpty(identifier))
-                            form.AddField("identifier", identifier);
-
-                        form.AddField("walletType", "WHITE_LABEL");
+                        var walletModel = new CreateWalletModel
+                        {
+                            walletType = "WHITE_LABEL",
+                            identifier = identifier,
+                            pincode = pincode,
+                        };
 
                         switch (chain)
                         {
                             case SecretType.AVAC:
-                                form.AddField("secretType", "AVAC");
+                                walletModel.secretType = "AVAC";
                                 break;
                             case SecretType.BSC:
-                                form.AddField("secretType", "BSC");
+                                walletModel.secretType = "BSC";
                                 break;
                             case SecretType.ETHEREUM:
-                                form.AddField("secretType", "ETHEREUM");
+                                walletModel.secretType = "ETHEREUM";
                                 break;
                             case SecretType.MATIC:
-                                form.AddField("secretType", "MATIC");
+                                walletModel.secretType = "MATIC";
                                 break;
                         }
 
-                        UnityWebRequest www = UnityWebRequest.Post(BGSDKSettings.current.WalletUri, form); ;
+                        var jsonString = JsonUtility.ToJson(walletModel);
+
+                        UnityWebRequest www = UnityWebRequest.Put(BGSDKSettings.current.WalletUri, jsonString);
+                        www.method = UnityWebRequest.kHttpVerbPOST;
                         www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
+                        www.uploadHandler.contentType = "application/json;charset=UTF-8";
+                        www.SetRequestHeader("Content-Type", "application/json;charset=UTF-8");
 
                         var co = www.SendWebRequest();
                         while (!co.isDone)
@@ -350,7 +363,7 @@ namespace HeathenEngineering.BGSDK.API
             {
                 if (BGSDKSettings.current == null)
                 {
-                    callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.UserWallet.List with no BGSDK.Settings object applied." });
+                    callback(new ListWalletResult() { hasError = true, message = "Attempted to call BGSDK.Wallets.List with no BGSDK.Settings object applied." });
                     yield return null;
                 }
                 else

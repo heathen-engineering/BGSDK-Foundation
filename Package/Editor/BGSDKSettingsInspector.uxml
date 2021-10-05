@@ -11,6 +11,13 @@
     </ui:VisualElement>
     <ui:VisualElement name="apiPage" style="display: none; visibility: visible;">
         <uie:PropertyField binding-path="useStaging" />
+        <ui:VisualElement style="height: 25px;" />
+        <ui:Label text="Interface URLs" />
+        <uie:PropertyField binding-path="authentication" />
+        <uie:PropertyField binding-path="api" />
+        <uie:PropertyField binding-path="business" />
+        <uie:PropertyField binding-path="wallet" />
+        <uie:PropertyField binding-path="connect" />
     </ui:VisualElement>
     <ui:VisualElement name="modelPage" style="flex-grow: 1; display: none;">
         <uie:Toolbar>
