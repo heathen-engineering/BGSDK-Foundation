@@ -202,7 +202,7 @@ namespace HeathenEngineering.BGSDK.API
             /// <remarks>
             /// <see href="https://docs.venly.io/pages/reference.html#get-specific-user-wallet">https://docs.venly.io/pages/reference.html#get-specific-user-wallet</see>
             /// </remarks>
-            public static IEnumerator Get(string walletId, Action<ListWalletResult> callback)
+            public static IEnumerator Get(string walletAddress, Action<ListWalletResult> callback)
             {
                 if (BGSDKSettings.current == null)
                 {
@@ -218,7 +218,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId);
+                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletAddress);
                         www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = www.SendWebRequest();
@@ -262,10 +262,10 @@ namespace HeathenEngineering.BGSDK.API
             /// <remarks>
             /// For more information see <see href="https://docs.venly.io/pages/reference.html#_native_balance_arkane_api">https://docs.venly.io/pages/reference.html#_native_balance_arkane_api</see>
             /// </remarks>
-            /// <param name="walletId"></param>
+            /// <param name="walletAddress"></param>
             /// <param name="callback"></param>
             /// <returns>The Unity routine enumerator</returns>
-            public static IEnumerator Balance(string walletId, Action<BalanceResult> callback)
+            public static IEnumerator Balance(string walletAddress, Action<BalanceResult> callback)
             {
                 if (BGSDKSettings.current == null)
                 {
@@ -281,7 +281,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId + "/balance");
+                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletAddress + "/balance");
                         www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = www.SendWebRequest();
@@ -326,10 +326,10 @@ namespace HeathenEngineering.BGSDK.API
             /// For more details see <see href="https://docs.venly.io/pages/reference.html#_token_balances_arkane_api">https://docs.venly.io/pages/reference.html#_token_balances_arkane_api</see>
             /// </para>
             /// </remarks>
-            /// <param name="walletId"></param>
+            /// <param name="walletAddress"></param>
             /// <param name="callback"></param>
             /// <returns>The Unity routine enumerator</returns>
-            public static IEnumerator TokenBalance(string walletId, Action<TokenBalanceResult> callback)
+            public static IEnumerator TokenBalance(string walletAddress, Action<TokenBalanceResult> callback)
             {
                 if (BGSDKSettings.current == null)
                 {
@@ -345,7 +345,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId + "/balance/tokens");
+                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletAddress + "/balance/tokens");
                         www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = www.SendWebRequest();
@@ -391,11 +391,11 @@ namespace HeathenEngineering.BGSDK.API
             /// For more details see <see href="https://docs.venly.io/pages/reference.html#_specific_token_balance_arkane_api">https://docs.venly.io/pages/reference.html#_specific_token_balance_arkane_api</see>
             /// </para>
             /// </remarks>
-            /// <param name="walletId"></param>
+            /// <param name="walletAddress"></param>
             /// <param name="tokenAddress"></param>
             /// <param name="callback"></param>
             /// <returns>The Unity routine enumerator</returns>
-            public static IEnumerator SpecificTokenBalance(string walletId, string tokenAddress, Action<TokenBalanceResult> callback)
+            public static IEnumerator SpecificTokenBalance(string walletAddress, string tokenAddress, Action<TokenBalanceResult> callback)
             {
                 if (BGSDKSettings.current == null)
                 {
@@ -411,7 +411,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletId + "/balance/tokens/" + tokenAddress);
+                        UnityWebRequest www = UnityWebRequest.Get(BGSDKSettings.current.WalletUri + "/" + walletAddress + "/balance/tokens/" + tokenAddress);
                         www.SetRequestHeader("Authorization", BGSDKSettings.user.authentication.token_type + " " + BGSDKSettings.user.authentication.access_token);
 
                         var co = www.SendWebRequest();
@@ -455,11 +455,11 @@ namespace HeathenEngineering.BGSDK.API
             /// <remarks>
             /// For more information please see <see href="https://docs.venly.io/api/api-products/wallet-api/retrieve-non-fungible-tokens"/>
             /// </remarks>
-            /// <param name="walletId"></param>
+            /// <param name="walletAddress"></param>
             /// <param name="optionalContractAddresses">List of contract addresses to filter for, if empty or null all will be returned. Can be null</param>
             /// <param name="callback"></param>
             /// <returns>The Unity routine enumerator</returns>
-            public static IEnumerator NFTs(string walletId, SecretType chain, List<string> optionalContractAddresses, Action<NFTBalanceResult> callback)
+            public static IEnumerator NFTs(string walletAddress, SecretType chain, List<string> optionalContractAddresses, Action<NFTBalanceResult> callback)
             {
                 if (BGSDKSettings.current == null)
                 {
@@ -483,7 +483,7 @@ namespace HeathenEngineering.BGSDK.API
                     }
                     else
                     {
-                        string address = BGSDKSettings.current.WalletUri + "/" + chain.ToString() + "/" + walletId + "/nonfungibles";
+                        string address = BGSDKSettings.current.WalletUri + "/" + chain.ToString() + "/" + walletAddress + "/nonfungibles";
 
                         if (optionalContractAddresses != null && optionalContractAddresses.Count > 0)
                         {

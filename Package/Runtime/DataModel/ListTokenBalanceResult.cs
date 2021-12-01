@@ -36,6 +36,55 @@ namespace HeathenEngineering.BGSDK.DataModel
             public bool fungible;
             public ulong maxSupply;
             public TokenAttributes[] attributes;
+
+            public string TokenTypeId
+            {
+                get
+                {
+                    foreach(var attribute in attributes)
+                    {
+                        if (attribute.name == "tokenTypeId")
+                            return attribute.value;
+                    }
+
+                    return "[unknown]";
+                }
+            }
+
+            public Engine.Token TokenType
+            {
+                get
+                {
+                    var id = TokenTypeId;
+
+                    if(Engine.BGSDKSettings.current != null && !string.IsNullOrEmpty(id))
+                    {
+                        foreach(var contract in Engine.BGSDKSettings.current.contracts)
+                        {
+                            foreach(var token in contract.tokens)
+                            {
+                                if (token.Id == id)
+                                    return token;
+                            }
+                        }
+
+                        return null;
+                    }
+                    else
+                    {
+                        if(Engine.BGSDKSettings.current == null)
+                        {
+                            UnityEngine.Debug.LogWarning("Failed to return Token reference, you must set an active BGSDKSettings object first!");
+                        }
+                        else if(string.IsNullOrEmpty(id))
+                        {
+                            UnityEngine.Debug.LogWarning("Failed to return Token reference, the token data in question has no tokenTypeId attribute!");
+                        }
+
+                        return null;
+                    }
+                }
+            }
         }
 
         public List<Token> result;
