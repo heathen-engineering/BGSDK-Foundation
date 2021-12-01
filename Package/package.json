@@ -10,7 +10,7 @@
         "blockchain",
         "integration"
     ],
-    "description": "Heathen Engineering's wrapper, integration, and editor extensions; around Arkane Network's / Venly's web API .",
+    "description": "Heathen Engineering's wrapper, integration, and editor extensions; around Venly's web API .",
     "samples": [
         {
             "displayName": "Demo",
