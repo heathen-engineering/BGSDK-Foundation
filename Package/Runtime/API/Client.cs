@@ -10,7 +10,6 @@ namespace HeathenEngineering.BGSDK.API
 {
     public static class Client
     {
-        [Obsolete("Temporarily depricated by Venly", true)]
         /// <summary>
         /// A wrapper around BGSDK's User API
         /// </summary>
