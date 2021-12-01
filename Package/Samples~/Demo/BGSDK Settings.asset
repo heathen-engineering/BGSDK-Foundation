@@ -16,7 +16,7 @@ MonoBehaviour:
     Staging: https://login-staging.arkane.network
     Production: https://login.arkane.network
   wallet:
-    Staging: https://staging.arkane.network/
+    Staging: https://staging.arkane.network
     Production: https://app.arkane.network
   api:
     Staging: https://api-staging.arkane.network

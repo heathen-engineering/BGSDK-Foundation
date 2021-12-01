@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using HeathenEngineering.BGSDK.DataModel;
-using HeathenEngineering.BGSDK.Engine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,8 +20,12 @@ namespace HeathenEngineering.BGSDK.Examples
         public List<Wallet> walletData;
         public List<NFTBalanceResult.Token> tokenData;
 
+        /// <summary>
+        /// SERVER ONLY
+        /// </summary>
         public void CreateWallet()
         {
+#if UNITY_SERVER || UNITY_EDITOR
             if (!string.IsNullOrEmpty(walletId.text)
                 && !string.IsNullOrEmpty(walletPin.text))
             {
@@ -32,16 +35,26 @@ namespace HeathenEngineering.BGSDK.Examples
             {
                 Debug.LogWarning("You must provide a wallet ID and Pin in order to create a new wallet.");
             }
+#else
+            Debug.LogWarning("Attempted to call CreateWallet from a client build. This is not supported!");
+#endif
         }
 
+        /// <summary>
+        /// SERVER ONLY
+        /// </summary>
         public void FetchWallets()
         {
+#if UNITY_SERVER || UNITY_EDITOR
             StartCoroutine(API.Server.Wallets.List(HandleListWalletResults));
+#else
+            Debug.LogWarning("Attempted to call FetchWallets from a client build. This is not supported!");
+#endif
         }
 
         public void FetchNFTs()
         {
-            StartCoroutine(API.Server.Wallets.NFTs(walletAddress.text, (SecretType)listNFTWalletType.value, null, HandleNFTBalanceResult));
+            StartCoroutine(API.Client.Wallets.NFTs(walletAddress.text, (SecretType)listNFTWalletType.value, null, HandleNFTBalanceResult));
         }
 
         private void HandleCreateWalletResult(ListWalletResult walletResult)
