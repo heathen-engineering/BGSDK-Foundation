@@ -17,7 +17,7 @@ namespace HeathenEngineering.BGSDK.DataModel
     {
         [HideInInspector]
         public string contractAddress;
-        [HideInInspector]
+        [ReadOnly]
         public string id;
         [HideInInspector]
         public BigInteger contractTypeId;
