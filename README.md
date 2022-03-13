@@ -1,4 +1,12 @@
-# Blockchain Game Software Development Kit (BGSDK): Foundation
+# Blockchain Game Software Development Kit (BGSDK): 
+## Foundation
+
+* Author: [Heathen Group](https://github.com/sponsors/heathen-engineering)
+* Author Web Site: [Heathen.Group](https://heathen.group)
+* License: [MIT](https://github.com/heathen-engineering/BGSDK-Foundation/blob/master/LICENSE.txt)
+* [Documentation](https://kb.heathenengineering.com/assets/bgsdk)
+* [Support](https://discord.gg/6X3xrRc)
+* [Reporting Issues](https://github.com/heathen-engineering/BGSDK-Foundation/issues)
 
 Heathen Engineering's BGSDK Foundation allows you to manage in-game items as blockchain assets. It is a complete wrapper around [Venly](https://www.venly.io/)'s Web API. The tool simplifies integration with Venly API exposing all features and functions to C# classes and includes Editor extensions to aid in design and deployment of Contracts and Tokens.
 
